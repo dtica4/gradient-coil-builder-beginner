@@ -119,8 +119,8 @@
       <tbody>
         <tr class="group"><th colspan="3" scope="rowgroup">Hardware</th></tr>
         <tr><td>Litz wire</td><td>400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td>The coil conductor. About 13.6 m (X), 14.1 m (Y) and 17.1 m (Z), plus leads.</td></tr>
-        <tr><td>Grooved plates</td><td>12 printed plates: 4 per coil</td><td>Hold the wire on its designed path. <span class="tbd">Material and print settings to be added</span></td></tr>
-        <tr><td>3D printer</td><td><span class="tbd">Model to be added</span></td><td>Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
+        <tr><td>Grooved plates</td><td>12 printed plates, 4 per coil, in TPU 95A (3D Aura, Singapore), 1.6 mm thick</td><td>Hold the wire on its designed path. Flexible enough to bend into a tube, stiff enough to keep its round shape. About 67 g of TPU and 4 h 50 min of printing per plate.</td></tr>
+        <tr><td>3D printer</td><td>Bambu Lab P1S, 0.4 mm nozzle, textured PEI plate</td><td>Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
         <tr><td>Former</td><td><span class="tbd">To be added</span></td><td>The tube the plates wrap around.</td></tr>
         <tr><td>DC power supply</td><td>At least 5 A; constant-current mode recommended</td><td>Driving one coil at a time during testing.</td></tr>
         <tr><td>3-axis gaussmeter</td><td>Reads B<sub>x</sub>, B<sub>y</sub>, B<sub>z</sub> in mT</td><td>Measuring the coil’s field.</td></tr>
@@ -212,14 +212,51 @@ pip install shapely cadquery-ocp</code></pre>
 
       <li class="step" data-step="7">
         <div class="step-head"><h3>Print the plates</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Print all twelve plates. The ready-made files are in <a href="#files">Files</a>.</p>
-        <p class="tbd-block">To be added: material, printer settings, print time per plate.</p>
+        <p>Print all twelve plates in <strong>TPU 95A</strong>, a flexible filament (we use 3D Aura, Singapore). The ready-made files are in <a href="#files">Files</a>.</p>
+        <p><strong>Why TPU 95A?</strong> At 1.6 mm thick it does two jobs that pull in opposite directions. It is flexible enough to bend each flat plate into a curve, yet once the plates form a cylinder, the tube is stiff enough to stand upright and keep its round shape without deforming.</p>
+        <p>Lay each plate <strong>flat on the bed with the grooves facing up</strong>. No supports are needed.</p>
+        <div class="photos">
+          <figure><img src="images/plate-flat.jpg" alt="A printed black TPU plate lying flat, with the wire grooves forming one rounded loop pattern" loading="lazy" width="918" height="1000"><figcaption>A printed Y plate: one saddle loop of grooves, ready for wire.</figcaption></figure>
+          <figure><img class="fit" src="images/slicer-z-plate.jpg" alt="Bambu Studio preview of a Z plate lying flat on the build plate, with the slicing result showing about 4 hours 52 minutes" loading="lazy" width="1000" height="598"><figcaption>A Z plate in Bambu Studio: flat, grooves up, about 4 h 50 min.</figcaption></figure>
+        </div>
+        <div class="table-wrap">
+        <table class="mini">
+          <thead><tr><th scope="col">Setting (Bambu Studio)</th><th scope="col">Value</th></tr></thead>
+          <tbody>
+            <tr><td>Printer</td><td>Bambu Lab P1S, textured PEI plate</td></tr>
+            <tr><td>Nozzle</td><td>0.4 mm, standard flow</td></tr>
+            <tr><td>Filament</td><td>TPU 95A</td></tr>
+            <tr><td>Process profile</td><td>0.20mm Strength</td></tr>
+            <tr><td>Layer height</td><td>0.2 mm (first layer 0.2 mm)</td></tr>
+            <tr><td>Wall loops</td><td>6</td></tr>
+            <tr><td>Top shell</td><td>5 layers (1.0 mm)</td></tr>
+            <tr><td>Bottom shell</td><td>3 layers (0.6 mm)</td></tr>
+            <tr><td>Sparse infill</td><td>25 %, grid</td></tr>
+            <tr><td>Orientation</td><td>Flat on the bed, grooves facing up</td></tr>
+            <tr><td>Supports</td><td>None</td></tr>
+            <tr><td>Print time</td><td>About 4 h 50 min per plate (X, Y or Z), so about 58 h for all twelve</td></tr>
+            <tr><td>Filament used</td><td>About 67 g (23 m) for a Z plate</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="note">At 0.2 mm per layer, a 1.6 mm plate is just 8 layers, and the top shell (5) plus bottom shell (3) use all of them. The plate prints solid, so the infill setting has no effect.</p>
+        <div class="problem">
+          <h4>Known problem: the wire pops out of the groove</h4>
+          <p>The groove is a 1.3 mm round channel. The printer cannot build the curved top edge that would close over the wire, so the groove stays open and the wire can lift out, especially once the plate is bent.</p>
+          <p><strong>Fix:</strong> add small dabs of extra TPU by hand across the wire every few centimetres, so the wire is locked into the groove.</p>
+          <div class="photos">
+            <figure><img src="images/wire-held-with-tpu.jpg" alt="Close-up of litz wire lying in the grooves of a bent black plate, held down by small blobs of black TPU" loading="lazy" width="750" height="1000"><figcaption>Dabs of TPU lock the wire into the groove.</figcaption></figure>
+            <figure><img src="images/plates-wrapped-seam.jpg" alt="Side view of wound plates bent into a curve, showing the wire held along the grooves near a seam between plates" loading="lazy" width="750" height="1000"><figcaption>Wound plates after bending; the dabs keep the wire in place along the curve.</figcaption></figure>
+          </div>
+          <p class="tbd-block">To be added: the tool used to apply the TPU (3D pen, soldering iron …) and how far apart the dabs are.</p>
+        </div>
+        <p class="checkpoint"><strong>Checkpoint:</strong> each plate is 1.6 mm thick, bends by hand without cracking, and the wire fits into the grooves.</p>
       </li>
 
       <li class="step" data-step="8">
         <div class="step-head"><h3>Wind the litz wire</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Lay the litz wire into the grooves, following the path from one lead to the other.</p>
-        <p class="tbd-block">To be added: winding order, how the wire is held in the groove, how the leads leave the coil.</p>
+        <p>Lay the litz wire into the grooves, following the path from one lead to the other. Lock it in with dabs of TPU as you go (see the known problem in step 7).</p>
+        <p class="tbd-block">To be added: winding order, how the leads leave the coil.</p>
       </li>
 
       <li class="step" data-step="9">

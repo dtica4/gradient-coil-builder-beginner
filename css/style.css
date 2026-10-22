@@ -127,7 +127,7 @@ th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--li
 thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-bottom: 2px solid var(--ink); }
 .bom td:first-child { font-weight: 650; white-space: nowrap; }
 .bom tr.group th { font-variation-settings: "wdth" 125; font-size: 1rem; padding-top: 22px; color: var(--copper-deep); border-bottom: 1px solid var(--ink); }
-.mini { margin: 6px 0 16px; }
+.mini { margin: 6px 0 16px; max-width: 44em; }
 .results th[scope="row"] { font-variation-settings: "wdth" 125; font-weight: 750; color: var(--copper-deep); }
 .results td { font-variant-numeric: tabular-nums; }
 .table-title { margin: 36px 0 8px; }
@@ -159,6 +159,16 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-
 .pitfalls dl { margin: 14px 0 0; display: grid; grid-template-columns: minmax(0, 16em) 1fr; gap: 10px 20px; }
 .pitfalls dt { font-weight: 650; }
 .pitfalls dd { margin: 0; color: var(--ink-soft); }
+
+/* Photos and problem boxes */
+.photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 18px 0; max-width: 44em; }
+.photos figure { margin: 0; }
+.photos img { display: block; width: 100%; height: 260px; object-fit: cover; border-radius: 8px; background: var(--line); }
+.photos img.fit { object-fit: contain; background: #2b2b2b; }
+.photos figcaption { font-size: 0.86rem; color: var(--ink-soft); margin-top: 6px; }
+.problem { border: 1px solid var(--field-red); border-radius: 12px; padding: 16px 18px; margin: 20px 0; max-width: 46em; }
+.problem h4 { margin: 0 0 8px; font-size: 1.05rem; font-variation-settings: "wdth" 115; color: var(--field-red); }
+.problem p { margin: 0 0 10px; }
 
 /* Test */
 .method { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
