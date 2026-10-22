@@ -119,7 +119,7 @@
       <tbody>
         <tr class="group"><th colspan="3" scope="rowgroup">Hardware</th></tr>
         <tr><td>Litz wire</td><td>400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td>The coil conductor. About 13.6 m (X), 14.1 m (Y) and 17.1 m (Z), plus leads.</td></tr>
-        <tr><td>Grooved plates</td><td>12 printed plates, 4 per coil, in TPU 95A (3D Aura, Singapore), 1.6 mm thick</td><td>Hold the wire on its designed path. Flexible enough to bend into a tube, stiff enough to keep its round shape. About 67 g of TPU and 4 h 50 min of printing per plate.</td></tr>
+        <tr><td>Grooved plates</td><td>12 printed plates, 4 per coil, in TPU 95A (3D Aura, Singapore), 1.6 mm thick by design (about 1.95 mm as printed)</td><td>Hold the wire on its designed path. Flexible enough to bend into a tube, stiff enough to keep its round shape. About 67 g of TPU and 4 h 50 min of printing per plate.</td></tr>
         <tr><td>3D printer</td><td>Bambu Lab P1S, 0.4 mm nozzle, textured PEI plate</td><td>Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
         <tr><td>Former</td><td><span class="tbd">To be added</span></td><td>The tube the plates wrap around.</td></tr>
         <tr><td>DC power supply</td><td>At least 5 A; constant-current mode recommended</td><td>Driving one coil at a time during testing.</td></tr>
@@ -213,7 +213,7 @@ pip install shapely cadquery-ocp</code></pre>
       <li class="step" data-step="7">
         <div class="step-head"><h3>Print the plates</h3><label class="check"><input type="checkbox"> Done</label></div>
         <p>Print all twelve plates in <strong>TPU 95A</strong>, a flexible filament (we use 3D Aura, Singapore). The ready-made files are in <a href="#files">Files</a>.</p>
-        <p><strong>Why TPU 95A?</strong> At 1.6 mm thick it does two jobs that pull in opposite directions. It is flexible enough to bend each flat plate into a curve, yet once the plates form a cylinder, the tube is stiff enough to stand upright and keep its round shape without deforming.</p>
+        <p><strong>Why TPU 95A?</strong> At under 2 mm thick it does two jobs that pull in opposite directions. It is flexible enough to bend each flat plate into a curve, yet once the plates form a cylinder, the tube is stiff enough to stand upright and keep its round shape without deforming.</p>
         <p>Lay each plate <strong>flat on the bed with the grooves facing up</strong>. No supports are needed.</p>
         <div class="photos">
           <figure><img src="images/plate-flat.jpg" alt="A printed black TPU plate lying flat, with the wire grooves forming one rounded loop pattern" loading="lazy" width="918" height="1000"><figcaption>A printed Y plate: one saddle loop of grooves, ready for wire.</figcaption></figure>
@@ -239,18 +239,23 @@ pip install shapely cadquery-ocp</code></pre>
           </tbody>
         </table>
         </div>
-        <p class="note">At 0.2 mm per layer, a 1.6 mm plate is just 8 layers, and the top shell (5) plus bottom shell (3) use all of them. The plate prints solid, so the infill setting has no effect.</p>
+        <p class="note">The plates are designed 1.6 mm thick. At 0.2 mm per layer that is just 8 layers, and the top shell (5) plus bottom shell (3) use all of them, so the plate prints solid and the infill setting has no effect. Printed plates measure about 1.95 mm with calipers, a little thicker than the design.</p>
         <div class="problem">
           <h4>Known problem: the wire pops out of the groove</h4>
           <p>The groove is a 1.3 mm round channel. The printer cannot build the curved top edge that would close over the wire, so the groove stays open and the wire can lift out, especially once the plate is bent.</p>
-          <p><strong>Fix:</strong> add small dabs of extra TPU by hand across the wire every few centimetres, so the wire is locked into the groove.</p>
+          <p><strong>Fix:</strong> lock the wire in with small dabs of TPU. Take a short piece of the same TPU filament, melt it onto the plate across the wire with a soldering iron tip, and shape it with the tip so it bridges over the wire. Repeat along each groove.</p>
+          <p class="small">The iron tip is hot and melting TPU gives off fumes: work in a ventilated area.</p>
           <div class="photos">
+            <figure><img src="images/wire-lifts-without-dab.jpg" alt="A wound plate bent into a curve; a red arrow points at a groove where the wire has lifted out because there is no dab of TPU there" loading="lazy" width="750" height="1000"><figcaption>The problem: where there is no dab, the wire lifts out once the plate is bent (arrow).</figcaption></figure>
             <figure><img src="images/wire-held-with-tpu.jpg" alt="Close-up of litz wire lying in the grooves of a bent black plate, held down by small blobs of black TPU" loading="lazy" width="750" height="1000"><figcaption>Dabs of TPU lock the wire into the groove.</figcaption></figure>
             <figure><img src="images/plates-wrapped-seam.jpg" alt="Side view of wound plates bent into a curve, showing the wire held along the grooves near a seam between plates" loading="lazy" width="750" height="1000"><figcaption>Wound plates after bending; the dabs keep the wire in place along the curve.</figcaption></figure>
           </div>
-          <p class="tbd-block">To be added: the tool used to apply the TPU (3D pen, soldering iron …) and how far apart the dabs are.</p>
+          <div class="scale-note">
+            <figure><img src="images/larger-coil-no-dabs.jpg" alt="A larger gradient coil made of black and yellow TPU plates bent into a cylinder, with the wire sitting in deep grooves and no dabs of TPU" loading="lazy" width="750" height="1000"><figcaption>A larger gradient coil: no dabs needed.</figcaption></figure>
+            <p><strong>This only applies to small gradient coils</strong> like ours. On larger coils the plates can have grooves deep enough for the wire to sit inside and stay there on its own, with no dabs at all.</p>
+          </div>
         </div>
-        <p class="checkpoint"><strong>Checkpoint:</strong> each plate is 1.6 mm thick, bends by hand without cracking, and the wire fits into the grooves.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> each plate measures about 1.95 mm, bends by hand without cracking, and the wire fits into the grooves.</p>
       </li>
 
       <li class="step" data-step="8">

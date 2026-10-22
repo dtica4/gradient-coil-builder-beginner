@@ -169,6 +169,11 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-
 .problem { border: 1px solid var(--field-red); border-radius: 12px; padding: 16px 18px; margin: 20px 0; max-width: 46em; }
 .problem h4 { margin: 0 0 8px; font-size: 1.05rem; font-variation-settings: "wdth" 115; color: var(--field-red); }
 .problem p { margin: 0 0 10px; }
+.scale-note { display: grid; grid-template-columns: 170px 1fr; gap: 18px; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.scale-note figure { margin: 0; }
+.scale-note img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.scale-note figcaption { font-size: 0.8rem; color: var(--ink-soft); margin-top: 4px; }
+@media (max-width: 480px) { .scale-note { grid-template-columns: 1fr; } .scale-note img { max-width: 220px; } }
 
 /* Test */
 .method { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
