@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gradient Coil Builder</title>
+<meta name="description" content="Learn how to design, build and test the X, Y and Z gradient coils of a 32 mT portable MRI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="Gradient Coil Builder, back to top">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 22c4-12 8-12 12 0s8 12 12 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    <span>Gradient Coil Builder</span>
+  </a>
+  <nav aria-label="Sections">
+    <a href="#idea">The idea</a>
+    <a href="#materials">Materials</a>
+    <a href="#build">Build</a>
+    <a href="#test">Test</a>
+    <a href="#files">Files</a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- HERO: the coil itself -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="kicker">Gradient coils for the 32 mT portable MRI</p>
+    <h1>Roll a flat plate into a gradient coil.</h1>
+    <p class="lede">Each coil starts as copper wire laid in the grooves of four flat 3D-printed plates. Wrap the plates into a tube and the wire makes a magnetic field that changes steadily from one side of the scanner to the other. That steady change is what lets the scanner tell where a signal comes from.</p>
+    <dl class="coil-facts">
+      <div><dt>X coil</dt><dd>Ø 119.8 mm, gradient across the bore</dd></div>
+      <div><dt>Y coil</dt><dd>Ø 126.2 mm, gradient vertical</dd></div>
+      <div><dt>Z coil</dt><dd>Ø 132.6 mm, gradient along the bore</dd></div>
+    </dl>
+  </div>
+
+  <figure class="viewer" aria-label="3D viewer of the gradient coils">
+    <div class="viewer-tabs" role="tablist" aria-label="Choose a coil">
+      <button role="tab" data-coil="x" aria-selected="true">X</button>
+      <button role="tab" data-coil="y" aria-selected="false">Y</button>
+      <button role="tab" data-coil="z" aria-selected="false">Z</button>
+      <button role="tab" data-coil="all" aria-selected="false">All three</button>
+    </div>
+    <div class="viewer-stage" id="stage">
+      <p class="viewer-status" id="viewer-status">Loading the coil…</p>
+    </div>
+    <div class="viewer-controls">
+      <label class="wrap-control">
+        <span>Flat</span>
+        <input type="range" id="wrap" min="0" max="100" value="100" aria-label="Wrap the plates from flat to cylinder">
+        <span>Wrapped</span>
+      </label>
+      <button type="button" class="btn" id="play">Play the wrap</button>
+      <label class="toggle"><input type="checkbox" id="show-plates" checked> Plates</label>
+      <label class="toggle"><input type="checkbox" id="show-wire" checked> Wire</label>
+    </div>
+    <figcaption id="viewer-caption">X coil: four plates, one saddle-shaped wire loop in each. Drag to turn, scroll to zoom.</figcaption>
+  </figure>
+</section>
+
+<!-- 1. THE IDEA -->
+<section class="band" id="idea">
+  <div class="wrap">
+    <h2>What a gradient coil does</h2>
+    <div class="two-col">
+      <div class="prose">
+        <p>The permanent magnet ring makes a strong, even field, B<sub>0</sub> = 32 mT, pointing along the bore. Protons in that field spin at one frequency, the <em>Larmor frequency</em>:</p>
+        <p class="formula">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
+        <p>If every proton spins at the same frequency, the scanner hears one note and cannot tell where it came from. A gradient coil adds a small extra field that grows in a straight line across the scanner. Now each position has its own frequency, and the frequency tells you the position.</p>
+        <p>We need three coils, one per direction. Each is designed to give <strong>1.0 mT/m for every ampere</strong> of current (written 1.0 mT/m/A). We test them at <strong>5 A</strong>.</p>
+        <p class="note">The field only works as a ruler if it is a <em>straight</em> line. We call how far it bends away from a straight line the <em>linearity error</em>. Our target is below 5 % over a 50 mm field of view (FOV).</p>
+      </div>
+
+      <div class="lab" id="lab">
+        <h3>Try it: from current to position</h3>
+        <div class="lab-row" role="radiogroup" aria-label="Gradient direction">
+          <label><input type="radio" name="axis" value="x" checked> X</label>
+          <label><input type="radio" name="axis" value="y"> Y</label>
+          <label><input type="radio" name="axis" value="z"> Z</label>
+        </div>
+        <canvas id="lab-canvas" width="360" height="360" aria-label="Map of the extra field across the 50 mm field of view"></canvas>
+        <label class="slider">Current <output id="i-out">5.0 A</output>
+          <input type="range" id="i-in" min="0" max="5" step="0.1" value="5"></label>
+        <label class="slider">Magnet error <output id="e-out">0 µT</output>
+          <input type="range" id="e-in" min="0" max="20" step="1" value="0"></label>
+        <dl class="readout">
+          <div><dt>Gradient</dt><dd id="r-g">–</dd></div>
+          <div><dt>Frequency step per mm</dt><dd id="r-df">–</dd></div>
+          <div><dt>Frequency range across 50 mm</dt><dd id="r-bw">–</dd></div>
+          <div><dt>Image shift from magnet error</dt><dd id="r-shift">–</dd></div>
+        </dl>
+        <p class="small">Uses each coil’s pyCoilGen design value (X 1.053, Y 1.015, Z 1.282 mT/m/A). Blue is less field, red is more. The lines join points of equal field: straight, evenly spaced lines mean a linear gradient. A magnet error moves the whole pattern, so the image lands in the wrong place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. MATERIALS -->
+<section class="band band-alt" id="materials">
+  <div class="wrap">
+    <h2>Materials and software</h2>
+    <p class="section-lede">Everything you need for all three coils. Rows marked <span class="tbd">to be added</span> are still being written up by the gradient team.</p>
+    <div class="table-wrap">
+    <table class="bom">
+      <thead><tr><th scope="col">Item</th><th scope="col">What it is</th><th scope="col">Used for</th></tr></thead>
+      <tbody>
+        <tr class="group"><th colspan="3" scope="rowgroup">Hardware</th></tr>
+        <tr><td>Litz wire</td><td>400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td>The coil conductor. About 13.6 m (X), 14.1 m (Y) and 17.1 m (Z), plus leads.</td></tr>
+        <tr><td>Grooved plates</td><td>12 printed plates: 4 per coil</td><td>Hold the wire on its designed path. <span class="tbd">Material and print settings to be added</span></td></tr>
+        <tr><td>3D printer</td><td><span class="tbd">Model to be added</span></td><td>Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
+        <tr><td>Former</td><td><span class="tbd">To be added</span></td><td>The tube the plates wrap around.</td></tr>
+        <tr><td>DC power supply</td><td>At least 5 A; constant-current mode recommended</td><td>Driving one coil at a time during testing.</td></tr>
+        <tr><td>3-axis gaussmeter</td><td>Reads B<sub>x</sub>, B<sub>y</sub>, B<sub>z</sub> in mT</td><td>Measuring the coil’s field.</td></tr>
+        <tr><td>Motorised 3-axis stage</td><td>Moves the probe on a grid</td><td>Scanning 8 × 8 × 8 points, 7 mm apart.</td></tr>
+        <tr><td>Multimeter</td><td>Low-ohm range</td><td>Checking each coil’s resistance, cold and warm.</td></tr>
+        <tr class="group"><th colspan="3" scope="rowgroup">Software</th></tr>
+        <tr><td>Python 3.12</td><td>Not 3.13: pyCoilGen needs numpy 1.x</td><td>Running the design scripts.</td></tr>
+        <tr><td>pyCoilGen</td><td>Open-source coil designer</td><td>Finding the wire path that makes the gradient.</td></tr>
+        <tr><td>trimesh, shapely, cadquery-ocp</td><td>Python packages</td><td>Reading the STL, checking crossings, writing STEP files.</td></tr>
+        <tr><td>FastHenry2</td><td>Free inductance solver (Windows, 64-bit)</td><td>Inductance of each coil. Without it, pyCoilGen reports 0 Ω and 0 H.</td></tr>
+        <tr><td>VS Code</td><td>Code editor</td><td>Opening the examples folder and running scripts.</td></tr>
+        <tr><td>Onshape</td><td>Browser CAD</td><td>Cutting the grooves into the plates.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- 3. BUILD -->
+<section class="band" id="build">
+  <div class="wrap">
+    <div class="build-head">
+      <h2>Build it, step by step</h2>
+      <p class="progress" aria-live="polite"><span id="done-count">0</span> of <span id="step-count">9</span> steps checked <button type="button" class="link-btn" id="reset">Reset</button></p>
+    </div>
+    <p class="section-lede">Tick each step when its checkpoint passes. Your ticks are kept in this browser only.</p>
+
+    <ol class="steps">
+      <li class="step" data-step="1">
+        <div class="step-head"><h3>Set up Python</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>pyCoilGen needs numpy 1.x, which has no ready-made packages for Python 3.13, so install <strong>Python 3.12</strong>. Keep everything inside a virtual environment, so it doesn’t clash with other projects.</p>
+<pre><code>py -3.12 -m venv venv
+venv\Scripts\activate
+pip install pycoilgen trimesh
+pip install shapely cadquery-ocp</code></pre>
+        <p>Install <strong>FastHenry2</strong> from the FastFieldSolvers bundle. Open the examples folder in VS Code and choose <code>venv\Scripts\python.exe</code> as the interpreter.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> <code>python -c "import pyCoilGen"</code> runs without an error.</p>
+      </li>
+
+      <li class="step" data-step="2">
+        <div class="step-head"><h3>Design the three coils</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>Each generation script holds an <code>arg_dict</code> that describes one coil. The three scripts are copies of each other with four lines changed:</p>
+        <div class="table-wrap">
+        <table class="mini">
+          <thead><tr><th scope="col">Script</th><th scope="col">Direction</th><th scope="col">Radius (m)</th><th scope="col">Length (m)</th><th scope="col">Regularisation</th></tr></thead>
+          <tbody>
+            <tr><td><a href="scripts/xgrad_coil_1198mm.py">xgrad_coil_1198mm.py</a></td><td>x</td><td>0.0599</td><td>0.35</td><td>100</td></tr>
+            <tr><td><a href="scripts/ygrad_coil_1262mm.py">ygrad_coil_1262mm.py</a></td><td>y</td><td>0.0631</td><td>0.35</td><td>300</td></tr>
+            <tr><td><a href="scripts/zgrad_coil_1326mm.py">zgrad_coil_1326mm.py</a></td><td>z</td><td>0.0663</td><td>0.36</td><td>100</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p><strong>Diameter rule:</strong> radius in metres = diameter in mm ÷ 2 ÷ 1000. For 126.2 mm that gives 0.0631 m. This is the centre line of the wire; the outside of the wire sits a few mm further out. The coils nest inside each other, so each diameter must clear the coil inside it.</p>
+        <p class="note">The scripts ask for <code>target_gradient_strength: 0.9</code>, but the solver goes past it: the designs reach 1.053 (X), 1.015 (Y) and 1.282 (Z) mT/m/A, which meets the 1.0 target.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> each script writes <code>debug/&lt;project&gt;_final.npy</code> and a wire-only STL such as <code>xgrad_coil_1198mm_wire_0_x.stl</code>.</p>
+      </li>
+
+      <li class="step" data-step="3">
+        <div class="step-head"><h3>Smooth the wire path</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>A smooth path has fewer kinks and reversals. It exports to CAD in seconds and cuts cleanly. Two settings control it:</p>
+<pre><code>'smooth_factor': 5,                      # default 1 = off
+'normal_shift_smooth_factors': [4, 6, 4],  # default [2, 3, 2]</code></pre>
+        <p>The first averages each point with its neighbours. The second smooths the return paths, which are lifted 3 mm outward so crossing wires don’t touch.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> rerun and compare the efficiency. Too much smoothing pulls it away from the target.</p>
+      </li>
+
+      <li class="step" data-step="4">
+        <div class="step-head"><h3>Summarise and export</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>Each summary script loads the saved design and prints everything you need to judge it: gradient efficiency, true outer diameter, coil length, inductance (from FastHenry2), litz resistance, and voltage and power at 5 A. It also writes the wire points as TXT and the flattened path as STEP curves, all in <strong>millimetres</strong>.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> the efficiency is near the target, the outer diameter clears the next coil, resistance and inductance are not 0, and the STEP line ends with <code>write ok: True</code>.</p>
+      </li>
+
+      <li class="step" data-step="5">
+        <div class="step-head"><h3>Unwrap the path onto a flat sheet</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>To cut grooves in a flat plate, the wire path on the cylinder is rolled out flat: the angle around the tube becomes a distance along the sheet.</p>
+        <ul>
+          <li><strong>X and Y</strong> are four saddle-shaped lobes. One global unwrap of the whole path works. Splitting into lobes first scrambles it.</li>
+          <li><strong>Z</strong> is a double helix that winds around many times. Instead of unrolling, every turn is folded onto one circumference (π × 132.6 ≈ 416.5 mm), cut at the seams, smoothed, and exported as four quadrant STEP files.</li>
+        </ul>
+        <p class="checkpoint"><strong>Checkpoint:</strong> look at the preview plot before trusting the STEP files. Curves should never jump straight across the sheet.</p>
+      </li>
+
+      <li class="step" data-step="6">
+        <div class="step-head"><h3>Cut the grooves in CAD</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>Import the STEP curves into Onshape, sweep-cut a groove along them into a flat plate, and split the sheet into four plates that fit the printer: <strong>1–4</strong> for X and Y, <strong>TL, TR, BL, BR</strong> for Z. Each plate carries its label, so the pieces can’t be mixed up.</p>
+        <p class="tbd-block">To be added: groove width and depth, plate thickness, and how the plates are split.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> the plates open at the right size (X sheet about 375 × 360 mm), and grooves continue across every seam. Use the 3D viewer above to compare.</p>
+      </li>
+
+      <li class="step" data-step="7">
+        <div class="step-head"><h3>Print the plates</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>Print all twelve plates. The ready-made files are in <a href="#files">Files</a>.</p>
+        <p class="tbd-block">To be added: material, printer settings, print time per plate.</p>
+      </li>
+
+      <li class="step" data-step="8">
+        <div class="step-head"><h3>Wind the litz wire</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>Lay the litz wire into the grooves, following the path from one lead to the other.</p>
+        <p class="tbd-block">To be added: winding order, how the wire is held in the groove, how the leads leave the coil.</p>
+      </li>
+
+      <li class="step" data-step="9">
+        <div class="step-head"><h3>Wrap and nest the coils</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p>Wrap each coil’s four plates into a tube, then nest them: X (smallest) inside Y inside Z. Use the slider above to see how a flat set becomes a tube.</p>
+        <p class="tbd-block">To be added: the former, how the plates are fixed, how the three coils are held in the magnet.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> measure each coil’s resistance. It should be close to the prediction in <a href="#test">Test</a>.</p>
+      </li>
+    </ol>
+
+    <details class="pitfalls">
+      <summary>Common problems and quick fixes</summary>
+      <dl>
+        <dt>ModuleNotFoundError: pyCoilGen</dt><dd>VS Code is using the system Python. Run <code>venv\Scripts\python.exe</code> or set the interpreter.</dd>
+        <dt>“No Python at …”</dt><dd>The venv was copied from another PC. Fix the paths in <code>venv\pyvenv.cfg</code>, or make a new venv.</dd>
+        <dt>Resistance and inductance are 0</dt><dd>FastHenry2 is missing. Install it, then rerun the generation script.</dd>
+        <dt>STL “string is not a file”</dt><dd><code>CAD_filename</code> is missing, so the STL went to <code>images/</code>. Add it and regenerate.</dd>
+        <dt>Coil is microscopic in CAD</dt><dd>The points were written in metres. Export in millimetres.</dd>
+        <dt>STEP export hangs</dt><dd>The path is too kinked. Turn smoothing up, and use interpolation through the points instead of a least-squares fit.</dd>
+      </dl>
+    </details>
+  </div>
+</section>
+
+<!-- 4. TEST -->
+<section class="band band-alt" id="test">
+  <div class="wrap">
+    <h2>Test the coils</h2>
+    <p class="section-lede">A coil passes when its gradient is close to the design and the field is close to a straight line.</p>
+
+    <div class="method">
+      <div>
+        <h3>How we measure</h3>
+        <ol class="plain-steps">
+          <li>Put the probe of a 3-axis gaussmeter on a motorised stage and move it through an 8 × 8 × 8 grid, 7 mm apart: a 49 mm cube at the centre of the coil.</li>
+          <li>Run 5.0 A DC through one coil at a time and record B<sub>z</sub> at all 512 points.</li>
+          <li>Repeat the scan at 0 A with the coil in place. Fit a flat plane to it and subtract, so only the coil’s own field is judged.</li>
+          <li>Keep the 208 points inside the 50 mm field of view for the FOV numbers.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>How we judge</h3>
+        <p><strong>Efficiency.</strong> Fit the best straight line through all points: B<sub>z</sub> = a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>z. The slope |G| = √(a<sub>1</sub>² + a<sub>2</sub>² + a<sub>3</sub>²) is the gradient. Divide by the current to get mT/m/A.</p>
+        <p><strong>Linearity.</strong> Average the 64 readings in each plane along the coil’s axis, then compare each step between planes with the average step. Report the RMS difference in %.</p>
+      </div>
+    </div>
+
+    <h3 class="table-title">Design values at 5 A</h3>
+    <div class="table-wrap">
+    <table class="results">
+      <thead><tr><th scope="col">Coil</th><th scope="col">Efficiency<br>(mT/m/A)</th><th scope="col">Gradient at 5 A<br>(mT/m)</th><th scope="col">Wire length</th><th scope="col">Litz resistance</th><th scope="col">Voltage at 5 A</th><th scope="col">Power at 5 A</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">X</th><td>1.053</td><td>5.27</td><td>13.6 m</td><td>0.36–0.47 Ω</td><td>1.80–2.35 V</td><td>9.0–11.7 W</td></tr>
+        <tr><th scope="row">Y</th><td>1.015</td><td>5.08</td><td>14.1 m</td><td>0.37–0.49 Ω</td><td>1.86–2.43 V</td><td>9.3–12.2 W</td></tr>
+        <tr><th scope="row">Z</th><td>1.282</td><td>6.41</td><td>17.1 m</td><td>0.45–0.59 Ω</td><td>2.26–2.95 V</td><td>11.3–14.7 W</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small">Resistance = wire length × the litz datasheet range. Litz is 2.6–3.5× more resistive than the solid 1.3 mm wire pyCoilGen assumes, because only about 35 % of its footprint is copper. The X coil’s inductance is 37.7 µH (FastHenry2), so its current rises in about L/R ≈ 0.1 ms.</p>
+
+    <div id="measured"></div>
+  </div>
+</section>
+
+<!-- 5. FILES -->
+<section class="band" id="files">
+  <div class="wrap">
+    <h2>Files</h2>
+    <p class="section-lede">Click a file to download it. Everything is also in the <a href="https://github.com/dtica4/gradient-coil-builder-beginner">GitHub repository</a>.</p>
+    <div class="files">
+      <div>
+        <h3>Python scripts</h3>
+        <ul class="file-list">
+          <li><a href="scripts/xgrad_coil_1198mm.py" download>xgrad_coil_1198mm.py</a><span>Design X</span></li>
+          <li><a href="scripts/ygrad_coil_1262mm.py" download>ygrad_coil_1262mm.py</a><span>Design Y</span></li>
+          <li><a href="scripts/zgrad_coil_1326mm.py" download>zgrad_coil_1326mm.py</a><span>Design Z</span></li>
+          <li><a href="scripts/summ_data_smth_x1198.py" download>summ_data_smth_x1198.py</a><span>Summarise and export X</span></li>
+          <li><a href="scripts/summ_data_smth_y1262.py" download>summ_data_smth_y1262.py</a><span>Summarise and export Y</span></li>
+          <li><a href="scripts/summ_data_smth_z1326.py" download>summ_data_smth_z1326.py</a><span>Summarise, fold and export Z</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Plates to print (STEP)</h3>
+        <ul class="file-list">
+          <li><span class="file-group">X coil</span>
+            <a href="CAD/plates/x_coil_1198mm/x_plate_1.step" download>1</a>
+            <a href="CAD/plates/x_coil_1198mm/x_plate_2.step" download>2</a>
+            <a href="CAD/plates/x_coil_1198mm/x_plate_3.step" download>3</a>
+            <a href="CAD/plates/x_coil_1198mm/x_plate_4.step" download>4</a></li>
+          <li><span class="file-group">Y coil</span>
+            <a href="CAD/plates/y_coil_1262mm/y_plate_1.step" download>1</a>
+            <a href="CAD/plates/y_coil_1262mm/y_plate_2.step" download>2</a>
+            <a href="CAD/plates/y_coil_1262mm/y_plate_3.step" download>3</a>
+            <a href="CAD/plates/y_coil_1262mm/y_plate_4.step" download>4</a></li>
+          <li><span class="file-group">Z coil</span>
+            <a href="CAD/plates/z_coil_1326mm/z_plate_TL.step" download>TL</a>
+            <a href="CAD/plates/z_coil_1326mm/z_plate_TR.step" download>TR</a>
+            <a href="CAD/plates/z_coil_1326mm/z_plate_BL.step" download>BL</a>
+            <a href="CAD/plates/z_coil_1326mm/z_plate_BR.step" download>BR</a></li>
+        </ul>
+        <h3>Wire paths (STL)</h3>
+        <ul class="file-list">
+          <li><a href="CAD/wires/xgrad_coil_1198mm_wire_0_x.stl" download>xgrad_coil_1198mm_wire_0_x.stl</a><span>4.1 MB</span></li>
+          <li><a href="CAD/wires/ygrad_coil_1262mm_wire_0_y.stl" download>ygrad_coil_1262mm_wire_0_y.stl</a><span>4.1 MB</span></li>
+          <li><a href="CAD/wires/zgrad_coil_1326mm_wire_0_z.stl" download>zgrad_coil_1326mm_wire_0_z.stl</a><span>4.2 MB</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <p>Gradient subsystem, BioMed-EM Lab, SUTD. Built for the portable MRI hackathon.</p>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
