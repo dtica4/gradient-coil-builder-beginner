@@ -14,19 +14,19 @@ plates, and the plates are wrapped into tubes and nested.
 |---|---|
 | `index.html` | The website page |
 | `css/style.css` | Colours, fonts and layout |
-| `js/config.js` | **Settings you are most likely to edit** (see below) |
-| `js/main.js` | Page behaviour: step checkboxes, measured-results switch |
+| `js/config.js` | Coil data used by the viewer and the lab |
+| `js/main.js` | Page behaviour: step checkboxes, result tabs |
 | `js/lab.js` | The "from current to position" interactive lab |
 | `js/viewer.js` | The 3D viewer (Three.js) |
 | `models/` | Compressed coil models for the viewer (plates and wire, as flat-sheet coordinates) |
 | `scripts/` | The six pyCoilGen scripts (design + summary for X, Y, Z) |
 | `CAD/wires/` | Wire-only STL of each coil, from pyCoilGen |
 | `CAD/plates/` | The 12 grooved plates to print (STEP), 4 per coil |
+| `CAD/cover/` | The PLA gradient cover that holds the three coils (STEP) |
+| `images/` | Build photos; `images/results/` holds the test plots |
 
 ## Common edits
 
-- **Show the measured test results:** open `js/config.js` and change
-  `SHOW_MEASURED = false` to `true`. Only do this once the lab agrees the numbers can be public.
 - **Change text on the page:** edit `index.html`. Sections are marked with comments such as `<!-- 3. BUILD -->`.
 - **Fill in a "to be added" item:** search `index.html` for `tbd`.
 

@@ -1,4 +1,4 @@
-import { COILS, SHOW_MEASURED, MEASURED } from './config.js';
+import { COILS } from './config.js';
 import { createLab } from './lab.js';
 
 // --- Lab (no 3D needed, so start it first) ---
@@ -31,19 +31,24 @@ document.getElementById('reset').addEventListener('click', () => {
 });
 refresh();
 
-// --- Measured results (switched in js/config.js) ---
-const m = document.getElementById('measured');
-if (SHOW_MEASURED) {
-  m.innerHTML = `
-    <h3 class="table-title measured-head">Measured at 5 A (${MEASURED.date})</h3>
-    <div class="table-wrap"><table class="results">
-      <thead><tr><th scope="col">Coil</th><th scope="col">Measured efficiency<br>(mT/m/A)</th><th scope="col">Design</th><th scope="col">Difference</th><th scope="col">Gradient at 5 A (mT/m)</th><th scope="col">Linearity error, RMS</th><th scope="col">Probe noise removed</th></tr></thead>
-      <tbody>${MEASURED.rows.map((r) => `<tr><th scope="row">${r.coil}</th><td>${r.eff}</td><td>${r.design}</td><td>${r.diff}</td><td>${r.grad}</td><td>${r.lin}</td><td>${r.linClean}</td></tr>`).join('')}</tbody>
-    </table></div>
-    <p class="verdict">All three coils are within 3.5 % of the design and at the 1.0 mT/m/A target (Y within measurement uncertainty: a second method gives 1.032). Linearity error is about 3 %, below the 5 % target; about half of it is probe noise (±3.8 µT per reading).</p>`;
-} else {
-  m.innerHTML = `<p class="pending">Measured results will appear here once the lab approves publishing them.</p>`;
-}
+// --- Tabs (results and field slices) ---
+document.querySelectorAll('[data-tabs]').forEach((box) => {
+  const tabs = [...box.querySelectorAll('[role="tab"]')];
+  const select = (t) => {
+    tabs.forEach((x) => {
+      const on = x === t;
+      x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+    });
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; select(n); n.focus(); }
+    });
+  });
+});
 
 // --- 3D viewer (loaded last; the rest of the page works without it) ---
 const tabs = [...document.querySelectorAll('.viewer-tabs button')];

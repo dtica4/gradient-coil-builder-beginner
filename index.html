@@ -27,7 +27,7 @@
     <a href="#idea">The idea</a>
     <a href="#materials">Materials</a>
     <a href="#build">Build</a>
-    <a href="#test">Test</a>
+    <a href="#test">Test &amp; results</a>
     <a href="#files">Files</a>
   </nav>
 </header>
@@ -112,7 +112,7 @@
 <section class="band band-alt" id="materials">
   <div class="wrap">
     <h2>Materials and software</h2>
-    <p class="section-lede">Everything you need for all three coils. Rows marked <span class="tbd">to be added</span> are still being written up by the gradient team.</p>
+    <p class="section-lede">Everything you need for all three coils.</p>
     <div class="table-wrap">
     <table class="bom">
       <thead><tr><th scope="col">Item</th><th scope="col">What it is</th><th scope="col">Used for</th></tr></thead>
@@ -203,12 +203,30 @@ pip install shapely cadquery-ocp</code></pre>
           <li><strong>X and Y</strong> are four saddle-shaped lobes. One global unwrap of the whole path works. Splitting into lobes first scrambles it.</li>
           <li><strong>Z</strong> is a double helix that winds around many times. Instead of unrolling, every turn is folded onto one circumference (π × 132.6 ≈ 416.5 mm), cut at the seams, smoothed, and exported as four quadrant STEP files.</li>
         </ul>
+        <p><strong>Where it happens in the code.</strong> The summary scripts (<code>summ_data_smth_…</code>) do both jobs: they unwrap the wire path and write the flat curves as a STEP file. In <a href="scripts/summ_data_smth_x1198.py">summ_data_smth_x1198.py</a> (Y is the same):</p>
+<pre><code># lines 179–186: unwrap — angle around the tube becomes distance along the sheet
+r = np.sqrt(x**2 + y**2)
+R_nominal = np.median(r)
+theta = np.arctan2(y, x)
+theta_unwrapped = np.unwrap(theta)
+s = R_nominal * (theta_unwrapped - theta_unwrapped[0])   # arc length
+z_flat = r - R_nominal                                     # real radial standoff
+
+# lines 188–199: convert to millimetres, keep every 5th point
+# lines 210–211: write the flat curve to STEP
+step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
+        <p><code>export_step_curve</code> (lines 29–48) passes a B-spline through every point with OpenCascade’s <code>GeomAPI_Interpolate</code> and saves it as one curve in a STEP file. In <a href="scripts/summ_data_smth_z1326.py">summ_data_smth_z1326.py</a> the Z coil is folded instead (lines 261–263, raw angle with no <code>np.unwrap</code>), split at the seams (lines 284–291), smoothed (lines 350–356), and written as four quadrant STEP files plus one combined file with <code>export_step_curves</code> (lines 371–385).</p>
         <p class="checkpoint"><strong>Checkpoint:</strong> look at the preview plot before trusting the STEP files. Curves should never jump straight across the sheet.</p>
       </li>
 
       <li class="step" data-step="6">
         <div class="step-head"><h3>Cut the grooves in CAD</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Import the STEP curves into Onshape, sweep-cut a groove along them into a flat plate, and split the sheet into four plates that fit the printer: <strong>1–4</strong> for X and Y, <strong>TL, TR, BL, BR</strong> for Z. Each plate carries its label, so the pieces can’t be mixed up.</p>
+        <ol class="plain-steps">
+          <li><strong>Import the curves.</strong> Upload the STEP file from step 5 into Onshape. SolidWorks or another CAD tool works the same way.</li>
+          <li><strong>Make the plate.</strong> Create a flat plate under the curves, 1.6 mm thick.</li>
+          <li><strong>Cut the grooves.</strong> Use a <strong>sweep cut</strong> with a 1.3 mm circle as the profile and the imported curves as the path. The sweep follows every contour and leaves the groove in the plate.</li>
+          <li><strong>Split into plates.</strong> Split the sheet into four plates that fit the printer: <strong>1–4</strong> for X and Y, <strong>TL, TR, BL, BR</strong> for Z. Each plate carries its label, so the pieces can’t be mixed up.</li>
+        </ol>
         <p>The groove is a <strong>round channel</strong>: a circle of diameter <em>d</em> swept along the wire path and cut into a plate of thickness <em>t</em>. The circle sits partly below the top surface, so the opening at the top is narrower than the wire.</p>
         <div class="groove-figs">
           <figure class="diagram">
@@ -236,7 +254,7 @@ pip install shapely cadquery-ocp</code></pre>
             <figcaption>The same groove at the edge of a plate in Onshape.</figcaption>
           </figure>
         </div>
-        <p class="tbd-block">To be added: how the STEP curves are brought into Onshape, how the sheet is split into four plates, and how the labels are made.</p>
+        <p class="tbd-block">To be added: how the sheet is split into the four plates, and how the labels are made.</p>
         <p class="checkpoint"><strong>Checkpoint:</strong> the plates open at the right size (X sheet about 375 × 360 mm), and grooves continue across every seam. Use the 3D viewer above to compare.</p>
       </li>
 
@@ -368,39 +386,219 @@ pip install shapely cadquery-ocp</code></pre>
 <section class="band band-alt" id="test">
   <div class="wrap">
     <h2>Test the coils</h2>
-    <p class="section-lede">A coil passes when its gradient is close to the design and the field is close to a straight line.</p>
+    <p class="section-lede">We map each coil’s field on a 3D grid and compare it with the pyCoilGen design. A coil passes when its gradient is close to the design and its field is close to a straight line. Measurements from 13–15 Oct 2026, at 5.0 A.</p>
 
-    <div class="method">
-      <div>
-        <h3>How we measure</h3>
-        <ol class="plain-steps">
-          <li>Put the probe of a 3-axis gaussmeter on a motorised stage and move it through an 8 × 8 × 8 grid, 7 mm apart: a 49 mm cube at the centre of the coil.</li>
-          <li>Run 5.0 A DC through one coil at a time and record B<sub>z</sub> at all 512 points.</li>
-          <li>Repeat the scan at 0 A with the coil in place. Fit a flat plane to it and subtract, so only the coil’s own field is judged.</li>
-          <li>Keep the 208 points inside the 50 mm field of view for the FOV numbers.</li>
-        </ol>
-      </div>
-      <div>
-        <h3>How we judge</h3>
-        <p><strong>Efficiency.</strong> Fit the best straight line through all points: B<sub>z</sub> = a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>z. The slope |G| = √(a<sub>1</sub>² + a<sub>2</sub>² + a<sub>3</sub>²) is the gradient. Divide by the current to get mT/m/A.</p>
-        <p><strong>Linearity.</strong> Average the 64 readings in each plane along the coil’s axis, then compare each step between planes with the average step. Report the RMS difference in %.</p>
-      </div>
+    <div class="verdict-box">
+      <h3>The result</h3>
+      <p>All three coils produce real, straight gradients that match the pyCoilGen design and reach the 1.0 mT/m/A target: efficiency within 3.5 % of the design, and a linearity error of about 3 % against a 5 % target. The design can be used in the 32 mT portable MRI, as long as the magnet’s field is uniform enough (see <a href="#meaning">What the numbers mean at 32 mT</a>).</p>
     </div>
 
-    <h3 class="table-title">Design values at 5 A</h3>
     <div class="table-wrap">
     <table class="results">
-      <thead><tr><th scope="col">Coil</th><th scope="col">Efficiency<br>(mT/m/A)</th><th scope="col">Gradient at 5 A<br>(mT/m)</th><th scope="col">Wire length</th><th scope="col">Litz resistance</th><th scope="col">Voltage at 5 A</th><th scope="col">Power at 5 A</th></tr></thead>
+      <caption>Results at a glance. Measured = the built coil in the lab; Design = the pyCoilGen simulation of the same coil.</caption>
+      <thead><tr><th scope="col"></th><th scope="col">X coil</th><th scope="col">Y coil</th><th scope="col">Z coil</th><th scope="col">Target</th></tr></thead>
       <tbody>
-        <tr><th scope="row">X</th><td>1.053</td><td>5.27</td><td>13.6 m</td><td>0.36–0.47 Ω</td><td>1.80–2.35 V</td><td>9.0–11.7 W</td></tr>
-        <tr><th scope="row">Y</th><td>1.015</td><td>5.08</td><td>14.1 m</td><td>0.37–0.49 Ω</td><td>1.86–2.43 V</td><td>9.3–12.2 W</td></tr>
-        <tr><th scope="row">Z</th><td>1.282</td><td>6.41</td><td>17.1 m</td><td>0.45–0.59 Ω</td><td>2.26–2.95 V</td><td>11.3–14.7 W</td></tr>
+        <tr><th scope="row">Design efficiency (mT/m/A)</th><td>1.053</td><td>1.015</td><td>1.282</td><td>1.0</td></tr>
+        <tr class="hl"><th scope="row">Measured efficiency (mT/m/A)</th><td>1.048</td><td>0.980*</td><td>1.290</td><td>≈ 1.0</td></tr>
+        <tr><th scope="row">Measured vs design</th><td>−0.5 %</td><td>−3.5 %</td><td>+0.6 %</td><td></td></tr>
+        <tr><th scope="row">Design gradient at 5.0 A (mT/m)</th><td>5.27</td><td>5.08</td><td>6.41</td><td></td></tr>
+        <tr><th scope="row">Measured gradient at 5.0 A (mT/m)</th><td>5.24</td><td>4.90</td><td>6.45</td><td></td></tr>
+        <tr class="hl"><th scope="row">Linearity error, RMS (50 mm FOV)</th><td>2.9 %</td><td>3.1 %</td><td>2.7 %</td><td>&lt; 5 %</td></tr>
+        <tr><th scope="row">Linearity error, 95th percentile</th><td>5.6 %</td><td>6.5 %</td><td>5.2 %</td><td></td></tr>
+        <tr><th scope="row">Linearity error, worst point</th><td>8.9 %</td><td>9.8 %</td><td>7.1 %</td><td></td></tr>
+        <tr><th scope="row">Linearity error, probe noise removed</th><td>1.4 %</td><td>1.4 %</td><td>1.6 %</td><td>&lt; 5 %</td></tr>
       </tbody>
     </table>
     </div>
-    <p class="small">Resistance = wire length × the litz datasheet range. Litz is 2.6–3.5× more resistive than the solid 1.3 mm wire pyCoilGen assumes, because only about 35 % of its footprint is copper. The X coil’s inductance is 37.7 µH (FastHenry2), so its current rises in about L/R ≈ 0.1 ms.</p>
+    <p class="small">* Y meets the target within measurement uncertainty: a second method (the field component along the bore, B<sub>y</sub>) gives 1.032 mT/m/A, so the true value lies between 0.98 and 1.03. The 0 A background is removed in all numbers.</p>
 
-    <div id="measured"></div>
+    <h3 class="sub-h">How we measure</h3>
+    <div class="two-col">
+      <div class="prose">
+        <ol class="plain-steps">
+          <li>Mount a 3-axis gaussmeter probe on a motorised stage and move it through an <strong>8 × 8 × 8 grid, 7 mm apart</strong>: 512 points filling a 49 mm cube at the centre of the coil.</li>
+          <li>Run <strong>5.0 A DC</strong> through one coil at a time and record the field at every point.</li>
+          <li>Repeat the same scan at <strong>0 A</strong> with the coil in place, to measure the background.</li>
+          <li>For the field-of-view numbers, keep the <strong>208 points inside the 50 mm FOV</strong> sphere. The other 304 points sit in the cube’s corners and edges.</li>
+        </ol>
+        <p class="note">The motor axes are not the design axes. X = motor x, Y = motor z, and Z = 200 mm − motor y, because the motor’s y runs into the bore while the design’s Z runs out of it. The field readings get the same correction. The probe’s sign is not certain, so we report gradient sizes, not directions.</p>
+      </div>
+      <div class="photos">
+        <figure><img src="images/results/setup-positioner.jpg" alt="The motorised three-axis stage holding a long probe arm next to the gradient coil" loading="lazy" width="750" height="1000"><figcaption>The motorised probe positioner.</figcaption></figure>
+        <figure><img src="images/results/setup-probe.jpg" alt="The gaussmeter probe reaching into the bore of the coil" loading="lazy" width="750" height="1000"><figcaption>The probe entering the coil.</figcaption></figure>
+      </div>
+    </div>
+    <figure class="plot"><img src="images/results/scan-fov.png" alt="Left: the centre slice of the scan grid with the 50 mm field of view drawn as a circle around the grid points. Right: all 512 points in 3D, with the 208 inside the field of view highlighted" loading="lazy" width="1600" height="736"><figcaption>The scan (±24.5 mm) covers the 50 mm FOV (±25 mm) to within 0.5 mm. Points inside the FOV are coloured; points outside are grey and not counted.</figcaption></figure>
+
+    <h3 class="sub-h">How each coil is judged</h3>
+    <div class="judge">
+      <div>
+        <h4>1 · Remove the background</h4>
+        <p>Fit a flat plane to the 0 A scan and subtract it, so only the coil’s own field is judged.</p>
+        <p class="formula">B<sub>z,coil</sub> = B<sub>z</sub>(5 A) − (b<sub>0</sub> + b<sub>1</sub>x + b<sub>2</sub>y + b<sub>3</sub>z)</p>
+      </div>
+      <div>
+        <h4>2 · Efficiency</h4>
+        <p>Fit the best straight line (a plane in 3D) through all 512 points. Its slope is the gradient; divide by the current.</p>
+        <p class="formula">B<sub>z</sub> = a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>z<br>|G| = √(a<sub>1</sub>² + a<sub>2</sub>² + a<sub>3</sub>²) &nbsp;&nbsp; efficiency = |G| ÷ 5.0 A</p>
+      </div>
+      <div>
+        <h4>3 · Linearity, step by step</h4>
+        <p>Average the 64 readings in each plane (planes 7 mm apart along the coil’s axis), then compare every step between planes with the average of the 7 steps. Equal steps mean a straight line.</p>
+        <p class="formula">G<sub>step</sub> = (B̄<sub>i+1</sub> − B̄<sub>i</sub>) ÷ 7 mm</p>
+      </div>
+      <div>
+        <h4>4 · Linearity error (RMS)</h4>
+        <p>How far the 208 FOV points sit from the straight line of card 2, as a percentage of the field change across the FOV radius. Target: below 5 %.</p>
+        <p class="formula">RMS = √mean[(B<sub>z</sub> − line)²] ÷ (|G| × 25 mm) × 100 %</p>
+      </div>
+    </div>
+    <p class="small">Measured vs design (%) = (measured efficiency − design efficiency) ÷ design efficiency × 100.</p>
+    <details class="more">
+      <summary>Worked example: one plane = 64 readings</summary>
+      <figure class="plot"><img src="images/results/one-plane.png" alt="The 8 by 8 by 8 grid with one orange plane of 64 points highlighted, shown from the end of the bore and laid flat with the 64 readings written in" loading="lazy" width="1600" height="587"><figcaption>Each dot on the coil-result graphs below is the average of one such plane. The 8 planes are 7 mm apart along the coil’s axis.</figcaption></figure>
+    </details>
+
+    <h3 class="sub-h">First look at the field</h3>
+    <figure class="plot"><img src="images/results/first-look-bz.png" alt="Nine colour maps of the raw field Bz at 5 A, one row per coil and one column per centre plane. Along each coil's own axis the colour ramps from blue to red; on the plane that crosses that axis the colour is nearly flat" loading="lazy" width="1600" height="1325"><figcaption>Raw B<sub>z</sub> at 5.0 A, straight from the probe (only the coordinates corrected). One row per coil, one column per centre plane. Along each coil’s own axis the colour ramps blue → red: a linear gradient. The plane that crosses the axis is one flat colour (X coil: YZ, Y coil: XZ, Z coil: XY). Everything below puts numbers on what this picture already shows.</figcaption></figure>
+
+    <h3 class="sub-h">The background is small and almost uniform</h3>
+    <dl class="facts">
+      <div><dt>|B| with the coil at 0 A</dt><dd>0.17–0.26 mT, mostly vertical (B<sub>y</sub>)</dd></div>
+      <div><dt>B<sub>z</sub> background along the bore</dt><dd>−0.014 mT, slope below 0.2 mT/m</dd></div>
+      <div><dt>Probe noise per reading</dt><dd>±3.8 µT, from two 0 A scans 45 min apart: spread of the difference ÷ √2</dd></div>
+    </dl>
+    <figure class="plot"><img src="images/results/background-0A.png" alt="Three colour maps of the field magnitude with the coil switched off, showing only small variations" loading="lazy" width="1600" height="499"><figcaption>Field magnitude with the X coil at 0 A, on three centre planes.</figcaption></figure>
+    <figure class="plot"><img src="images/results/background-effect.png" alt="Line graphs for each coil comparing the plane averages with and without the background removed, with bar charts of efficiency, linearity and zero point" loading="lazy" width="1600" height="950"><figcaption>Removing the background moves the lines up by 2–3 µT/A but keeps the same slope: efficiency changes by 1–2 %, the linearity error does not change, and the zero point moves 2–3 mm. The linearity error comes from the coils and probe noise, not the background.</figcaption></figure>
+
+    <h3 class="sub-h">Results for each coil</h3>
+    <details class="more">
+      <summary>How to read these graphs</summary>
+      <figure class="plot"><img src="images/results/how-to-read.png" alt="Annotated guide using the X coil: one plane of 64 points, the measured gradient graph, one step zoomed in, the linearity step chart and the efficiency comparison bars" loading="lazy" width="1600" height="1073"><figcaption>Left graph: each dot is one plane’s average and the dashed line is the design. Right graph: each bar is one 7 mm step compared with the average step; bars inside the green ±5 % band mean a straight line.</figcaption></figure>
+    </details>
+    <div class="tabs" data-tabs>
+      <div class="tab-list" role="tablist" aria-label="Choose a coil">
+        <button role="tab" aria-selected="true" aria-controls="res-x" id="tab-res-x">X coil</button>
+        <button role="tab" aria-selected="false" aria-controls="res-y" id="tab-res-y" tabindex="-1">Y coil</button>
+        <button role="tab" aria-selected="false" aria-controls="res-z" id="tab-res-z" tabindex="-1">Z coil</button>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="res-x" aria-labelledby="tab-res-x">
+        <h4>X coil: efficiency matches the design within 0.5 %</h4>
+        <dl class="facts"><div><dt>Measured efficiency</dt><dd>1.048 mT/m/A (design 1.053)</dd></div><div><dt>Gradient at 5.0 A</dt><dd>5.24 mT/m (design 5.27)</dd></div><div><dt>Linearity error, RMS</dt><dd>2.9 % (1.4 % with noise removed)</dd></div></dl>
+        <figure class="plot"><img src="images/results/x-result.png" alt="X coil: plane averages along X lying on the dashed design line, and a step-by-step bar chart with most bars inside the plus or minus 5 percent band" loading="lazy" width="1600" height="560"><figcaption>The end steps differ most (+8 % / −6 %); the middle five are within ±4 %. The coil sat 8.5° off the motor axis (rotated by hand), which widens the band but does not change the efficiency or linearity.</figcaption></figure>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="res-y" aria-labelledby="tab-res-y" hidden>
+        <h4>Y coil: efficiency matches the design within 3.5 %</h4>
+        <dl class="facts"><div><dt>Measured efficiency</dt><dd>0.980 mT/m/A (design 1.015); 1.032 by a second method</dd></div><div><dt>Gradient at 5.0 A</dt><dd>4.90 mT/m (design 5.08)</dd></div><div><dt>Linearity error, RMS</dt><dd>3.1 % (1.4 % with noise removed)</dd></div></dl>
+        <figure class="plot"><img src="images/results/y-result.png" alt="Y coil: plane averages along Y on the design line, and a step chart where one step is clearly lower than the rest" loading="lazy" width="1600" height="560"><figcaption>One step is 13 % below average, yet every plane average stays within ±3 µT of the line: a motor step error of about 1 mm would explain it.</figcaption></figure>
+        <figure class="plot"><img src="images/results/y-rescan.png" alt="Y coil before and after the rescan: the first scan shows a bent profile, the rescan a straight line with even steps" loading="lazy" width="1600" height="1097"><figcaption>The rescan removed a bend. Steps are now even (30–38 µT), and the zero point moved from +4.9 to +6.8 mm, yet the bend is gone: the 13 Oct setup caused it. Efficiency went from 0.958 to 0.980 mT/m/A and the linearity error from 5.9 % to 3.1 %.</figcaption></figure>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="res-z" aria-labelledby="tab-res-z" hidden>
+        <h4>Z coil: efficiency matches the design within 0.6 %</h4>
+        <dl class="facts"><div><dt>Measured efficiency</dt><dd>1.290 mT/m/A (design 1.282)</dd></div><div><dt>Gradient at 5.0 A</dt><dd>6.45 mT/m (design 6.41)</dd></div><div><dt>Linearity error, RMS</dt><dd>2.7 % (1.6 % with noise removed)</dd></div></dl>
+        <figure class="plot"><img src="images/results/z-result.png" alt="Z coil: plane averages along Z on the design line, and a step chart with a weaker first step" loading="lazy" width="1600" height="560"><figcaption>The weaker first step (−7.7 %, at the −Z end) matches the design, which also predicts a weaker field at that end. The field crosses zero 15 mm from the scan centre.</figcaption></figure>
+      </div>
+    </div>
+
+    <h3 class="sub-h">All three coils side by side</h3>
+    <figure class="plot"><img src="images/results/all-steps.png" alt="Bar charts of the rise per 7 mm step for each coil, all nearly equal, and the distance of each plane average from the straight line, all within a few microtesla" loading="lazy" width="1600" height="875"><figcaption>Equal bars mean a straight line. Every plane average stays within ±3.5 µT of the line, inside the ±5 % band (green).</figcaption></figure>
+    <figure class="plot"><img src="images/results/measured-vs-coilgen.png" alt="Left: bar chart of design and measured efficiency for each coil against the 1.0 target. Right: linearity error for each coil, raw and with noise removed, against the 5 percent target" loading="lazy" width="1600" height="594"><figcaption>Efficiency: all three within 3.5 % of the design and at the 1.0 mT/m/A target. Linearity: all three below 5 %; about half of the measured error is probe noise (green = noise removed).</figcaption></figure>
+
+    <h3 class="sub-h">Field slices through the scan</h3>
+    <p class="section-lede">Centre slices of B<sub>z</sub> at 5.0 A with the background removed. On the two planes that contain a coil’s axis, the lines of equal field are straight and evenly spaced. The plane that crosses the axis is nearly flat.</p>
+    <div class="tabs" data-tabs>
+      <div class="tab-list" role="tablist" aria-label="Choose a coil">
+        <button role="tab" aria-selected="true" aria-controls="sl-x" id="tab-sl-x">X coil</button>
+        <button role="tab" aria-selected="false" aria-controls="sl-y" id="tab-sl-y" tabindex="-1">Y coil</button>
+        <button role="tab" aria-selected="false" aria-controls="sl-z" id="tab-sl-z" tabindex="-1">Z coil</button>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="sl-x" aria-labelledby="tab-sl-x">
+        <div class="slices">
+          <figure><img src="images/results/x-slice-xy.png" alt="X coil, XY plane: Bz ramps from blue to red across X" loading="lazy" width="840" height="720"><figcaption>XY plane: 5.13 mT/m</figcaption></figure>
+          <figure><img src="images/results/x-slice-yz.png" alt="X coil, YZ plane: nearly one flat colour" loading="lazy" width="840" height="720"><figcaption>YZ plane: nearly flat (±11 µT)</figcaption></figure>
+          <figure><img src="images/results/x-slice-xz.png" alt="X coil, XZ plane: Bz ramps from blue to red across X" loading="lazy" width="840" height="720"><figcaption>XZ plane: 5.11 mT/m</figcaption></figure>
+        </div>
+        <p class="small">Bz changes along X (across the bore): 5.24 mT/m overall.</p>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="sl-y" aria-labelledby="tab-sl-y" hidden>
+        <div class="slices">
+          <figure><img src="images/results/y-slice-xy.png" alt="Y coil, XY plane: Bz ramps from blue to red vertically" loading="lazy" width="840" height="720"><figcaption>XY plane: 4.86 mT/m</figcaption></figure>
+          <figure><img src="images/results/y-slice-yz.png" alt="Y coil, YZ plane: Bz ramps from blue to red along Y" loading="lazy" width="840" height="720"><figcaption>YZ plane: 4.94 mT/m</figcaption></figure>
+          <figure><img src="images/results/y-slice-xz.png" alt="Y coil, XZ plane: nearly one flat colour" loading="lazy" width="840" height="720"><figcaption>XZ plane: nearly flat (±6 µT)</figcaption></figure>
+        </div>
+        <p class="small">Bz changes along Y (vertical): 4.90 mT/m overall.</p>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="sl-z" aria-labelledby="tab-sl-z" hidden>
+        <div class="slices">
+          <figure><img src="images/results/z-slice-xy.png" alt="Z coil, XY plane: nearly one flat colour" loading="lazy" width="840" height="720"><figcaption>XY plane: nearly flat (±4 µT)</figcaption></figure>
+          <figure><img src="images/results/z-slice-yz.png" alt="Z coil, YZ plane: Bz ramps from blue to red along Z" loading="lazy" width="840" height="720"><figcaption>YZ plane: 6.41 mT/m</figcaption></figure>
+          <figure><img src="images/results/z-slice-xz.png" alt="Z coil, XZ plane: Bz ramps from blue to red along Z" loading="lazy" width="840" height="720"><figcaption>XZ plane: 6.41 mT/m</figcaption></figure>
+        </div>
+        <p class="small">Bz changes along Z (along the bore): 6.45 mT/m overall.</p>
+      </div>
+    </div>
+    <figure class="plot"><img src="images/results/layer-gradient.png" alt="Three line graphs, one per coil, showing the gradient measured in each layer of the scan staying close to the average" loading="lazy" width="1600" height="480"><figcaption>The gradient is the same in every layer: X ±3.2 %, Y ±2.5 %, Z ±2.4 %. In the X and Z scans the layers fall slowly in the order they were scanned (about 0.6 % per layer), likely the current dropping as the coil warmed; the Y rescan, with steady current, does not.</figcaption></figure>
+
+    <h3 class="sub-h" id="meaning">What the numbers mean at 32 mT</h3>
+    <div class="two-col stack">
+      <div class="prose">
+        <p>The gradient turns position into frequency. With the 32 mT magnet and the measured gradients at 5.0 A:</p>
+        <p class="formula">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
+        <p class="formula">Δf = γ · G ≈ 209–275 Hz per mm</p>
+        <p>Across the 50 mm FOV that is a frequency range of about <strong>10–14 kHz</strong>, a comfortable bandwidth at low field, and enough for about 1 mm pixels.</p>
+        <div class="problem">
+          <h4>The one condition: magnet uniformity</h4>
+          <p>With about 5 µT per mm of gradient, a B<sub>0</sub> error of 5 µT (about 150 ppm of 32 mT) shifts the image by about 1 mm. The gradients are strong enough as long as the magnet’s B<sub>0</sub> varies by less than about 150 ppm over the FOV, or the gradient current is raised to match. Try it with the <em>Magnet error</em> slider in <a href="#lab">the lab above</a>.</p>
+        </div>
+      </div>
+      <div>
+        <div class="table-wrap">
+        <table class="results">
+          <caption>Predicted electrical values at 5.0 A</caption>
+          <thead><tr><th scope="col">Coil</th><th scope="col">Wire</th><th scope="col">Resistance (litz)</th><th scope="col">Inductance</th><th scope="col">Voltage</th><th scope="col">Power</th><th scope="col">Current rise L/R</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">X</th><td>13.6 m</td><td>0.36–0.47 Ω</td><td>37.7 µH</td><td>1.8–2.4 V</td><td>9.0–11.8 W</td><td>0.08–0.10 ms</td></tr>
+            <tr><th scope="row">Y</th><td>14.1 m</td><td>0.37–0.48 Ω</td><td>38.9 µH</td><td>1.9–2.4 V</td><td>9.3–12.1 W</td><td>0.08–0.10 ms</td></tr>
+            <tr><th scope="row">Z</th><td>17.1 m</td><td>0.45–0.59 Ω</td><td>68.0 µH</td><td>2.3–2.9 V</td><td>11.3–14.7 W</td><td>0.12–0.15 ms</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="formula small-formula">V = I · R &nbsp;&nbsp; P = I² · R &nbsp;&nbsp; τ = L / R</p>
+        <p class="small">R from the litz datasheet (0.0264–0.0345 Ω/m) and the wire length; L from pyCoilGen (FastHenry2). Litz is 2.6–3.5× more resistive than the solid 1.3 mm wire pyCoilGen assumes, because only about 35 % of its footprint is copper. A current rise of about 0.1 ms is fast enough for low-field sequences.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Limits and next steps</h3>
+    <div class="two-col">
+      <div>
+        <h4>Limits of this measurement</h4>
+        <ul>
+          <li>Probe noise of ±3.8 µT per reading sets a floor of about 3 % on the linearity error.</li>
+          <li>The probe’s sign is not certain, so only gradient sizes are reported, not directions.</li>
+          <li>The X and Z scans lost about 0.6 % of gradient per layer, likely the current dropping as the coil warmed (the Y rescan was steady).</li>
+          <li>The Z 5.0 A scan is from 13 Oct and its 0 A scan from 15 Oct; this is fine because the background is uniform.</li>
+          <li>B<sub>0</sub> is assumed to point along the bore (Z), as in the design.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Next steps</h4>
+        <ul>
+          <li>Measure each coil’s resistance cold and warm, against the 0.36–0.59 Ω prediction.</li>
+          <li>Run the supply in constant-current mode and log the current.</li>
+          <li>Align the X coil in the scanner (it sat 8.5° off the motor axis on the bench).</li>
+          <li>Check the Z coil’s orientation against the design (lead end).</li>
+          <li>Measure the magnet’s B<sub>0</sub> uniformity over the 50 mm FOV.</li>
+          <li>If Y must clearly exceed 1.0 mT/m/A, run it at about 5.1 A.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">None of these limits changes the verdict: X and Z clear both targets by more than the measurement uncertainty, and Y’s efficiency range (0.98–1.03 mT/m/A) straddles the 1.0 target.</p>
+
+    <details class="more">
+      <summary>Appendix: how probe noise was separated</summary>
+      <figure class="plot"><img src="images/results/noise-cubic.png" alt="For each coil: the measured field with a straight-line and cubic fit, the distance from the straight line, and a histogram of what is left after the cubic fit" loading="lazy" width="1600" height="1350"><figcaption>Fit a smooth 20-term cubic to the 512 points: it follows the coil’s gentle bending but not random noise. Cubic minus straight line is the coil’s own bending, the “noise removed” value (about 1.5 %). Measured minus cubic is the noise: 3.6–3.7 µT, matching the 3.8 µT from two 0 A scans.</figcaption></figure>
+      <p class="formula">B<sub>z</sub> = c<sub>0</sub> + c<sub>1</sub>x + c<sub>2</sub>y + c<sub>3</sub>z + … + c<sub>19</sub>z³</p>
+    </details>
   </div>
 </section>
 

@@ -46,6 +46,8 @@ h1 { font-size: clamp(2.1rem, 4.6vw, 3.6rem); font-weight: 800; text-wrap: balan
 h2 { font-size: clamp(1.6rem, 3vw, 2.25rem); font-weight: 750; margin-bottom: 0.6em; }
 h3 { font-size: 1.2rem; font-weight: 700; }
 code, pre { font-family: var(--mono); font-size: 0.86em; }
+:not(pre) > code { overflow-wrap: anywhere; }
+pre { max-width: 100%; }
 sub { font-size: 0.7em; }
 
 /* Top bar */
@@ -216,6 +218,45 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-
 .verdict { border-left: 3px solid var(--field-blue); padding: 4px 0 4px 14px; max-width: 44em; }
 .pending { background: var(--paper); border: 1px dashed var(--line); border-radius: 10px; padding: 16px 18px; margin-top: 32px; color: var(--ink-soft); max-width: 44em; }
 
+
+/* Results */
+.verdict-box { border-left: 4px solid var(--field-blue); background: var(--paper); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 0 0 24px; max-width: 50em; }
+.verdict-box h3 { margin-bottom: 6px; }
+.verdict-box p { margin: 0; }
+.results caption { caption-side: top; text-align: left; font-size: 0.9rem; color: var(--ink-soft); padding-bottom: 8px; }
+.results tbody th[scope="row"] { font-variation-settings: "wdth" 100; font-weight: 600; color: var(--ink); }
+.results tr.hl td, .results tr.hl th { background: color-mix(in srgb, var(--field-blue) 9%, transparent); font-weight: 700; }
+.sub-h { font-size: 1.35rem; margin: 52px 0 14px; padding-top: 22px; border-top: 1px solid var(--line); }
+.judge { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.judge > div { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.judge h4 { margin: 0 0 6px; font-size: 1rem; font-variation-settings: "wdth" 115; }
+.judge p { margin: 0 0 8px; font-size: 0.95rem; }
+.judge .formula, .formula.small-formula { font-size: 1rem; padding: 6px 0 0; }
+.plot { margin: 20px 0; }
+.plot img { display: block; width: 100%; height: auto; border-radius: 8px; background: #fff; border: 1px solid var(--line); }
+.plot figcaption { font-size: 0.88rem; color: var(--ink-soft); margin-top: 8px; max-width: 60em; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 10px 0 6px; }
+.facts div { background: var(--paper); border-radius: 8px; padding: 10px 14px; }
+.facts dt { font-size: 0.82rem; color: var(--ink-soft); }
+.facts dd { margin: 2px 0 0; font-weight: 650; }
+.tabs { margin: 12px 0 8px; }
+.tab-list { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 2px solid var(--line); margin-bottom: 14px; }
+.tab-list button { font: inherit; font-weight: 700; font-variation-settings: "wdth" 115; background: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 8px 14px; color: var(--ink-soft); cursor: pointer; }
+.tab-list button[aria-selected="true"] { color: var(--copper-deep); border-bottom-color: var(--copper); }
+.tab-panel h4 { margin: 4px 0 8px; font-size: 1.05rem; }
+.slices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.slices figure { margin: 0; }
+.slices img { display: block; width: 100%; height: auto; border-radius: 6px; background: #fff; border: 1px solid var(--line); }
+.slices figcaption { font-size: 0.85rem; color: var(--ink-soft); margin-top: 4px; }
+.more { margin: 14px 0; border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; background: var(--paper); }
+.more summary { font-weight: 700; cursor: pointer; font-variation-settings: "wdth" 110; }
+#test .two-col { gap: 32px; }
+#test .two-col .photos { margin: 0; }
+#test .two-col.stack { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+#test .two-col.stack .prose p, #test .two-col.stack .problem { max-width: 46em; }
+.results td { white-space: nowrap; }
+@media (max-width: 760px) { .judge, .facts, .slices { grid-template-columns: 1fr; } .slices { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
 /* Files */
 .files { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 .files h3 { margin: 0 0 10px; }
@@ -230,7 +271,7 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-
 
 /* Narrow screens */
 @media (max-width: 900px) {
-  .hero, .two-col, .method, .files { grid-template-columns: 1fr; }
+  .hero, .two-col, .method, .files { grid-template-columns: minmax(0, 1fr); }
   .hero { padding-top: 28px; gap: 28px; }
 }
 @media (max-width: 640px) {
