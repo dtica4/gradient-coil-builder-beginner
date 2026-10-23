@@ -196,6 +196,16 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-
 
 .step h4.sub { font-size: 1.05rem; font-variation-settings: "wdth" 115; margin: 22px 0 6px; }
 
+.diagram.wide { max-width: 46em; margin: 16px 0; }
+.diagram.wide svg { display: block; width: 100%; height: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.diagram.wide figcaption { font-size: 0.86rem; color: var(--ink-soft); margin-top: 6px; }
+.c-pla { fill: #f1f1ec; stroke: var(--ink); stroke-width: 1.2; }
+.c-tpu { fill: #2a2f35; }
+.c-lbl { fill: #e9c9a8; font: 800 16px var(--wide); }
+.c-dim { stroke: var(--ink); stroke-width: 1.4; }
+.c-ext { stroke: var(--ink-soft); stroke-width: 1; }
+.c-sm { fill: var(--ink); font: 600 14px var(--wide); }
+
 /* Test */
 .method { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 .method h3 { margin-bottom: 12px; }

@@ -121,7 +121,7 @@
         <tr><td>Litz wire</td><td>400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td>The coil conductor. Cut 14.15 m (X), 14.55 m (Y) and 17.56 m (Z): the design length plus 50 cm for leads.</td></tr>
         <tr><td>Grooved plates</td><td>12 printed plates, 4 per coil, in TPU 95A (3D Aura, Singapore), 1.6 mm thick by design (about 1.95 mm as printed)</td><td>Hold the wire on its designed path. Flexible enough to bend into a tube, stiff enough to keep its round shape. About 67 g of TPU and 4 h 50 min of printing per plate.</td></tr>
         <tr><td>3D printer</td><td>Bambu Lab P1S, 0.4 mm nozzle, textured PEI plate</td><td>Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
-        <tr><td>Former</td><td><span class="tbd">To be added</span></td><td>The tube the plates wrap around.</td></tr>
+        <tr><td>Gradient cover</td><td>Printed in PLA, with three concentric slits (2.6 mm wide, 24 mm deep)</td><td>Holds the X, Y and Z coils concentric and lets the leads out of the bore.</td></tr>
         <tr><td>DC power supply</td><td>At least 5 A; constant-current mode recommended</td><td>Driving one coil at a time during testing.</td></tr>
         <tr><td>3-axis gaussmeter</td><td>Reads B<sub>x</sub>, B<sub>y</sub>, B<sub>z</sub> in mT</td><td>Measuring the coil’s field.</td></tr>
         <tr><td>Motorised 3-axis stage</td><td>Moves the probe on a grid</td><td>Scanning 8 × 8 × 8 points, 7 mm apart.</td></tr>
@@ -326,10 +326,27 @@ pip install shapely cadquery-ocp</code></pre>
       </li>
 
       <li class="step" data-step="9">
-        <div class="step-head"><h3>Wrap and nest the coils</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Wrap each coil’s four plates into a tube, then nest them: X (smallest) inside Y inside Z. Use the slider above to see how a flat set becomes a tube.</p>
-        <p class="tbd-block">To be added: the former, how the plates are fixed, how the three coils are held in the magnet.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> measure each coil’s resistance. It should be close to the prediction in <a href="#test">Test</a>.</p>
+        <div class="step-head"><h3>Join, nest and hold the coils</h3><label class="check"><input type="checkbox"> Done</label></div>
+        <p><strong>Join the plates.</strong> Fuse the seams between each coil’s four plates with a soldering iron tip: melt the TPU on both sides of the seam so it flows together and bonds. The same melt-and-bond method works between TPU and other printed parts.</p>
+        <p>The white tube used for winding (step 8) is only a tool: slide it out once the coil is wound and joined.</p>
+        <p><strong>Nest the coils in the gradient cover.</strong> A printed PLA cover holds the three tubes concentric. It has three ring-shaped slits, one per coil, and each slit is centred on its coil’s design radius. Slide in <strong>X first (innermost), then Y, then Z (outermost)</strong>. The cover keeps the coils concentric and holds them in their round shape, so nothing else is needed to fix them together.</p>
+        <figure class="diagram wide">
+            <svg viewBox="0 0 830 340" role="img" aria-labelledby="cov-title cov-desc">
+              <title id="cov-title">Cross-section of the gradient cover with the three coils</title>
+              <desc id="cov-desc">Half cross-section through the printed PLA gradient cover. Three slits, each 2.6 millimetres wide and 24 millimetres deep, hold the TPU plates of the X coil (innermost), Y coil and Z coil (outermost), keeping them concentric. A cap closes the end of the slits.</desc>
+              <defs><marker id="carr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker></defs>
+              <rect class="c-pla" x="276.0" y="271.2" width="432.0" height="10.8"/><rect class="c-pla" x="276.0" y="213.6" width="432.0" height="10.8"/><rect class="c-pla" x="276.0" y="156.0" width="432.0" height="10.8"/><rect class="c-pla" x="276.0" y="67.8" width="432.0" height="41.4"/><rect class="c-pla" x="708.0" y="94.8" width="90.0" height="187.2"/><rect class="c-tpu" x="60.0" y="230.2" width="640.8" height="35.1"/><text class="c-lbl" x="72.6" y="253.8">X</text><rect class="c-tpu" x="60.0" y="172.6" width="640.8" height="35.1"/><text class="c-lbl" x="72.6" y="196.2">Y</text><rect class="c-tpu" x="60.0" y="115.1" width="640.8" height="35.1"/><text class="c-lbl" x="72.6" y="138.6">Z</text><line class="c-ext" x1="60" y1="57.0" x2="60" y2="294.6" stroke-dasharray="4 4"/><line class="c-dim" x1="254.4" y1="224.39999999999995" x2="254.4" y2="271.2" marker-start="url(#carr)" marker-end="url(#carr)"/><text class="c-sm" x="246.4" y="298.6" text-anchor="end">slit 2.6 mm</text><line class="c-dim" x1="276" y1="55.2000000000001" x2="708" y2="55.2000000000001" marker-start="url(#carr)" marker-end="url(#carr)"/><text class="c-sm" x="492" y="47.2000000000001" text-anchor="middle">24 mm deep</text><text class="c-sm" x="753.0" y="47.2000000000001" text-anchor="middle">cap</text><text class="c-sm" x="528" y="318" text-anchor="middle">bore side (Ø 116 mm)</text>
+            </svg>
+            <figcaption>Half cross-section through the cover (to scale). Each 2.6 mm slit holds one ~1.95 mm plate: X at radius 59.9 mm, Y at 63.1 mm, Z at 66.3 mm, matching the coil designs.</figcaption>
+        </figure>
+        <p><strong>Bring the leads out.</strong> All the leads leave the bore through the pairs of holes in the cover: two holes per coil, one for each lead.</p>
+        <div class="photos">
+          <figure><img src="images/tpu-bonding.jpg" alt="A soldering iron tip melting black TPU around the edge of a white printed disc set into a black TPU plate, fusing the two together" loading="lazy" width="750" height="1000"><figcaption>Bonding by melting: the iron tip fuses TPU to the next part.</figcaption></figure>
+          <figure><img src="images/gradient-cover-ring.jpg" alt="The white PLA gradient cover held in a hand, showing its concentric ring slits and two pairs of small holes" loading="lazy" width="750" height="1000"><figcaption>The gradient cover: concentric slits for the three coils.</figcaption></figure>
+          <figure><img src="images/gradient-cover-holes.jpg" alt="The gradient cover from the top, a wide flat white ring with pairs of small holes for the coil leads" loading="lazy" width="750" height="1000"><figcaption>Pairs of holes let each coil’s two leads out of the bore.</figcaption></figure>
+        </div>
+        <p>The cover file is in <a href="#files">Files</a>.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> all three coils sit fully in their slits, round and concentric, with the six leads out through the holes. Measure each coil’s resistance: it should be close to the prediction in <a href="#test">Test</a>.</p>
       </li>
     </ol>
 
@@ -422,6 +439,10 @@ pip install shapely cadquery-ocp</code></pre>
             <a href="CAD/plates/z_coil_1326mm/z_plate_TR.step" download>TR</a>
             <a href="CAD/plates/z_coil_1326mm/z_plate_BL.step" download>BL</a>
             <a href="CAD/plates/z_coil_1326mm/z_plate_BR.step" download>BR</a></li>
+        </ul>
+        <h3>Gradient cover (STEP)</h3>
+        <ul class="file-list">
+          <li><a href="CAD/cover/gradient_cover_concentric.step" download>gradient_cover_concentric.step</a><span>Print in PLA</span></li>
         </ul>
         <h3>Wire paths (STL)</h3>
         <ul class="file-list">
