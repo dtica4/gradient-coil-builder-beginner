@@ -118,13 +118,16 @@
       <thead><tr><th scope="col">Item</th><th scope="col">What it is</th><th scope="col">Used for</th></tr></thead>
       <tbody>
         <tr class="group"><th colspan="3" scope="rowgroup">Hardware</th></tr>
-        <tr><td>Litz wire</td><td>400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td>The coil conductor. About 13.6 m (X), 14.1 m (Y) and 17.1 m (Z), plus leads.</td></tr>
+        <tr><td>Litz wire</td><td>400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td>The coil conductor. Cut 14.15 m (X), 14.55 m (Y) and 17.56 m (Z): the design length plus 50 cm for leads.</td></tr>
         <tr><td>Grooved plates</td><td>12 printed plates, 4 per coil, in TPU 95A (3D Aura, Singapore), 1.6 mm thick by design (about 1.95 mm as printed)</td><td>Hold the wire on its designed path. Flexible enough to bend into a tube, stiff enough to keep its round shape. About 67 g of TPU and 4 h 50 min of printing per plate.</td></tr>
         <tr><td>3D printer</td><td>Bambu Lab P1S, 0.4 mm nozzle, textured PEI plate</td><td>Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
         <tr><td>Former</td><td><span class="tbd">To be added</span></td><td>The tube the plates wrap around.</td></tr>
         <tr><td>DC power supply</td><td>At least 5 A; constant-current mode recommended</td><td>Driving one coil at a time during testing.</td></tr>
         <tr><td>3-axis gaussmeter</td><td>Reads B<sub>x</sub>, B<sub>y</sub>, B<sub>z</sub> in mT</td><td>Measuring the coil’s field.</td></tr>
         <tr><td>Motorised 3-axis stage</td><td>Moves the probe on a grid</td><td>Scanning 8 × 8 × 8 points, 7 mm apart.</td></tr>
+        <tr><td>Cylindrical support</td><td>A rigid tube to bend the plates around</td><td>Winding the small coils with the plates already curved.</td></tr>
+        <tr><td>Soldering iron</td><td>Up to 400 °C</td><td>Melting the TPU dabs and tinning the lead tips.</td></tr>
+        <tr><td>Solder</td><td>SCS7 alloy, 0.8 mm, lead-free</td><td>Tinning the tips of the litz leads.</td></tr>
         <tr><td>Multimeter</td><td>Low-ohm range</td><td>Checking each coil’s resistance, cold and warm.</td></tr>
         <tr class="group"><th colspan="3" scope="rowgroup">Software</th></tr>
         <tr><td>Python 3.12</td><td>Not 3.13: pyCoilGen needs numpy 1.x</td><td>Running the design scripts.</td></tr>
@@ -206,7 +209,34 @@ pip install shapely cadquery-ocp</code></pre>
       <li class="step" data-step="6">
         <div class="step-head"><h3>Cut the grooves in CAD</h3><label class="check"><input type="checkbox"> Done</label></div>
         <p>Import the STEP curves into Onshape, sweep-cut a groove along them into a flat plate, and split the sheet into four plates that fit the printer: <strong>1–4</strong> for X and Y, <strong>TL, TR, BL, BR</strong> for Z. Each plate carries its label, so the pieces can’t be mixed up.</p>
-        <p class="tbd-block">To be added: groove width and depth, plate thickness, and how the plates are split.</p>
+        <p>The groove is a <strong>round channel</strong>: a circle of diameter <em>d</em> swept along the wire path and cut into a plate of thickness <em>t</em>. The circle sits partly below the top surface, so the opening at the top is narrower than the wire.</p>
+        <div class="groove-figs">
+          <figure class="diagram">
+            <svg viewBox="0 0 450 290" role="img" aria-labelledby="groove-title groove-desc">
+              <title id="groove-title">Cross-section of one groove</title>
+              <desc id="groove-desc">A plate of thickness t equal to 1.6 millimetres with a round groove of diameter d equal to 1.3 millimetres cut near its top surface. The litz wire sits in the groove. The curved lips at the top of the groove overhang the wire.</desc>
+              <defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker></defs>
+              <path class="d-plate" d="M20,80 L153.1,80 A65,65 0 1,0 246.9,80 L330,80 L330,240 L20,240 Z"/>
+              <circle class="d-wire" cx="200" cy="125" r="61"/>
+              <circle class="d-strand" cx="200" cy="125" r="43"/>
+              <line class="d-ext" x1="135" y1="125" x2="135" y2="272"/><line class="d-ext" x1="265" y1="125" x2="265" y2="272"/>
+              <line class="d-dim" x1="139" y1="264" x2="261" y2="264" marker-start="url(#arr)" marker-end="url(#arr)"/>
+              <text class="d-lbl" x="285" y="270">d = 1.3 mm</text>
+              <line class="d-ext" x1="330" y1="80" x2="372" y2="80"/><line class="d-ext" x1="330" y1="240" x2="372" y2="240"/>
+              <line class="d-dim" x1="364" y1="84" x2="364" y2="236" marker-start="url(#arr)" marker-end="url(#arr)"/>
+              <text class="d-lbl" x="378" y="156">t =</text><text class="d-lbl" x="378" y="180">1.6 mm</text>
+              <line class="d-call" x1="152" y1="82" x2="246" y2="34"/><line class="d-call" x1="248" y1="82" x2="250" y2="34"/>
+              <text class="d-note" x="256" y="28">Curved lips overhang</text>
+              <text class="d-note" x="256" y="48">the wire: hard to print</text>
+            </svg>
+            <figcaption>One groove in cross-section. The wire is held only where the lips close over it.</figcaption>
+          </figure>
+          <figure>
+            <img src="images/groove-cad-section.jpg" alt="Onshape view of the end of a plate, showing the round groove cut into the plate's edge and the grooves running across its top" loading="lazy" width="792" height="582">
+            <figcaption>The same groove at the edge of a plate in Onshape.</figcaption>
+          </figure>
+        </div>
+        <p class="tbd-block">To be added: how the STEP curves are brought into Onshape, how the sheet is split into four plates, and how the labels are made.</p>
         <p class="checkpoint"><strong>Checkpoint:</strong> the plates open at the right size (X sheet about 375 × 360 mm), and grooves continue across every seam. Use the 3D viewer above to compare.</p>
       </li>
 
@@ -260,8 +290,39 @@ pip install shapely cadquery-ocp</code></pre>
 
       <li class="step" data-step="8">
         <div class="step-head"><h3>Wind the litz wire</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Lay the litz wire into the grooves, following the path from one lead to the other. Lock it in with dabs of TPU as you go (see the known problem in step 7).</p>
-        <p class="tbd-block">To be added: winding order, how the leads leave the coil.</p>
+        <p>Each coil has its <strong>own separate wire</strong>: X, Y and Z are not connected to each other. Cut each wire to the design length plus <strong>50 cm</strong>, so there is spare wire at both the start and the end.</p>
+        <div class="table-wrap">
+        <table class="mini">
+          <thead><tr><th scope="col">Coil</th><th scope="col">Wire path (design)</th><th scope="col">Plus leads</th><th scope="col">Cut length</th></tr></thead>
+          <tbody>
+            <tr><td>X</td><td>13.646 m</td><td>0.5 m</td><td><strong>14.15 m</strong></td></tr>
+            <tr><td>Y</td><td>14.052 m</td><td>0.5 m</td><td><strong>14.55 m</strong></td></tr>
+            <tr><td>Z</td><td>17.057 m</td><td>0.5 m</td><td><strong>17.56 m</strong></td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <h4 class="sub">Wind the loops first, the crossings last</h4>
+        <p>Every coil is one continuous path, but in a few places the wire has to cross over wire already lying in a groove: for example where it leaves the centre of a loop. Choose a start and a direction so that <strong>all the loops go in first</strong>, and the sections that run on top of them go in last. The other way round, the crossing sections are in the way of every loop you wind after them.</p>
+        <div class="photos">
+          <figure><img class="fit-light" src="images/winding-path-x.jpg" alt="One X plate in Onshape with the winding route drawn in red: S marks the start and E the end at a small gap at the top edge, arrows show the direction around the outer turns and into the centre loop, and a dashed line shows the section that runs back out over the loops" loading="lazy" width="1000" height="714"><figcaption>X coil route: start at S, follow the arrows around the turns, and finish at E. The dashed red section runs on top of the turns, so it goes in last.</figcaption></figure>
+          <figure><img class="fit-light" src="images/winding-crossover.jpg" alt="Close-up of one X loop in Onshape: solid green lines mark wire inside the grooves, a dashed green line marks the section that leaves the centre of the loop and passes over the other grooves" loading="lazy" width="866" height="812"><figcaption>Solid green: wire inside the grooves. Dashed green: the section that passes over them, laid on top afterwards.</figcaption></figure>
+        </div>
+
+        <h4 class="sub">Wind on a cylinder for small coils</h4>
+        <p>For small coils like ours (50 mm FOV), wind the plates <strong>already bent around a cylindrical support</strong>. If you wind them flat and bend them afterwards, the wire pops out of the grooves as the plate curves. For a large bore and FOV you can wind flat and then bend, with much less risk of the wire popping out.</p>
+        <p>Add the TPU dabs <strong>while you wind</strong> (see step 7). You can see as you go which sections want to lift, or where the print came out poorly.</p>
+        <div class="photos">
+          <figure><img src="images/winding-on-cylinder.jpg" alt="Black TPU plates bent around a white cylindrical tube on a workbench, partly wound with litz wire held by small yellow dabs of TPU" loading="lazy" width="750" height="1000"><figcaption>Winding with the plates bent around a white cylindrical support.</figcaption></figure>
+          <figure><img class="fit-light" src="images/coil-leads.jpg" alt="A wound X coil standing upright, with many yellow TPU dabs; the two long wire ends run down the front of the coil, and a red arrow points at them" loading="lazy" width="584" height="1000"><figcaption>A wound X coil. The arrow points at the two 50 cm leads, left separate.</figcaption></figure>
+        </div>
+
+        <h4 class="sub">Finish the leads</h4>
+        <p>Leave the two ends <strong>separate</strong>; don’t twist them together. Solder the tip of each lead so the measuring clips make good contact during testing. We use SCS7 alloy, 0.8 mm lead-free solder, with the iron at its maximum of 400 °C: the bare tip of a litz wire is many fine copper strands, and solder doesn’t stick to it well at normal temperatures.</p>
+        <p class="small">Work in a ventilated area and let the tip cool before handling it.</p>
+
+        <p><strong>Time:</strong> about 30–45 minutes to wind one coil of this size.</p>
+        <p class="checkpoint"><strong>Checkpoint:</strong> every groove holds wire, nothing lifts when you press along the turns, and both soldered leads are free and about 50 cm long.</p>
       </li>
 
       <li class="step" data-step="9">

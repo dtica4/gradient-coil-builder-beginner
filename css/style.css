@@ -164,6 +164,7 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-
 .photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 18px 0; max-width: 44em; }
 .photos figure { margin: 0; }
 .photos img { display: block; width: 100%; height: 260px; object-fit: cover; border-radius: 8px; background: var(--line); }
+.photos img.fit-light { object-fit: contain; background: var(--surface); border: 1px solid var(--line); }
 .photos img.fit { object-fit: contain; background: #2b2b2b; }
 .photos figcaption { font-size: 0.86rem; color: var(--ink-soft); margin-top: 6px; }
 .problem { border: 1px solid var(--field-red); border-radius: 12px; padding: 16px 18px; margin: 20px 0; max-width: 46em; }
@@ -174,6 +175,26 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 650; border-
 .scale-note img { display: block; width: 100%; height: auto; border-radius: 8px; }
 .scale-note figcaption { font-size: 0.8rem; color: var(--ink-soft); margin-top: 4px; }
 @media (max-width: 480px) { .scale-note { grid-template-columns: 1fr; } .scale-note img { max-width: 220px; } }
+
+/* Groove diagram */
+.groove-figs { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: start; margin: 16px 0; max-width: 52em; }
+.groove-figs figure { margin: 0; }
+.groove-figs img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.groove-figs figcaption { font-size: 0.86rem; color: var(--ink-soft); margin-top: 6px; }
+.diagram svg { display: block; width: 100%; height: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.d-plate { fill: #9fb3c4; stroke: var(--ink); stroke-width: 1.5; }
+.d-wire { fill: #e9c9a8; stroke: var(--copper); stroke-width: 2; }
+.d-strand { fill: none; stroke: var(--copper); stroke-width: 1; stroke-dasharray: 2 5; }
+.d-ext { stroke: var(--ink-soft); stroke-width: 1; }
+.d-dim { stroke: var(--ink); stroke-width: 1.5; }
+.d-head { fill: var(--ink); }
+.d-call { stroke: var(--field-red); stroke-width: 1.2; }
+.d-lbl { fill: var(--ink); font: 700 19px var(--wide); }
+.d-lbl.small { font-size: 14px; font-weight: 600; }
+.d-note { fill: var(--field-red); font: 600 17px var(--wide); }
+@media (max-width: 700px) { .groove-figs { grid-template-columns: 1fr; } }
+
+.step h4.sub { font-size: 1.05rem; font-variation-settings: "wdth" 115; margin: 22px 0 6px; }
 
 /* Test */
 .method { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
