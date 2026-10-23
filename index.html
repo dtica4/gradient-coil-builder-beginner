@@ -1,14 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gradient Coil Builder</title>
-<meta name="description" content="Learn how to design, build and test the X, Y and Z gradient coils of a 32 mT portable MRI.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title data-i18n="t001">portableMRI NerdFest - 2 | Gradient coils</title>
+<meta content="Learn how to design, build and test the X, Y and Z gradient coils of a 32 mT portable MRI." name="description"/>
+<link href="images/brand/favicon.png" rel="icon"/>
+<link href="css/style.css" rel="stylesheet"/>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -17,193 +16,200 @@
 </script>
 </head>
 <body>
-
-<header class="topbar">
-  <a class="brand" href="#top" aria-label="Gradient Coil Builder, back to top">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 22c4-12 8-12 12 0s8 12 12 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-    <span>Gradient Coil Builder</span>
-  </a>
-  <nav aria-label="Sections">
-    <a href="#idea">The idea</a>
-    <a href="#materials">Materials</a>
-    <a href="#build">Build</a>
-    <a href="#test">Test &amp; results</a>
-    <a href="#files">Files</a>
-  </nav>
+<header>
+<div class="site-head">
+<a class="brand" href="#top">
+<img alt="MRI, Hardware, AI logo" data-i18n-alt="t387" height="120" src="images/brand/mri-hardware-ai.png" width="164"/>
+<span><strong>portableMRI NerdFest - 2</strong><small data-i18n="brand.sub">Gradient coils: from flat plates to a working coil</small></span>
+</a>
+<label class="lang"><span class="sr-only" data-i18n="lang.label">Language</span>
+<select id="lang">
+<option value="en">English</option>
+<option value="zh">中文</option>
+<option value="es">Español</option>
+</select>
+</label>
+</div>
 </header>
-
+<nav aria-label="Sections" class="tabbar" data-i18n-aria="t427">
+<div class="tabbar-inner">
+<a data-i18n="nav.overview" href="#top">Overview</a>
+<a data-i18n="nav.idea" href="#idea">The idea</a>
+<a data-i18n="nav.materials" href="#materials">Materials</a>
+<a data-i18n="nav.build" href="#build">Build</a>
+<a data-i18n="nav.test" href="#test">Test &amp; results</a>
+<a data-i18n="nav.files" href="#files">Files</a>
+</div>
+</nav>
 <main id="top">
-
 <!-- HERO: the coil itself -->
 <section class="hero">
-  <div class="hero-text">
-    <p class="kicker">Gradient coils for the 32 mT portable MRI</p>
-    <h1>Roll a flat plate into a gradient coil.</h1>
-    <p class="lede">Each coil starts as copper wire laid in the grooves of four flat 3D-printed plates. Wrap the plates into a tube and the wire makes a magnetic field that changes steadily from one side of the scanner to the other. That steady change is what lets the scanner tell where a signal comes from.</p>
-    <dl class="coil-facts">
-      <div><dt>X coil</dt><dd>Ø 119.8 mm, gradient across the bore</dd></div>
-      <div><dt>Y coil</dt><dd>Ø 126.2 mm, gradient vertical</dd></div>
-      <div><dt>Z coil</dt><dd>Ø 132.6 mm, gradient along the bore</dd></div>
-    </dl>
-  </div>
-
-  <figure class="viewer" aria-label="3D viewer of the gradient coils">
-    <div class="viewer-tabs" role="tablist" aria-label="Choose a coil">
-      <button role="tab" data-coil="x" aria-selected="true">X</button>
-      <button role="tab" data-coil="y" aria-selected="false">Y</button>
-      <button role="tab" data-coil="z" aria-selected="false">Z</button>
-      <button role="tab" data-coil="all" aria-selected="false">All three</button>
-    </div>
-    <div class="viewer-stage" id="stage">
-      <p class="viewer-status" id="viewer-status">Loading the coil…</p>
-    </div>
-    <div class="viewer-controls">
-      <label class="wrap-control">
-        <span>Flat</span>
-        <input type="range" id="wrap" min="0" max="100" value="100" aria-label="Wrap the plates from flat to cylinder">
-        <span>Wrapped</span>
-      </label>
-      <button type="button" class="btn" id="play">Play the wrap</button>
-      <label class="toggle"><input type="checkbox" id="show-plates" checked> Plates</label>
-      <label class="toggle"><input type="checkbox" id="show-wire" checked> Wire</label>
-    </div>
-    <figcaption id="viewer-caption">X coil: four plates, one saddle-shaped wire loop in each. Drag to turn, scroll to zoom.</figcaption>
-  </figure>
+<div class="hero-text">
+<a class="event" href="https://www.mrinerdfest.org/" rel="noopener noreferrer" target="_blank">
+<span class="event-label" data-i18n="hero.eventLabel">Event website</span>
+<span class="event-name">portableMRI NerdFest - 2 <svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M7 17 17 7M8 7h9v9"></path></svg></span>
+</a>
+<p class="kicker" data-i18n="t002">Gradient coils for the 32 mT portable MRI</p>
+<h1 data-i18n="t003">Roll a flat plate into a gradient coil.</h1>
+<p class="lede" data-i18n="t004">Each coil starts as copper wire laid in the grooves of four flat 3D-printed plates. Wrap the plates into a tube and the wire makes a magnetic field that changes steadily from one side of the scanner to the other. That steady change is what lets the scanner tell where a signal comes from.</p>
+<div class="hero-actions">
+<a class="btn-primary" data-i18n="hero.start" href="#build">Start building</a>
+<a class="btn-secondary" data-i18n="hero.materials" href="#materials">View materials</a>
+</div>
+<dl class="coil-facts">
+<div><dt data-i18n="t005">X coil</dt><dd data-i18n="t006">Ø 119.8 mm, gradient across the bore</dd></div>
+<div><dt data-i18n="t007">Y coil</dt><dd data-i18n="t008">Ø 126.2 mm, gradient vertical</dd></div>
+<div><dt data-i18n="t009">Z coil</dt><dd data-i18n="t010">Ø 132.6 mm, gradient along the bore</dd></div>
+</dl>
+</div>
+<figure aria-label="3D viewer of the gradient coils" class="viewer" data-i18n-aria="t428">
+<div aria-label="Choose a coil" class="viewer-tabs" data-i18n-aria="t429" role="tablist">
+<button aria-selected="true" data-coil="x" role="tab">X</button>
+<button aria-selected="false" data-coil="y" role="tab">Y</button>
+<button aria-selected="false" data-coil="z" role="tab">Z</button>
+<button aria-selected="false" data-coil="all" data-i18n="t011" role="tab">All three</button>
+</div>
+<div class="viewer-stage" id="stage">
+<p class="viewer-status" id="viewer-status">Loading the coil…</p>
+</div>
+<div class="viewer-controls">
+<label class="wrap-control">
+<span data-i18n="t365">Flat</span>
+<input aria-label="Wrap the plates from flat to cylinder" data-i18n-aria="t430" id="wrap" max="100" min="0" type="range" value="100"/>
+<span data-i18n="t366">Wrapped</span>
+</label>
+<button class="btn" data-i18n="t013" id="play" type="button">Play the wrap</button>
+<label class="toggle"><input checked="" id="show-plates" type="checkbox"/> <span data-i18n="viewer.plates">Plates</span></label>
+<label class="toggle"><input checked="" id="show-wire" type="checkbox"/> <span data-i18n="viewer.wire">Wire</span></label>
+</div>
+<figcaption id="viewer-caption">X coil: four plates, one saddle-shaped wire loop in each. Drag to turn, scroll to zoom.</figcaption>
+</figure>
 </section>
-
 <!-- 1. THE IDEA -->
 <section class="band" id="idea">
-  <div class="wrap">
-    <h2>What a gradient coil does</h2>
-    <div class="two-col">
-      <div class="prose">
-        <p>The permanent magnet ring makes a strong, even field, B<sub>0</sub> = 32 mT, pointing along the bore. Protons in that field spin at one frequency, the <em>Larmor frequency</em>:</p>
-        <p class="formula">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
-        <p>If every proton spins at the same frequency, the scanner hears one note and cannot tell where it came from. A gradient coil adds a small extra field that grows in a straight line across the scanner. Now each position has its own frequency, and the frequency tells you the position.</p>
-        <p>We need three coils, one per direction. Each is designed to give <strong>1.0 mT/m for every ampere</strong> of current (written 1.0 mT/m/A). We test them at <strong>5 A</strong>.</p>
-        <p class="note">The field only works as a ruler if it is a <em>straight</em> line. We call how far it bends away from a straight line the <em>linearity error</em>. Our target is below 5 % over a 50 mm field of view (FOV).</p>
-      </div>
-
-      <div class="lab" id="lab">
-        <h3>Try it: from current to position</h3>
-        <div class="lab-row" role="radiogroup" aria-label="Gradient direction">
-          <label><input type="radio" name="axis" value="x" checked> X</label>
-          <label><input type="radio" name="axis" value="y"> Y</label>
-          <label><input type="radio" name="axis" value="z"> Z</label>
-        </div>
-        <canvas id="lab-canvas" width="360" height="360" aria-label="Map of the extra field across the 50 mm field of view"></canvas>
-        <label class="slider">Current <output id="i-out">5.0 A</output>
-          <input type="range" id="i-in" min="0" max="5" step="0.1" value="5"></label>
-        <label class="slider">Magnet error <output id="e-out">0 µT</output>
-          <input type="range" id="e-in" min="0" max="20" step="1" value="0"></label>
-        <dl class="readout">
-          <div><dt>Gradient</dt><dd id="r-g">–</dd></div>
-          <div><dt>Frequency step per mm</dt><dd id="r-df">–</dd></div>
-          <div><dt>Frequency range across 50 mm</dt><dd id="r-bw">–</dd></div>
-          <div><dt>Image shift from magnet error</dt><dd id="r-shift">–</dd></div>
-        </dl>
-        <p class="small">Uses each coil’s pyCoilGen design value (X 1.053, Y 1.015, Z 1.282 mT/m/A). Blue is less field, red is more. The lines join points of equal field: straight, evenly spaced lines mean a linear gradient. A magnet error moves the whole pattern, so the image lands in the wrong place.</p>
-      </div>
-    </div>
-  </div>
+<div class="wrap">
+<h2 data-i18n="t015">What a gradient coil does</h2>
+<div class="two-col">
+<div class="prose">
+<p data-i18n="t016">The permanent magnet ring makes a strong, even field, B<sub>0</sub> = 32 mT, pointing along the bore. Protons in that field spin at one frequency, the <em>Larmor frequency</em>:</p>
+<p class="formula" data-i18n="t017">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
+<p data-i18n="t018">If every proton spins at the same frequency, the scanner hears one note and cannot tell where it came from. A gradient coil adds a small extra field that grows in a straight line across the scanner. Now each position has its own frequency, and the frequency tells you the position.</p>
+<p data-i18n="t019">We need three coils, one per direction. Each is designed to give <strong>1.0 mT/m for every ampere</strong> of current (written 1.0 mT/m/A). We test them at <strong>5 A</strong>.</p>
+<p class="note" data-i18n="t020">The field only works as a ruler if it is a <em>straight</em> line. We call how far it bends away from a straight line the <em>linearity error</em>. Our target is below 5 % over a 50 mm field of view (FOV).</p>
+</div>
+<div class="lab" id="lab">
+<h3 data-i18n="t021">Try it: from current to position</h3>
+<div aria-label="Gradient direction" class="lab-row" data-i18n-aria="t431" role="radiogroup">
+<label><input checked="" name="axis" type="radio" value="x"/> X</label>
+<label><input name="axis" type="radio" value="y"/> Y</label>
+<label><input name="axis" type="radio" value="z"/> Z</label>
+</div>
+<canvas aria-label="Map of the extra field across the 50 mm field of view" data-i18n-aria="t432" height="360" id="lab-canvas" width="360"></canvas>
+<label class="slider"><span data-i18n="lab.current">Current</span> <output id="i-out">5.0 A</output>
+<input id="i-in" max="5" min="0" step="0.1" type="range" value="5"/></label>
+<label class="slider"><span data-i18n="lab.error">Magnet error</span> <output id="e-out">0 µT</output>
+<input id="e-in" max="20" min="0" step="1" type="range" value="0"/></label>
+<dl class="readout">
+<div><dt data-i18n="t022">Gradient</dt><dd id="r-g">–</dd></div>
+<div><dt data-i18n="t023">Frequency step per mm</dt><dd id="r-df">–</dd></div>
+<div><dt data-i18n="t024">Frequency range across 50 mm</dt><dd id="r-bw">–</dd></div>
+<div><dt data-i18n="t025">Image shift from magnet error</dt><dd id="r-shift">–</dd></div>
+</dl>
+<p class="small" data-i18n="t026">Uses each coil’s pyCoilGen design value (X 1.053, Y 1.015, Z 1.282 mT/m/A). Blue is less field, red is more. The lines join points of equal field: straight, evenly spaced lines mean a linear gradient. A magnet error moves the whole pattern, so the image lands in the wrong place.</p>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 2. MATERIALS -->
 <section class="band band-alt" id="materials">
-  <div class="wrap">
-    <h2>Materials and software</h2>
-    <p class="section-lede">Everything you need for all three coils.</p>
-    <div class="table-wrap">
-    <table class="bom">
-      <thead><tr><th scope="col">Item</th><th scope="col">What it is</th><th scope="col">Used for</th></tr></thead>
-      <tbody>
-        <tr class="group"><th colspan="3" scope="rowgroup">Hardware</th></tr>
-        <tr><td>Litz wire</td><td>400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td>The coil conductor. Cut 14.15 m (X), 14.55 m (Y) and 17.56 m (Z): the design length plus 50 cm for leads.</td></tr>
-        <tr><td>Grooved plates</td><td>12 printed plates, 4 per coil, in TPU 95A (3D Aura, Singapore), 1.6 mm thick by design (about 1.95 mm as printed)</td><td>Hold the wire on its designed path. Flexible enough to bend into a tube, stiff enough to keep its round shape. About 67 g of TPU and 4 h 50 min of printing per plate.</td></tr>
-        <tr><td>3D printer</td><td>Bambu Lab P1S, 0.4 mm nozzle, textured PEI plate</td><td>Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
-        <tr><td>Gradient cover</td><td>Printed in PLA, with three concentric slits (2.6 mm wide, 24 mm deep)</td><td>Holds the X, Y and Z coils concentric and lets the leads out of the bore.</td></tr>
-        <tr><td>DC power supply</td><td>At least 5 A; constant-current mode recommended</td><td>Driving one coil at a time during testing.</td></tr>
-        <tr><td>3-axis gaussmeter</td><td>Reads B<sub>x</sub>, B<sub>y</sub>, B<sub>z</sub> in mT</td><td>Measuring the coil’s field.</td></tr>
-        <tr><td>Motorised 3-axis stage</td><td>Moves the probe on a grid</td><td>Scanning 8 × 8 × 8 points, 7 mm apart.</td></tr>
-        <tr><td>Cylindrical support</td><td>A rigid tube to bend the plates around</td><td>Winding the small coils with the plates already curved.</td></tr>
-        <tr><td>Soldering iron</td><td>Up to 400 °C</td><td>Melting the TPU dabs and tinning the lead tips.</td></tr>
-        <tr><td>Solder</td><td>SCS7 alloy, 0.8 mm, lead-free</td><td>Tinning the tips of the litz leads.</td></tr>
-        <tr><td>Multimeter</td><td>Low-ohm range</td><td>Checking each coil’s resistance, cold and warm.</td></tr>
-        <tr class="group"><th colspan="3" scope="rowgroup">Software</th></tr>
-        <tr><td>Python 3.12</td><td>Not 3.13: pyCoilGen needs numpy 1.x</td><td>Running the design scripts.</td></tr>
-        <tr><td>pyCoilGen</td><td>Open-source coil designer</td><td>Finding the wire path that makes the gradient.</td></tr>
-        <tr><td>trimesh, shapely, cadquery-ocp</td><td>Python packages</td><td>Reading the STL, checking crossings, writing STEP files.</td></tr>
-        <tr><td>FastHenry2</td><td>Free inductance solver (Windows, 64-bit)</td><td>Inductance of each coil. Without it, pyCoilGen reports 0 Ω and 0 H.</td></tr>
-        <tr><td>VS Code</td><td>Code editor</td><td>Opening the examples folder and running scripts.</td></tr>
-        <tr><td>Onshape</td><td>Browser CAD</td><td>Cutting the grooves into the plates.</td></tr>
-      </tbody>
-    </table>
-    </div>
-  </div>
+<div class="wrap">
+<h2 data-i18n="t027">Materials and software</h2>
+<p class="section-lede" data-i18n="t028">Everything you need for all three coils.</p>
+<div class="table-wrap">
+<table class="bom">
+<thead><tr><th data-i18n="t029" scope="col">Item</th><th data-i18n="t030" scope="col">What it is</th><th data-i18n="t031" scope="col">Used for</th></tr></thead>
+<tbody>
+<tr class="group"><th colspan="3" data-i18n="t032" scope="rowgroup">Hardware</th></tr>
+<tr><td data-i18n="t033">Litz wire</td><td data-i18n="t034">400 strands × 0.05 mm, 0.589 mm² of copper, 0.0264–0.0345 Ω/m</td><td data-i18n="t035">The coil conductor. Cut 14.15 m (X), 14.55 m (Y) and 17.56 m (Z): the design length plus 50 cm for leads.</td></tr>
+<tr><td data-i18n="t036">Grooved plates</td><td data-i18n="t037">12 printed plates, 4 per coil, in TPU 95A (3D Aura, Singapore), 1.6 mm thick by design (about 1.95 mm as printed)</td><td data-i18n="t038">Hold the wire on its designed path. Flexible enough to bend into a tube, stiff enough to keep its round shape. About 67 g of TPU and 4 h 50 min of printing per plate.</td></tr>
+<tr><td data-i18n="t039">3D printer</td><td data-i18n="t040">Bambu Lab P1S, 0.4 mm nozzle, textured PEI plate</td><td data-i18n="t041">Printing the plates (each plate is about 190 × 180 mm, X/Y, or 207 × 180 mm, Z).</td></tr>
+<tr><td data-i18n="t042">Gradient cover</td><td data-i18n="t043">Printed in PLA, with three concentric slits (2.6 mm wide, 24 mm deep)</td><td data-i18n="t044">Holds the X, Y and Z coils concentric and lets the leads out of the bore.</td></tr>
+<tr><td data-i18n="t045">DC power supply</td><td data-i18n="t046">At least 5 A; constant-current mode recommended</td><td data-i18n="t047">Driving one coil at a time during testing.</td></tr>
+<tr><td data-i18n="t048">3-axis gaussmeter</td><td data-i18n="t049">Reads B<sub>x</sub>, B<sub>y</sub>, B<sub>z</sub> in mT</td><td data-i18n="t050">Measuring the coil’s field.</td></tr>
+<tr><td data-i18n="t051">Motorised 3-axis stage</td><td data-i18n="t052">Moves the probe on a grid</td><td data-i18n="t053">Scanning 8 × 8 × 8 points, 7 mm apart.</td></tr>
+<tr><td data-i18n="t054">Cylindrical support</td><td data-i18n="t055">A rigid tube to bend the plates around</td><td data-i18n="t056">Winding the small coils with the plates already curved.</td></tr>
+<tr><td data-i18n="t057">Soldering iron</td><td>Up to 400 °C</td><td data-i18n="t058">Melting the TPU dabs and tinning the lead tips.</td></tr>
+<tr><td data-i18n="t059">Solder</td><td data-i18n="t060">SCS7 alloy, 0.8 mm, lead-free</td><td data-i18n="t061">Tinning the tips of the litz leads.</td></tr>
+<tr><td data-i18n="t062">Multimeter</td><td data-i18n="t063">Low-ohm range</td><td data-i18n="t064">Checking each coil’s resistance, cold and warm.</td></tr>
+<tr class="group"><th colspan="3" data-i18n="t065" scope="rowgroup">Software</th></tr>
+<tr><td data-i18n="t066">Python 3.12</td><td data-i18n="t067">Not 3.13: pyCoilGen needs numpy 1.x</td><td data-i18n="t068">Running the design scripts.</td></tr>
+<tr><td data-i18n="t069">pyCoilGen</td><td data-i18n="t070">Open-source coil designer</td><td data-i18n="t071">Finding the wire path that makes the gradient.</td></tr>
+<tr><td data-i18n="t072">trimesh, shapely, cadquery-ocp</td><td data-i18n="t073">Python packages</td><td data-i18n="t074">Reading the STL, checking crossings, writing STEP files.</td></tr>
+<tr><td data-i18n="t075">FastHenry2</td><td data-i18n="t076">Free inductance solver (Windows, 64-bit)</td><td data-i18n="t077">Inductance of each coil. Without it, pyCoilGen reports 0 Ω and 0 H.</td></tr>
+<tr><td data-i18n="t078">VS Code</td><td data-i18n="t079">Code editor</td><td data-i18n="t080">Opening the examples folder and running scripts.</td></tr>
+<tr><td data-i18n="t081">Onshape</td><td data-i18n="t082">Browser CAD</td><td data-i18n="t083">Cutting the grooves into the plates.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
-
 <!-- 3. BUILD -->
 <section class="band" id="build">
-  <div class="wrap">
-    <div class="build-head">
-      <h2>Build it, step by step</h2>
-      <p class="progress" aria-live="polite"><span id="done-count">0</span> of <span id="step-count">9</span> steps checked <button type="button" class="link-btn" id="reset">Reset</button></p>
-    </div>
-    <p class="section-lede">Tick each step when its checkpoint passes. Your ticks are kept in this browser only.</p>
-
-    <ol class="steps">
-      <li class="step" data-step="1">
-        <div class="step-head"><h3>Set up Python</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>pyCoilGen needs numpy 1.x, which has no ready-made packages for Python 3.13, so install <strong>Python 3.12</strong>. Keep everything inside a virtual environment, so it doesn’t clash with other projects.</p>
+<div class="wrap">
+<div class="build-head">
+<h2 data-i18n="t084">Build it, step by step</h2>
+<p aria-live="polite" class="progress"><span id="progress-text">0 of 9 steps checked</span> <button class="link-btn" id="reset" type="button" data-i18n="ui.reset">Reset</button></p>
+</div>
+<p class="section-lede" data-i18n="t086">Tick each step when its checkpoint passes. Your ticks are kept in this browser only.</p>
+<ol class="steps">
+<li class="step" data-step="1">
+<div class="step-head"><h3 data-i18n="t087">Set up Python</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t088">pyCoilGen needs numpy 1.x, which has no ready-made packages for Python 3.13, so install <strong>Python 3.12</strong>. Keep everything inside a virtual environment, so it doesn’t clash with other projects.</p>
 <pre><code>py -3.12 -m venv venv
 venv\Scripts\activate
 pip install pycoilgen trimesh
 pip install shapely cadquery-ocp</code></pre>
-        <p>Install <strong>FastHenry2</strong> from the FastFieldSolvers bundle. Open the examples folder in VS Code and choose <code>venv\Scripts\python.exe</code> as the interpreter.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> <code>python -c "import pyCoilGen"</code> runs without an error.</p>
-      </li>
-
-      <li class="step" data-step="2">
-        <div class="step-head"><h3>Design the three coils</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Each generation script holds an <code>arg_dict</code> that describes one coil. The three scripts are copies of each other with four lines changed:</p>
-        <div class="table-wrap">
-        <table class="mini">
-          <thead><tr><th scope="col">Script</th><th scope="col">Direction</th><th scope="col">Radius (m)</th><th scope="col">Length (m)</th><th scope="col">Regularisation</th></tr></thead>
-          <tbody>
-            <tr><td><a href="scripts/xgrad_coil_1198mm.py">xgrad_coil_1198mm.py</a></td><td>x</td><td>0.0599</td><td>0.35</td><td>100</td></tr>
-            <tr><td><a href="scripts/ygrad_coil_1262mm.py">ygrad_coil_1262mm.py</a></td><td>y</td><td>0.0631</td><td>0.35</td><td>300</td></tr>
-            <tr><td><a href="scripts/zgrad_coil_1326mm.py">zgrad_coil_1326mm.py</a></td><td>z</td><td>0.0663</td><td>0.36</td><td>100</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p><strong>Diameter rule:</strong> radius in metres = diameter in mm ÷ 2 ÷ 1000. For 126.2 mm that gives 0.0631 m. This is the centre line of the wire; the outside of the wire sits a few mm further out. The coils nest inside each other, so each diameter must clear the coil inside it.</p>
-        <p class="note">The scripts ask for <code>target_gradient_strength: 0.9</code>, but the solver goes past it: the designs reach 1.053 (X), 1.015 (Y) and 1.282 (Z) mT/m/A, which meets the 1.0 target.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> each script writes <code>debug/&lt;project&gt;_final.npy</code> and a wire-only STL such as <code>xgrad_coil_1198mm_wire_0_x.stl</code>.</p>
-      </li>
-
-      <li class="step" data-step="3">
-        <div class="step-head"><h3>Smooth the wire path</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>A smooth path has fewer kinks and reversals. It exports to CAD in seconds and cuts cleanly. Two settings control it:</p>
+<p data-i18n="t089">Install <strong>FastHenry2</strong> from the FastFieldSolvers bundle. Open the examples folder in VS Code and choose <code>venv\Scripts\python.exe</code> as the interpreter.</p>
+<p class="checkpoint" data-i18n="t090"><strong>Checkpoint:</strong> <code>python -c "import pyCoilGen"</code> runs without an error.</p>
+</li>
+<li class="step" data-step="2">
+<div class="step-head"><h3 data-i18n="t091">Design the three coils</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t092">Each generation script holds an <code>arg_dict</code> that describes one coil. The three scripts are copies of each other with four lines changed:</p>
+<div class="table-wrap">
+<table class="mini">
+<thead><tr><th data-i18n="t093" scope="col">Script</th><th data-i18n="t094" scope="col">Direction</th><th data-i18n="t095" scope="col">Radius (m)</th><th data-i18n="t096" scope="col">Length (m)</th><th data-i18n="t097" scope="col">Regularisation</th></tr></thead>
+<tbody>
+<tr><td data-i18n="t098"><a href="scripts/xgrad_coil_1198mm.py">xgrad_coil_1198mm.py</a></td><td>x</td><td>0.0599</td><td>0.35</td><td>100</td></tr>
+<tr><td data-i18n="t099"><a href="scripts/ygrad_coil_1262mm.py">ygrad_coil_1262mm.py</a></td><td>y</td><td>0.0631</td><td>0.35</td><td>300</td></tr>
+<tr><td data-i18n="t100"><a href="scripts/zgrad_coil_1326mm.py">zgrad_coil_1326mm.py</a></td><td>z</td><td>0.0663</td><td>0.36</td><td>100</td></tr>
+</tbody>
+</table>
+</div>
+<p data-i18n="t101"><strong>Diameter rule:</strong> radius in metres = diameter in mm ÷ 2 ÷ 1000. For 126.2 mm that gives 0.0631 m. This is the centre line of the wire; the outside of the wire sits a few mm further out. The coils nest inside each other, so each diameter must clear the coil inside it.</p>
+<p class="note" data-i18n="t102">The scripts ask for <code>target_gradient_strength: 0.9</code>, but the solver goes past it: the designs reach 1.053 (X), 1.015 (Y) and 1.282 (Z) mT/m/A, which meets the 1.0 target.</p>
+<p class="checkpoint" data-i18n="t103"><strong>Checkpoint:</strong> each script writes <code>debug/&lt;project&gt;_final.npy</code> and a wire-only STL such as <code>xgrad_coil_1198mm_wire_0_x.stl</code>.</p>
+</li>
+<li class="step" data-step="3">
+<div class="step-head"><h3 data-i18n="t104">Smooth the wire path</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t105">A smooth path has fewer kinks and reversals. It exports to CAD in seconds and cuts cleanly. Two settings control it:</p>
 <pre><code>'smooth_factor': 5,                      # default 1 = off
 'normal_shift_smooth_factors': [4, 6, 4],  # default [2, 3, 2]</code></pre>
-        <p>The first averages each point with its neighbours. The second smooths the return paths, which are lifted 3 mm outward so crossing wires don’t touch.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> rerun and compare the efficiency. Too much smoothing pulls it away from the target.</p>
-      </li>
-
-      <li class="step" data-step="4">
-        <div class="step-head"><h3>Summarise and export</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Each summary script loads the saved design and prints everything you need to judge it: gradient efficiency, true outer diameter, coil length, inductance (from FastHenry2), litz resistance, and voltage and power at 5 A. It also writes the wire points as TXT and the flattened path as STEP curves, all in <strong>millimetres</strong>.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> the efficiency is near the target, the outer diameter clears the next coil, resistance and inductance are not 0, and the STEP line ends with <code>write ok: True</code>.</p>
-      </li>
-
-      <li class="step" data-step="5">
-        <div class="step-head"><h3>Unwrap the path onto a flat sheet</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>To cut grooves in a flat plate, the wire path on the cylinder is rolled out flat: the angle around the tube becomes a distance along the sheet.</p>
-        <ul>
-          <li><strong>X and Y</strong> are four saddle-shaped lobes. One global unwrap of the whole path works. Splitting into lobes first scrambles it.</li>
-          <li><strong>Z</strong> is a double helix that winds around many times. Instead of unrolling, every turn is folded onto one circumference (π × 132.6 ≈ 416.5 mm), cut at the seams, smoothed, and exported as four quadrant STEP files.</li>
-        </ul>
-        <p><strong>Where it happens in the code.</strong> The summary scripts (<code>summ_data_smth_…</code>) do both jobs: they unwrap the wire path and write the flat curves as a STEP file. In <a href="scripts/summ_data_smth_x1198.py">summ_data_smth_x1198.py</a> (Y is the same):</p>
+<p data-i18n="t106">The first averages each point with its neighbours. The second smooths the return paths, which are lifted 3 mm outward so crossing wires don’t touch.</p>
+<p class="checkpoint" data-i18n="t107"><strong>Checkpoint:</strong> rerun and compare the efficiency. Too much smoothing pulls it away from the target.</p>
+</li>
+<li class="step" data-step="4">
+<div class="step-head"><h3 data-i18n="t108">Summarise and export</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t109">Each summary script loads the saved design and prints everything you need to judge it: gradient efficiency, true outer diameter, coil length, inductance (from FastHenry2), litz resistance, and voltage and power at 5 A. It also writes the wire points as TXT and the flattened path as STEP curves, all in <strong>millimetres</strong>.</p>
+<p class="checkpoint" data-i18n="t110"><strong>Checkpoint:</strong> the efficiency is near the target, the outer diameter clears the next coil, resistance and inductance are not 0, and the STEP line ends with <code>write ok: True</code>.</p>
+</li>
+<li class="step" data-step="5">
+<div class="step-head"><h3 data-i18n="t111">Unwrap the path onto a flat sheet</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t112">To cut grooves in a flat plate, the wire path on the cylinder is rolled out flat: the angle around the tube becomes a distance along the sheet.</p>
+<ul>
+<li data-i18n="t113"><strong>X and Y</strong> are four saddle-shaped lobes. One global unwrap of the whole path works. Splitting into lobes first scrambles it.</li>
+<li data-i18n="t114"><strong>Z</strong> is a double helix that winds around many times. Instead of unrolling, every turn is folded onto one circumference (π × 132.6 ≈ 416.5 mm), cut at the seams, smoothed, and exported as four quadrant STEP files.</li>
+</ul>
+<p data-i18n="t115"><strong>Where it happens in the code.</strong> The summary scripts (<code>summ_data_smth_…</code>) do both jobs: they unwrap the wire path and write the flat curves as a STEP file. In <a href="scripts/summ_data_smth_x1198.py">summ_data_smth_x1198.py</a> (Y is the same):</p>
 <pre><code># lines 179–186: unwrap — angle around the tube becomes distance along the sheet
 r = np.sqrt(x**2 + y**2)
 R_nominal = np.median(r)
@@ -215,450 +221,424 @@ z_flat = r - R_nominal                                     # real radial standof
 # lines 188–199: convert to millimetres, keep every 5th point
 # lines 210–211: write the flat curve to STEP
 step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
-        <p><code>export_step_curve</code> (lines 29–48) passes a B-spline through every point with OpenCascade’s <code>GeomAPI_Interpolate</code> and saves it as one curve in a STEP file. In <a href="scripts/summ_data_smth_z1326.py">summ_data_smth_z1326.py</a> the Z coil is folded instead (lines 261–263, raw angle with no <code>np.unwrap</code>), split at the seams (lines 284–291), smoothed (lines 350–356), and written as four quadrant STEP files plus one combined file with <code>export_step_curves</code> (lines 371–385).</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> look at the preview plot before trusting the STEP files. Curves should never jump straight across the sheet.</p>
-      </li>
-
-      <li class="step" data-step="6">
-        <div class="step-head"><h3>Cut the grooves in CAD</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <ol class="plain-steps">
-          <li><strong>Import the curves.</strong> Upload the STEP file from step 5 into Onshape. SolidWorks or another CAD tool works the same way.</li>
-          <li><strong>Make the plate.</strong> Create a flat plate under the curves, 1.6 mm thick.</li>
-          <li><strong>Cut the grooves.</strong> Use a <strong>sweep cut</strong> with a 1.3 mm circle as the profile and the imported curves as the path. The sweep follows every contour and leaves the groove in the plate.</li>
-          <li><strong>Split into plates.</strong> Split the sheet into four plates that fit the printer: <strong>1–4</strong> for X and Y, <strong>TL, TR, BL, BR</strong> for Z. Each plate carries its label, so the pieces can’t be mixed up.</li>
-        </ol>
-        <p>The groove is a <strong>round channel</strong>: a circle of diameter <em>d</em> swept along the wire path and cut into a plate of thickness <em>t</em>. The circle sits partly below the top surface, so the opening at the top is narrower than the wire.</p>
-        <div class="groove-figs">
-          <figure class="diagram">
-            <svg viewBox="0 0 450 290" role="img" aria-labelledby="groove-title groove-desc">
-              <title id="groove-title">Cross-section of one groove</title>
-              <desc id="groove-desc">A plate of thickness t equal to 1.6 millimetres with a round groove of diameter d equal to 1.3 millimetres cut near its top surface. The litz wire sits in the groove. The curved lips at the top of the groove overhang the wire.</desc>
-              <defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker></defs>
-              <path class="d-plate" d="M20,80 L153.1,80 A65,65 0 1,0 246.9,80 L330,80 L330,240 L20,240 Z"/>
-              <circle class="d-wire" cx="200" cy="125" r="61"/>
-              <circle class="d-strand" cx="200" cy="125" r="43"/>
-              <line class="d-ext" x1="135" y1="125" x2="135" y2="272"/><line class="d-ext" x1="265" y1="125" x2="265" y2="272"/>
-              <line class="d-dim" x1="139" y1="264" x2="261" y2="264" marker-start="url(#arr)" marker-end="url(#arr)"/>
-              <text class="d-lbl" x="285" y="270">d = 1.3 mm</text>
-              <line class="d-ext" x1="330" y1="80" x2="372" y2="80"/><line class="d-ext" x1="330" y1="240" x2="372" y2="240"/>
-              <line class="d-dim" x1="364" y1="84" x2="364" y2="236" marker-start="url(#arr)" marker-end="url(#arr)"/>
-              <text class="d-lbl" x="378" y="156">t =</text><text class="d-lbl" x="378" y="180">1.6 mm</text>
-              <line class="d-call" x1="152" y1="82" x2="246" y2="34"/><line class="d-call" x1="248" y1="82" x2="250" y2="34"/>
-              <text class="d-note" x="256" y="28">Curved lips overhang</text>
-              <text class="d-note" x="256" y="48">the wire: hard to print</text>
-            </svg>
-            <figcaption>One groove in cross-section. The wire is held only where the lips close over it.</figcaption>
-          </figure>
-          <figure>
-            <img src="images/groove-cad-section.jpg" alt="Onshape view of the end of a plate, showing the round groove cut into the plate's edge and the grooves running across its top" loading="lazy" width="792" height="582">
-            <figcaption>The same groove at the edge of a plate in Onshape.</figcaption>
-          </figure>
-        </div>
-        <p class="tbd-block">To be added: how the sheet is split into the four plates, and how the labels are made.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> the plates open at the right size (X sheet about 375 × 360 mm), and grooves continue across every seam. Use the 3D viewer above to compare.</p>
-      </li>
-
-      <li class="step" data-step="7">
-        <div class="step-head"><h3>Print the plates</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Print all twelve plates in <strong>TPU 95A</strong>, a flexible filament (we use 3D Aura, Singapore). The ready-made files are in <a href="#files">Files</a>.</p>
-        <p><strong>Why TPU 95A?</strong> At under 2 mm thick it does two jobs that pull in opposite directions. It is flexible enough to bend each flat plate into a curve, yet once the plates form a cylinder, the tube is stiff enough to stand upright and keep its round shape without deforming.</p>
-        <p>Lay each plate <strong>flat on the bed with the grooves facing up</strong>. No supports are needed.</p>
-        <div class="photos">
-          <figure><img src="images/plate-flat.jpg" alt="A printed black TPU plate lying flat, with the wire grooves forming one rounded loop pattern" loading="lazy" width="918" height="1000"><figcaption>A printed Y plate: one saddle loop of grooves, ready for wire.</figcaption></figure>
-          <figure><img class="fit" src="images/slicer-z-plate.jpg" alt="Bambu Studio preview of a Z plate lying flat on the build plate, with the slicing result showing about 4 hours 52 minutes" loading="lazy" width="1000" height="598"><figcaption>A Z plate in Bambu Studio: flat, grooves up, about 4 h 50 min.</figcaption></figure>
-        </div>
-        <div class="table-wrap">
-        <table class="mini">
-          <thead><tr><th scope="col">Setting (Bambu Studio)</th><th scope="col">Value</th></tr></thead>
-          <tbody>
-            <tr><td>Printer</td><td>Bambu Lab P1S, textured PEI plate</td></tr>
-            <tr><td>Nozzle</td><td>0.4 mm, standard flow</td></tr>
-            <tr><td>Filament</td><td>TPU 95A</td></tr>
-            <tr><td>Process profile</td><td>0.20mm Strength</td></tr>
-            <tr><td>Layer height</td><td>0.2 mm (first layer 0.2 mm)</td></tr>
-            <tr><td>Wall loops</td><td>6</td></tr>
-            <tr><td>Top shell</td><td>5 layers (1.0 mm)</td></tr>
-            <tr><td>Bottom shell</td><td>3 layers (0.6 mm)</td></tr>
-            <tr><td>Sparse infill</td><td>25 %, grid</td></tr>
-            <tr><td>Orientation</td><td>Flat on the bed, grooves facing up</td></tr>
-            <tr><td>Supports</td><td>None</td></tr>
-            <tr><td>Print time</td><td>About 4 h 50 min per plate (X, Y or Z), so about 58 h for all twelve</td></tr>
-            <tr><td>Filament used</td><td>About 67 g (23 m) for a Z plate</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p class="note">The plates are designed 1.6 mm thick. At 0.2 mm per layer that is just 8 layers, and the top shell (5) plus bottom shell (3) use all of them, so the plate prints solid and the infill setting has no effect. Printed plates measure about 1.95 mm with calipers, a little thicker than the design.</p>
-        <div class="problem">
-          <h4>Known problem: the wire pops out of the groove</h4>
-          <p>The groove is a 1.3 mm round channel. The printer cannot build the curved top edge that would close over the wire, so the groove stays open and the wire can lift out, especially once the plate is bent.</p>
-          <p><strong>Fix:</strong> lock the wire in with small dabs of TPU. Take a short piece of the same TPU filament, melt it onto the plate across the wire with a soldering iron tip, and shape it with the tip so it bridges over the wire. Repeat along each groove.</p>
-          <p class="small">The iron tip is hot and melting TPU gives off fumes: work in a ventilated area.</p>
-          <div class="photos">
-            <figure><img src="images/wire-lifts-without-dab.jpg" alt="A wound plate bent into a curve; a red arrow points at a groove where the wire has lifted out because there is no dab of TPU there" loading="lazy" width="750" height="1000"><figcaption>The problem: where there is no dab, the wire lifts out once the plate is bent (arrow).</figcaption></figure>
-            <figure><img src="images/wire-held-with-tpu.jpg" alt="Close-up of litz wire lying in the grooves of a bent black plate, held down by small blobs of black TPU" loading="lazy" width="750" height="1000"><figcaption>Dabs of TPU lock the wire into the groove.</figcaption></figure>
-            <figure><img src="images/plates-wrapped-seam.jpg" alt="Side view of wound plates bent into a curve, showing the wire held along the grooves near a seam between plates" loading="lazy" width="750" height="1000"><figcaption>Wound plates after bending; the dabs keep the wire in place along the curve.</figcaption></figure>
-          </div>
-          <div class="scale-note">
-            <figure><img src="images/larger-coil-no-dabs.jpg" alt="A larger gradient coil made of black and yellow TPU plates bent into a cylinder, with the wire sitting in deep grooves and no dabs of TPU" loading="lazy" width="750" height="1000"><figcaption>A larger gradient coil: no dabs needed.</figcaption></figure>
-            <p><strong>This only applies to small gradient coils</strong> like ours. On larger coils the plates can have grooves deep enough for the wire to sit inside and stay there on its own, with no dabs at all.</p>
-          </div>
-        </div>
-        <p class="checkpoint"><strong>Checkpoint:</strong> each plate measures about 1.95 mm, bends by hand without cracking, and the wire fits into the grooves.</p>
-      </li>
-
-      <li class="step" data-step="8">
-        <div class="step-head"><h3>Wind the litz wire</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p>Each coil has its <strong>own separate wire</strong>: X, Y and Z are not connected to each other. Cut each wire to the design length plus <strong>50 cm</strong>, so there is spare wire at both the start and the end.</p>
-        <div class="table-wrap">
-        <table class="mini">
-          <thead><tr><th scope="col">Coil</th><th scope="col">Wire path (design)</th><th scope="col">Plus leads</th><th scope="col">Cut length</th></tr></thead>
-          <tbody>
-            <tr><td>X</td><td>13.646 m</td><td>0.5 m</td><td><strong>14.15 m</strong></td></tr>
-            <tr><td>Y</td><td>14.052 m</td><td>0.5 m</td><td><strong>14.55 m</strong></td></tr>
-            <tr><td>Z</td><td>17.057 m</td><td>0.5 m</td><td><strong>17.56 m</strong></td></tr>
-          </tbody>
-        </table>
-        </div>
-
-        <h4 class="sub">Wind the loops first, the crossings last</h4>
-        <p>Every coil is one continuous path, but in a few places the wire has to cross over wire already lying in a groove: for example where it leaves the centre of a loop. Choose a start and a direction so that <strong>all the loops go in first</strong>, and the sections that run on top of them go in last. The other way round, the crossing sections are in the way of every loop you wind after them.</p>
-        <div class="photos">
-          <figure><img class="fit-light" src="images/winding-path-x.jpg" alt="One X plate in Onshape with the winding route drawn in red: S marks the start and E the end at a small gap at the top edge, arrows show the direction around the outer turns and into the centre loop, and a dashed line shows the section that runs back out over the loops" loading="lazy" width="1000" height="714"><figcaption>X coil route: start at S, follow the arrows around the turns, and finish at E. The dashed red section runs on top of the turns, so it goes in last.</figcaption></figure>
-          <figure><img class="fit-light" src="images/winding-crossover.jpg" alt="Close-up of one X loop in Onshape: solid green lines mark wire inside the grooves, a dashed green line marks the section that leaves the centre of the loop and passes over the other grooves" loading="lazy" width="866" height="812"><figcaption>Solid green: wire inside the grooves. Dashed green: the section that passes over them, laid on top afterwards.</figcaption></figure>
-        </div>
-
-        <h4 class="sub">Wind on a cylinder for small coils</h4>
-        <p>For small coils like ours (50 mm FOV), wind the plates <strong>already bent around a cylindrical support</strong>. If you wind them flat and bend them afterwards, the wire pops out of the grooves as the plate curves. For a large bore and FOV you can wind flat and then bend, with much less risk of the wire popping out.</p>
-        <p>Add the TPU dabs <strong>while you wind</strong> (see step 7). You can see as you go which sections want to lift, or where the print came out poorly.</p>
-        <div class="photos">
-          <figure><img src="images/winding-on-cylinder.jpg" alt="Black TPU plates bent around a white cylindrical tube on a workbench, partly wound with litz wire held by small yellow dabs of TPU" loading="lazy" width="750" height="1000"><figcaption>Winding with the plates bent around a white cylindrical support.</figcaption></figure>
-          <figure><img class="fit-light" src="images/coil-leads.jpg" alt="A wound X coil standing upright, with many yellow TPU dabs; the two long wire ends run down the front of the coil, and a red arrow points at them" loading="lazy" width="584" height="1000"><figcaption>A wound X coil. The arrow points at the two 50 cm leads, left separate.</figcaption></figure>
-        </div>
-
-        <h4 class="sub">Finish the leads</h4>
-        <p>Leave the two ends <strong>separate</strong>; don’t twist them together. Solder the tip of each lead so the measuring clips make good contact during testing. We use SCS7 alloy, 0.8 mm lead-free solder, with the iron at its maximum of 400 °C: the bare tip of a litz wire is many fine copper strands, and solder doesn’t stick to it well at normal temperatures.</p>
-        <p class="small">Work in a ventilated area and let the tip cool before handling it.</p>
-
-        <p><strong>Time:</strong> about 30–45 minutes to wind one coil of this size.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> every groove holds wire, nothing lifts when you press along the turns, and both soldered leads are free and about 50 cm long.</p>
-      </li>
-
-      <li class="step" data-step="9">
-        <div class="step-head"><h3>Join, nest and hold the coils</h3><label class="check"><input type="checkbox"> Done</label></div>
-        <p><strong>Join the plates.</strong> Fuse the seams between each coil’s four plates with a soldering iron tip: melt the TPU on both sides of the seam so it flows together and bonds. The same melt-and-bond method works between TPU and other printed parts.</p>
-        <p>The white tube used for winding (step 8) is only a tool: slide it out once the coil is wound and joined.</p>
-        <p><strong>Nest the coils in the gradient cover.</strong> A printed PLA cover holds the three tubes concentric. It has three ring-shaped slits, one per coil, and each slit is centred on its coil’s design radius. Slide in <strong>X first (innermost), then Y, then Z (outermost)</strong>. The cover keeps the coils concentric and holds them in their round shape, so nothing else is needed to fix them together.</p>
-        <figure class="diagram wide">
-            <svg viewBox="0 0 830 340" role="img" aria-labelledby="cov-title cov-desc">
-              <title id="cov-title">Cross-section of the gradient cover with the three coils</title>
-              <desc id="cov-desc">Half cross-section through the printed PLA gradient cover. Three slits, each 2.6 millimetres wide and 24 millimetres deep, hold the TPU plates of the X coil (innermost), Y coil and Z coil (outermost), keeping them concentric. A cap closes the end of the slits.</desc>
-              <defs><marker id="carr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="d-head"/></marker></defs>
-              <rect class="c-pla" x="276.0" y="271.2" width="432.0" height="10.8"/><rect class="c-pla" x="276.0" y="213.6" width="432.0" height="10.8"/><rect class="c-pla" x="276.0" y="156.0" width="432.0" height="10.8"/><rect class="c-pla" x="276.0" y="67.8" width="432.0" height="41.4"/><rect class="c-pla" x="708.0" y="94.8" width="90.0" height="187.2"/><rect class="c-tpu" x="60.0" y="230.2" width="640.8" height="35.1"/><text class="c-lbl" x="72.6" y="253.8">X</text><rect class="c-tpu" x="60.0" y="172.6" width="640.8" height="35.1"/><text class="c-lbl" x="72.6" y="196.2">Y</text><rect class="c-tpu" x="60.0" y="115.1" width="640.8" height="35.1"/><text class="c-lbl" x="72.6" y="138.6">Z</text><line class="c-ext" x1="60" y1="57.0" x2="60" y2="294.6" stroke-dasharray="4 4"/><line class="c-dim" x1="254.4" y1="224.39999999999995" x2="254.4" y2="271.2" marker-start="url(#carr)" marker-end="url(#carr)"/><text class="c-sm" x="246.4" y="298.6" text-anchor="end">slit 2.6 mm</text><line class="c-dim" x1="276" y1="55.2000000000001" x2="708" y2="55.2000000000001" marker-start="url(#carr)" marker-end="url(#carr)"/><text class="c-sm" x="492" y="47.2000000000001" text-anchor="middle">24 mm deep</text><text class="c-sm" x="753.0" y="47.2000000000001" text-anchor="middle">cap</text><text class="c-sm" x="528" y="318" text-anchor="middle">bore side (Ø 116 mm)</text>
-            </svg>
-            <figcaption>Half cross-section through the cover (to scale). Each 2.6 mm slit holds one ~1.95 mm plate: X at radius 59.9 mm, Y at 63.1 mm, Z at 66.3 mm, matching the coil designs.</figcaption>
-        </figure>
-        <p><strong>Bring the leads out.</strong> All the leads leave the bore through the pairs of holes in the cover: two holes per coil, one for each lead.</p>
-        <div class="photos">
-          <figure><img src="images/tpu-bonding.jpg" alt="A soldering iron tip melting black TPU around the edge of a white printed disc set into a black TPU plate, fusing the two together" loading="lazy" width="750" height="1000"><figcaption>Bonding by melting: the iron tip fuses TPU to the next part.</figcaption></figure>
-          <figure><img src="images/gradient-cover-ring.jpg" alt="The white PLA gradient cover held in a hand, showing its concentric ring slits and two pairs of small holes" loading="lazy" width="750" height="1000"><figcaption>The gradient cover: concentric slits for the three coils.</figcaption></figure>
-          <figure><img src="images/gradient-cover-holes.jpg" alt="The gradient cover from the top, a wide flat white ring with pairs of small holes for the coil leads" loading="lazy" width="750" height="1000"><figcaption>Pairs of holes let each coil’s two leads out of the bore.</figcaption></figure>
-        </div>
-        <p>The cover file is in <a href="#files">Files</a>.</p>
-        <p class="checkpoint"><strong>Checkpoint:</strong> all three coils sit fully in their slits, round and concentric, with the six leads out through the holes. Measure each coil’s resistance: it should be close to the prediction in <a href="#test">Test</a>.</p>
-      </li>
-    </ol>
-
-    <details class="pitfalls">
-      <summary>Common problems and quick fixes</summary>
-      <dl>
-        <dt>ModuleNotFoundError: pyCoilGen</dt><dd>VS Code is using the system Python. Run <code>venv\Scripts\python.exe</code> or set the interpreter.</dd>
-        <dt>“No Python at …”</dt><dd>The venv was copied from another PC. Fix the paths in <code>venv\pyvenv.cfg</code>, or make a new venv.</dd>
-        <dt>Resistance and inductance are 0</dt><dd>FastHenry2 is missing. Install it, then rerun the generation script.</dd>
-        <dt>STL “string is not a file”</dt><dd><code>CAD_filename</code> is missing, so the STL went to <code>images/</code>. Add it and regenerate.</dd>
-        <dt>Coil is microscopic in CAD</dt><dd>The points were written in metres. Export in millimetres.</dd>
-        <dt>STEP export hangs</dt><dd>The path is too kinked. Turn smoothing up, and use interpolation through the points instead of a least-squares fit.</dd>
-      </dl>
-    </details>
-  </div>
+<p data-i18n="t116"><code>export_step_curve</code> (lines 29–48) passes a B-spline through every point with OpenCascade’s <code>GeomAPI_Interpolate</code> and saves it as one curve in a STEP file. In <a href="scripts/summ_data_smth_z1326.py">summ_data_smth_z1326.py</a> the Z coil is folded instead (lines 261–263, raw angle with no <code>np.unwrap</code>), split at the seams (lines 284–291), smoothed (lines 350–356), and written as four quadrant STEP files plus one combined file with <code>export_step_curves</code> (lines 371–385).</p>
+<p class="checkpoint" data-i18n="t117"><strong>Checkpoint:</strong> look at the preview plot before trusting the STEP files. Curves should never jump straight across the sheet.</p>
+</li>
+<li class="step" data-step="6">
+<div class="step-head"><h3 data-i18n="t118">Cut the grooves in CAD</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<ol class="plain-steps">
+<li data-i18n="t119"><strong>Import the curves.</strong> Upload the STEP file from step 5 into Onshape. SolidWorks or another CAD tool works the same way.</li>
+<li data-i18n="t120"><strong>Make the plate.</strong> Create a flat plate under the curves, 1.6 mm thick.</li>
+<li data-i18n="t121"><strong>Cut the grooves.</strong> Use a <strong>sweep cut</strong> with a 1.3 mm circle as the profile and the imported curves as the path. The sweep follows every contour and leaves the groove in the plate.</li>
+<li data-i18n="t122"><strong>Split into plates.</strong> Split the sheet into four plates that fit the printer: <strong>1–4</strong> for X and Y, <strong>TL, TR, BL, BR</strong> for Z. Each plate carries its label, so the pieces can’t be mixed up.</li>
+</ol>
+<p data-i18n="t123">The groove is a <strong>round channel</strong>: a circle of diameter <em>d</em> swept along the wire path and cut into a plate of thickness <em>t</em>. The circle sits partly below the top surface, so the opening at the top is narrower than the wire.</p>
+<div class="groove-figs">
+<figure class="diagram">
+<svg aria-labelledby="groove-title groove-desc" role="img" viewbox="0 0 450 290">
+<title data-i18n="t124" data-i18n-text="t383" id="groove-title">Cross-section of one groove</title>
+<desc data-i18n-text="t384" id="groove-desc">A plate of thickness t equal to 1.6 millimetres with a round groove of diameter d equal to 1.3 millimetres cut near its top surface. The litz wire sits in the groove. The curved lips at the top of the groove overhang the wire.</desc>
+<defs><marker id="arr" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="5" refy="5" viewbox="0 0 10 10"><path class="d-head" d="M0,0 L10,5 L0,10 z"></path></marker></defs>
+<path class="d-plate" d="M20,80 L153.1,80 A65,65 0 1,0 246.9,80 L330,80 L330,240 L20,240 Z"></path>
+<circle class="d-wire" cx="200" cy="125" r="61"></circle>
+<circle class="d-strand" cx="200" cy="125" r="43"></circle>
+<line class="d-ext" x1="135" x2="135" y1="125" y2="272"></line><line class="d-ext" x1="265" x2="265" y1="125" y2="272"></line>
+<line class="d-dim" marker-end="url(#arr)" marker-start="url(#arr)" x1="139" x2="261" y1="264" y2="264"></line>
+<text class="d-lbl" x="285" y="270">d = 1.3 mm</text>
+<line class="d-ext" x1="330" x2="372" y1="80" y2="80"></line><line class="d-ext" x1="330" x2="372" y1="240" y2="240"></line>
+<line class="d-dim" marker-end="url(#arr)" marker-start="url(#arr)" x1="364" x2="364" y1="84" y2="236"></line>
+<text class="d-lbl" x="378" y="156">t =</text><text class="d-lbl" x="378" y="180">1.6 mm</text>
+<line class="d-call" x1="152" x2="246" y1="82" y2="34"></line><line class="d-call" x1="248" x2="250" y1="82" y2="34"></line>
+<text class="d-note" data-i18n-text="t377" x="256" y="28">Curved lips overhang</text>
+<text class="d-note" data-i18n-text="t378" x="256" y="48">the wire: hard to print</text>
+</svg>
+<figcaption data-i18n="t125">One groove in cross-section. The wire is held only where the lips close over it.</figcaption>
+</figure>
+<figure>
+<img alt="Onshape view of the end of a plate, showing the round groove cut into the plate's edge and the grooves running across its top" data-i18n-alt="t388" height="582" loading="lazy" src="images/groove-cad-section.jpg" width="792"/>
+<figcaption data-i18n="t126">The same groove at the edge of a plate in Onshape.</figcaption>
+</figure>
+</div>
+<p class="tbd-block" data-i18n="t127">To be added: how the sheet is split into the four plates, and how the labels are made.</p>
+<p class="checkpoint" data-i18n="t128"><strong>Checkpoint:</strong> the plates open at the right size (X sheet about 375 × 360 mm), and grooves continue across every seam. Use the 3D viewer above to compare.</p>
+</li>
+<li class="step" data-step="7">
+<div class="step-head"><h3 data-i18n="t129">Print the plates</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t130">Print all twelve plates in <strong>TPU 95A</strong>, a flexible filament (we use 3D Aura, Singapore). The ready-made files are in <a href="#files">Files</a>.</p>
+<p data-i18n="t131"><strong>Why TPU 95A?</strong> At under 2 mm thick it does two jobs that pull in opposite directions. It is flexible enough to bend each flat plate into a curve, yet once the plates form a cylinder, the tube is stiff enough to stand upright and keep its round shape without deforming.</p>
+<p data-i18n="t132">Lay each plate <strong>flat on the bed with the grooves facing up</strong>. No supports are needed.</p>
+<div class="photos">
+<figure><img alt="A printed black TPU plate lying flat, with the wire grooves forming one rounded loop pattern" data-i18n-alt="t389" height="1000" loading="lazy" src="images/plate-flat.jpg" width="918"/><figcaption data-i18n="t133">A printed Y plate: one saddle loop of grooves, ready for wire.</figcaption></figure>
+<figure><img alt="Bambu Studio preview of a Z plate lying flat on the build plate, with the slicing result showing about 4 hours 52 minutes" class="fit" data-i18n-alt="t390" height="598" loading="lazy" src="images/slicer-z-plate.jpg" width="1000"/><figcaption data-i18n="t134">A Z plate in Bambu Studio: flat, grooves up, about 4 h 50 min.</figcaption></figure>
+</div>
+<div class="table-wrap">
+<table class="mini">
+<thead><tr><th data-i18n="t135" scope="col">Setting (Bambu Studio)</th><th data-i18n="t136" scope="col">Value</th></tr></thead>
+<tbody>
+<tr><td data-i18n="t137">Printer</td><td data-i18n="t138">Bambu Lab P1S, textured PEI plate</td></tr>
+<tr><td data-i18n="t139">Nozzle</td><td data-i18n="t140">0.4 mm, standard flow</td></tr>
+<tr><td data-i18n="t141">Filament</td><td data-i18n="t142">TPU 95A</td></tr>
+<tr><td data-i18n="t143">Process profile</td><td data-i18n="t144">0.20mm Strength</td></tr>
+<tr><td data-i18n="t145">Layer height</td><td data-i18n="t146">0.2 mm (first layer 0.2 mm)</td></tr>
+<tr><td data-i18n="t147">Wall loops</td><td>6</td></tr>
+<tr><td data-i18n="t148">Top shell</td><td data-i18n="t149">5 layers (1.0 mm)</td></tr>
+<tr><td data-i18n="t150">Bottom shell</td><td data-i18n="t151">3 layers (0.6 mm)</td></tr>
+<tr><td data-i18n="t152">Sparse infill</td><td data-i18n="t153">25 %, grid</td></tr>
+<tr><td data-i18n="t154">Orientation</td><td data-i18n="t155">Flat on the bed, grooves facing up</td></tr>
+<tr><td data-i18n="t156">Supports</td><td data-i18n="t157">None</td></tr>
+<tr><td data-i18n="t158">Print time</td><td data-i18n="t159">About 4 h 50 min per plate (X, Y or Z), so about 58 h for all twelve</td></tr>
+<tr><td data-i18n="t160">Filament used</td><td data-i18n="t161">About 67 g (23 m) for a Z plate</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note" data-i18n="t162">The plates are designed 1.6 mm thick. At 0.2 mm per layer that is just 8 layers, and the top shell (5) plus bottom shell (3) use all of them, so the plate prints solid and the infill setting has no effect. Printed plates measure about 1.95 mm with calipers, a little thicker than the design.</p>
+<div class="problem">
+<h4 data-i18n="t163">Known problem: the wire pops out of the groove</h4>
+<p data-i18n="t164">The groove is a 1.3 mm round channel. The printer cannot build the curved top edge that would close over the wire, so the groove stays open and the wire can lift out, especially once the plate is bent.</p>
+<p data-i18n="t165"><strong>Fix:</strong> lock the wire in with small dabs of TPU. Take a short piece of the same TPU filament, melt it onto the plate across the wire with a soldering iron tip, and shape it with the tip so it bridges over the wire. Repeat along each groove.</p>
+<p class="small" data-i18n="t166">The iron tip is hot and melting TPU gives off fumes: work in a ventilated area.</p>
+<div class="photos">
+<figure><img alt="A wound plate bent into a curve; a red arrow points at a groove where the wire has lifted out because there is no dab of TPU there" data-i18n-alt="t391" height="1000" loading="lazy" src="images/wire-lifts-without-dab.jpg" width="750"/><figcaption data-i18n="t167">The problem: where there is no dab, the wire lifts out once the plate is bent (arrow).</figcaption></figure>
+<figure><img alt="Close-up of litz wire lying in the grooves of a bent black plate, held down by small blobs of black TPU" data-i18n-alt="t392" height="1000" loading="lazy" src="images/wire-held-with-tpu.jpg" width="750"/><figcaption data-i18n="t168">Dabs of TPU lock the wire into the groove.</figcaption></figure>
+<figure><img alt="Side view of wound plates bent into a curve, showing the wire held along the grooves near a seam between plates" data-i18n-alt="t393" height="1000" loading="lazy" src="images/plates-wrapped-seam.jpg" width="750"/><figcaption data-i18n="t169">Wound plates after bending; the dabs keep the wire in place along the curve.</figcaption></figure>
+</div>
+<div class="scale-note">
+<figure><img alt="A larger gradient coil made of black and yellow TPU plates bent into a cylinder, with the wire sitting in deep grooves and no dabs of TPU" data-i18n-alt="t394" height="1000" loading="lazy" src="images/larger-coil-no-dabs.jpg" width="750"/><figcaption data-i18n="t170">A larger gradient coil: no dabs needed.</figcaption></figure>
+<p data-i18n="t171"><strong>This only applies to small gradient coils</strong> like ours. On larger coils the plates can have grooves deep enough for the wire to sit inside and stay there on its own, with no dabs at all.</p>
+</div>
+</div>
+<p class="checkpoint" data-i18n="t172"><strong>Checkpoint:</strong> each plate measures about 1.95 mm, bends by hand without cracking, and the wire fits into the grooves.</p>
+</li>
+<li class="step" data-step="8">
+<div class="step-head"><h3 data-i18n="t173">Wind the litz wire</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t174">Each coil has its <strong>own separate wire</strong>: X, Y and Z are not connected to each other. Cut each wire to the design length plus <strong>50 cm</strong>, so there is spare wire at both the start and the end.</p>
+<div class="table-wrap">
+<table class="mini">
+<thead><tr><th data-i18n="t175" scope="col">Coil</th><th data-i18n="t176" scope="col">Wire path (design)</th><th data-i18n="t177" scope="col">Plus leads</th><th data-i18n="t178" scope="col">Cut length</th></tr></thead>
+<tbody>
+<tr><td>X</td><td>13.646 m</td><td>0.5 m</td><td><strong>14.15 m</strong></td></tr>
+<tr><td>Y</td><td>14.052 m</td><td>0.5 m</td><td><strong>14.55 m</strong></td></tr>
+<tr><td>Z</td><td>17.057 m</td><td>0.5 m</td><td><strong>17.56 m</strong></td></tr>
+</tbody>
+</table>
+</div>
+<h4 class="sub" data-i18n="t179">Wind the loops first, the crossings last</h4>
+<p data-i18n="t180">Every coil is one continuous path, but in a few places the wire has to cross over wire already lying in a groove: for example where it leaves the centre of a loop. Choose a start and a direction so that <strong>all the loops go in first</strong>, and the sections that run on top of them go in last. The other way round, the crossing sections are in the way of every loop you wind after them.</p>
+<div class="photos">
+<figure><img alt="One X plate in Onshape with the winding route drawn in red: S marks the start and E the end at a small gap at the top edge, arrows show the direction around the outer turns and into the centre loop, and a dashed line shows the section that runs back out over the loops" class="fit-light" data-i18n-alt="t395" height="714" loading="lazy" src="images/winding-path-x.jpg" width="1000"/><figcaption data-i18n="t181">X coil route: start at S, follow the arrows around the turns, and finish at E. The dashed red section runs on top of the turns, so it goes in last.</figcaption></figure>
+<figure><img alt="Close-up of one X loop in Onshape: solid green lines mark wire inside the grooves, a dashed green line marks the section that leaves the centre of the loop and passes over the other grooves" class="fit-light" data-i18n-alt="t396" height="812" loading="lazy" src="images/winding-crossover.jpg" width="866"/><figcaption data-i18n="t182">Solid green: wire inside the grooves. Dashed green: the section that passes over them, laid on top afterwards.</figcaption></figure>
+</div>
+<h4 class="sub" data-i18n="t183">Wind on a cylinder for small coils</h4>
+<p data-i18n="t184">For small coils like ours (50 mm FOV), wind the plates <strong>already bent around a cylindrical support</strong>. If you wind them flat and bend them afterwards, the wire pops out of the grooves as the plate curves. For a large bore and FOV you can wind flat and then bend, with much less risk of the wire popping out.</p>
+<p data-i18n="t185">Add the TPU dabs <strong>while you wind</strong> (see step 7). You can see as you go which sections want to lift, or where the print came out poorly.</p>
+<div class="photos">
+<figure><img alt="Black TPU plates bent around a white cylindrical tube on a workbench, partly wound with litz wire held by small yellow dabs of TPU" data-i18n-alt="t397" height="1000" loading="lazy" src="images/winding-on-cylinder.jpg" width="750"/><figcaption data-i18n="t186">Winding with the plates bent around a white cylindrical support.</figcaption></figure>
+<figure><img alt="A wound X coil standing upright, with many yellow TPU dabs; the two long wire ends run down the front of the coil, and a red arrow points at them" class="fit-light" data-i18n-alt="t398" height="1000" loading="lazy" src="images/coil-leads.jpg" width="584"/><figcaption data-i18n="t187">A wound X coil. The arrow points at the two 50 cm leads, left separate.</figcaption></figure>
+</div>
+<h4 class="sub" data-i18n="t188">Finish the leads</h4>
+<p data-i18n="t189">Leave the two ends <strong>separate</strong>; don’t twist them together. Solder the tip of each lead so the measuring clips make good contact during testing. We use SCS7 alloy, 0.8 mm lead-free solder, with the iron at its maximum of 400 °C: the bare tip of a litz wire is many fine copper strands, and solder doesn’t stick to it well at normal temperatures.</p>
+<p class="small" data-i18n="t190">Work in a ventilated area and let the tip cool before handling it.</p>
+<p data-i18n="t191"><strong>Time:</strong> about 30–45 minutes to wind one coil of this size.</p>
+<p class="checkpoint" data-i18n="t192"><strong>Checkpoint:</strong> every groove holds wire, nothing lifts when you press along the turns, and both soldered leads are free and about 50 cm long.</p>
+</li>
+<li class="step" data-step="9">
+<div class="step-head"><h3 data-i18n="t193">Join, nest and hold the coils</h3><label class="check"><input type="checkbox"/> <span data-i18n="ui.done">Done</span></label></div>
+<p data-i18n="t194"><strong>Join the plates.</strong> Fuse the seams between each coil’s four plates with a soldering iron tip: melt the TPU on both sides of the seam so it flows together and bonds. The same melt-and-bond method works between TPU and other printed parts.</p>
+<p data-i18n="t195">The white tube used for winding (step 8) is only a tool: slide it out once the coil is wound and joined.</p>
+<p data-i18n="t196"><strong>Nest the coils in the gradient cover.</strong> A printed PLA cover holds the three tubes concentric. It has three ring-shaped slits, one per coil, and each slit is centred on its coil’s design radius. Slide in <strong>X first (innermost), then Y, then Z (outermost)</strong>. The cover keeps the coils concentric and holds them in their round shape, so nothing else is needed to fix them together.</p>
+<figure class="diagram wide">
+<svg aria-labelledby="cov-title cov-desc" role="img" viewbox="0 0 830 340">
+<title data-i18n="t197" data-i18n-text="t385" id="cov-title">Cross-section of the gradient cover with the three coils</title>
+<desc data-i18n-text="t386" id="cov-desc">Half cross-section through the printed PLA gradient cover. Three slits, each 2.6 millimetres wide and 24 millimetres deep, hold the TPU plates of the X coil (innermost), Y coil and Z coil (outermost), keeping them concentric. A cap closes the end of the slits.</desc>
+<defs><marker id="carr" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="5" refy="5" viewbox="0 0 10 10"><path class="d-head" d="M0,0 L10,5 L0,10 z"></path></marker></defs>
+<rect class="c-pla" height="10.8" width="432.0" x="276.0" y="271.2"></rect><rect class="c-pla" height="10.8" width="432.0" x="276.0" y="213.6"></rect><rect class="c-pla" height="10.8" width="432.0" x="276.0" y="156.0"></rect><rect class="c-pla" height="41.4" width="432.0" x="276.0" y="67.8"></rect><rect class="c-pla" height="187.2" width="90.0" x="708.0" y="94.8"></rect><rect class="c-tpu" height="35.1" width="640.8" x="60.0" y="230.2"></rect><text class="c-lbl" x="72.6" y="253.8">X</text><rect class="c-tpu" height="35.1" width="640.8" x="60.0" y="172.6"></rect><text class="c-lbl" x="72.6" y="196.2">Y</text><rect class="c-tpu" height="35.1" width="640.8" x="60.0" y="115.1"></rect><text class="c-lbl" x="72.6" y="138.6">Z</text><line class="c-ext" stroke-dasharray="4 4" x1="60" x2="60" y1="57.0" y2="294.6"></line><line class="c-dim" marker-end="url(#carr)" marker-start="url(#carr)" x1="254.4" x2="254.4" y1="224.39999999999995" y2="271.2"></line><text class="c-sm" data-i18n-text="t379" text-anchor="end" x="246.4" y="298.6">slit 2.6 mm</text><line class="c-dim" marker-end="url(#carr)" marker-start="url(#carr)" x1="276" x2="708" y1="55.2000000000001" y2="55.2000000000001"></line><text class="c-sm" data-i18n-text="t380" text-anchor="middle" x="492" y="47.2000000000001">24 mm deep</text><text class="c-sm" data-i18n-text="t381" text-anchor="middle" x="753.0" y="47.2000000000001">cap</text><text class="c-sm" data-i18n-text="t382" text-anchor="middle" x="528" y="318">bore side (Ø 116 mm)</text>
+</svg>
+<figcaption data-i18n="t198">Half cross-section through the cover (to scale). Each 2.6 mm slit holds one ~1.95 mm plate: X at radius 59.9 mm, Y at 63.1 mm, Z at 66.3 mm, matching the coil designs.</figcaption>
+</figure>
+<p data-i18n="t199"><strong>Bring the leads out.</strong> All the leads leave the bore through the pairs of holes in the cover: two holes per coil, one for each lead.</p>
+<div class="photos">
+<figure><img alt="A soldering iron tip melting black TPU around the edge of a white printed disc set into a black TPU plate, fusing the two together" data-i18n-alt="t399" height="1000" loading="lazy" src="images/tpu-bonding.jpg" width="750"/><figcaption data-i18n="t200">Bonding by melting: the iron tip fuses TPU to the next part.</figcaption></figure>
+<figure><img alt="The white PLA gradient cover held in a hand, showing its concentric ring slits and two pairs of small holes" data-i18n-alt="t400" height="1000" loading="lazy" src="images/gradient-cover-ring.jpg" width="750"/><figcaption data-i18n="t201">The gradient cover: concentric slits for the three coils.</figcaption></figure>
+<figure><img alt="The gradient cover from the top, a wide flat white ring with pairs of small holes for the coil leads" data-i18n-alt="t401" height="1000" loading="lazy" src="images/gradient-cover-holes.jpg" width="750"/><figcaption data-i18n="t202">Pairs of holes let each coil’s two leads out of the bore.</figcaption></figure>
+</div>
+<p data-i18n="t203">The cover file is in <a href="#files">Files</a>.</p>
+<p class="checkpoint" data-i18n="t204"><strong>Checkpoint:</strong> all three coils sit fully in their slits, round and concentric, with the six leads out through the holes. Measure each coil’s resistance: it should be close to the prediction in <a href="#test">Test</a>.</p>
+</li>
+</ol>
+<details class="pitfalls">
+<summary data-i18n="t205">Common problems and quick fixes</summary>
+<dl>
+<dt data-i18n="t206">ModuleNotFoundError: pyCoilGen</dt><dd data-i18n="t207">VS Code is using the system Python. Run <code>venv\Scripts\python.exe</code> or set the interpreter.</dd>
+<dt data-i18n="t208">“No Python at …”</dt><dd data-i18n="t209">The venv was copied from another PC. Fix the paths in <code>venv\pyvenv.cfg</code>, or make a new venv.</dd>
+<dt data-i18n="t210">Resistance and inductance are 0</dt><dd data-i18n="t211">FastHenry2 is missing. Install it, then rerun the generation script.</dd>
+<dt data-i18n="t212">STL “string is not a file”</dt><dd data-i18n="t213"><code>CAD_filename</code> is missing, so the STL went to <code>images/</code>. Add it and regenerate.</dd>
+<dt data-i18n="t214">Coil is microscopic in CAD</dt><dd data-i18n="t215">The points were written in metres. Export in millimetres.</dd>
+<dt data-i18n="t216">STEP export hangs</dt><dd data-i18n="t217">The path is too kinked. Turn smoothing up, and use interpolation through the points instead of a least-squares fit.</dd>
+</dl>
+</details>
+</div>
 </section>
-
 <!-- 4. TEST -->
 <section class="band band-alt" id="test">
-  <div class="wrap">
-    <h2>Test the coils</h2>
-    <p class="section-lede">We map each coil’s field on a 3D grid and compare it with the pyCoilGen design. A coil passes when its gradient is close to the design and its field is close to a straight line. Measurements from 13–15 Oct 2026, at 5.0 A.</p>
-
-    <div class="verdict-box">
-      <h3>The result</h3>
-      <p>All three coils produce real, straight gradients that match the pyCoilGen design and reach the 1.0 mT/m/A target: efficiency within 3.5 % of the design, and a linearity error of about 3 % against a 5 % target. The design can be used in the 32 mT portable MRI, as long as the magnet’s field is uniform enough (see <a href="#meaning">What the numbers mean at 32 mT</a>).</p>
-    </div>
-
-    <div class="table-wrap">
-    <table class="results">
-      <caption>Results at a glance. Measured = the built coil in the lab; Design = the pyCoilGen simulation of the same coil.</caption>
-      <thead><tr><th scope="col"></th><th scope="col">X coil</th><th scope="col">Y coil</th><th scope="col">Z coil</th><th scope="col">Target</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Design efficiency (mT/m/A)</th><td>1.053</td><td>1.015</td><td>1.282</td><td>1.0</td></tr>
-        <tr class="hl"><th scope="row">Measured efficiency (mT/m/A)</th><td>1.048</td><td>0.980*</td><td>1.290</td><td>≈ 1.0</td></tr>
-        <tr><th scope="row">Measured vs design</th><td>−0.5 %</td><td>−3.5 %</td><td>+0.6 %</td><td></td></tr>
-        <tr><th scope="row">Design gradient at 5.0 A (mT/m)</th><td>5.27</td><td>5.08</td><td>6.41</td><td></td></tr>
-        <tr><th scope="row">Measured gradient at 5.0 A (mT/m)</th><td>5.24</td><td>4.90</td><td>6.45</td><td></td></tr>
-        <tr class="hl"><th scope="row">Linearity error, RMS (50 mm FOV)</th><td>2.9 %</td><td>3.1 %</td><td>2.7 %</td><td>&lt; 5 %</td></tr>
-        <tr><th scope="row">Linearity error, 95th percentile</th><td>5.6 %</td><td>6.5 %</td><td>5.2 %</td><td></td></tr>
-        <tr><th scope="row">Linearity error, worst point</th><td>8.9 %</td><td>9.8 %</td><td>7.1 %</td><td></td></tr>
-        <tr><th scope="row">Linearity error, probe noise removed</th><td>1.4 %</td><td>1.4 %</td><td>1.6 %</td><td>&lt; 5 %</td></tr>
-      </tbody>
-    </table>
-    </div>
-    <p class="small">* Y meets the target within measurement uncertainty: a second method (the field component along the bore, B<sub>y</sub>) gives 1.032 mT/m/A, so the true value lies between 0.98 and 1.03. The 0 A background is removed in all numbers.</p>
-
-    <h3 class="sub-h">How we measure</h3>
-    <div class="two-col">
-      <div class="prose">
-        <ol class="plain-steps">
-          <li>Mount a 3-axis gaussmeter probe on a motorised stage and move it through an <strong>8 × 8 × 8 grid, 7 mm apart</strong>: 512 points filling a 49 mm cube at the centre of the coil.</li>
-          <li>Run <strong>5.0 A DC</strong> through one coil at a time and record the field at every point.</li>
-          <li>Repeat the same scan at <strong>0 A</strong> with the coil in place, to measure the background.</li>
-          <li>For the field-of-view numbers, keep the <strong>208 points inside the 50 mm FOV</strong> sphere. The other 304 points sit in the cube’s corners and edges.</li>
-        </ol>
-        <p class="note">The motor axes are not the design axes. X = motor x, Y = motor z, and Z = 200 mm − motor y, because the motor’s y runs into the bore while the design’s Z runs out of it. The field readings get the same correction. The probe’s sign is not certain, so we report gradient sizes, not directions.</p>
-      </div>
-      <div class="photos">
-        <figure><img src="images/results/setup-positioner.jpg" alt="The motorised three-axis stage holding a long probe arm next to the gradient coil" loading="lazy" width="750" height="1000"><figcaption>The motorised probe positioner.</figcaption></figure>
-        <figure><img src="images/results/setup-probe.jpg" alt="The gaussmeter probe reaching into the bore of the coil" loading="lazy" width="750" height="1000"><figcaption>The probe entering the coil.</figcaption></figure>
-      </div>
-    </div>
-    <figure class="plot"><img src="images/results/scan-fov.png" alt="Left: the centre slice of the scan grid with the 50 mm field of view drawn as a circle around the grid points. Right: all 512 points in 3D, with the 208 inside the field of view highlighted" loading="lazy" width="1600" height="736"><figcaption>The scan (±24.5 mm) covers the 50 mm FOV (±25 mm) to within 0.5 mm. Points inside the FOV are coloured; points outside are grey and not counted.</figcaption></figure>
-
-    <h3 class="sub-h">How each coil is judged</h3>
-    <div class="judge">
-      <div>
-        <h4>1 · Remove the background</h4>
-        <p>Fit a flat plane to the 0 A scan and subtract it, so only the coil’s own field is judged.</p>
-        <p class="formula">B<sub>z,coil</sub> = B<sub>z</sub>(5 A) − (b<sub>0</sub> + b<sub>1</sub>x + b<sub>2</sub>y + b<sub>3</sub>z)</p>
-      </div>
-      <div>
-        <h4>2 · Efficiency</h4>
-        <p>Fit the best straight line (a plane in 3D) through all 512 points. Its slope is the gradient; divide by the current.</p>
-        <p class="formula">B<sub>z</sub> = a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>z<br>|G| = √(a<sub>1</sub>² + a<sub>2</sub>² + a<sub>3</sub>²) &nbsp;&nbsp; efficiency = |G| ÷ 5.0 A</p>
-      </div>
-      <div>
-        <h4>3 · Linearity, step by step</h4>
-        <p>Average the 64 readings in each plane (planes 7 mm apart along the coil’s axis), then compare every step between planes with the average of the 7 steps. Equal steps mean a straight line.</p>
-        <p class="formula">G<sub>step</sub> = (B̄<sub>i+1</sub> − B̄<sub>i</sub>) ÷ 7 mm</p>
-      </div>
-      <div>
-        <h4>4 · Linearity error (RMS)</h4>
-        <p>How far the 208 FOV points sit from the straight line of card 2, as a percentage of the field change across the FOV radius. Target: below 5 %.</p>
-        <p class="formula">RMS = √mean[(B<sub>z</sub> − line)²] ÷ (|G| × 25 mm) × 100 %</p>
-      </div>
-    </div>
-    <p class="small">Measured vs design (%) = (measured efficiency − design efficiency) ÷ design efficiency × 100.</p>
-    <details class="more">
-      <summary>Worked example: one plane = 64 readings</summary>
-      <figure class="plot"><img src="images/results/one-plane.png" alt="The 8 by 8 by 8 grid with one orange plane of 64 points highlighted, shown from the end of the bore and laid flat with the 64 readings written in" loading="lazy" width="1600" height="587"><figcaption>Each dot on the coil-result graphs below is the average of one such plane. The 8 planes are 7 mm apart along the coil’s axis.</figcaption></figure>
-    </details>
-
-    <h3 class="sub-h">First look at the field</h3>
-    <figure class="plot"><img src="images/results/first-look-bz.png" alt="Nine colour maps of the raw field Bz at 5 A, one row per coil and one column per centre plane. Along each coil's own axis the colour ramps from blue to red; on the plane that crosses that axis the colour is nearly flat" loading="lazy" width="1600" height="1325"><figcaption>Raw B<sub>z</sub> at 5.0 A, straight from the probe (only the coordinates corrected). One row per coil, one column per centre plane. Along each coil’s own axis the colour ramps blue → red: a linear gradient. The plane that crosses the axis is one flat colour (X coil: YZ, Y coil: XZ, Z coil: XY). Everything below puts numbers on what this picture already shows.</figcaption></figure>
-
-    <h3 class="sub-h">The background is small and almost uniform</h3>
-    <dl class="facts">
-      <div><dt>|B| with the coil at 0 A</dt><dd>0.17–0.26 mT, mostly vertical (B<sub>y</sub>)</dd></div>
-      <div><dt>B<sub>z</sub> background along the bore</dt><dd>−0.014 mT, slope below 0.2 mT/m</dd></div>
-      <div><dt>Probe noise per reading</dt><dd>±3.8 µT, from two 0 A scans 45 min apart: spread of the difference ÷ √2</dd></div>
-    </dl>
-    <figure class="plot"><img src="images/results/background-0A.png" alt="Three colour maps of the field magnitude with the coil switched off, showing only small variations" loading="lazy" width="1600" height="499"><figcaption>Field magnitude with the X coil at 0 A, on three centre planes.</figcaption></figure>
-    <figure class="plot"><img src="images/results/background-effect.png" alt="Line graphs for each coil comparing the plane averages with and without the background removed, with bar charts of efficiency, linearity and zero point" loading="lazy" width="1600" height="950"><figcaption>Removing the background moves the lines up by 2–3 µT/A but keeps the same slope: efficiency changes by 1–2 %, the linearity error does not change, and the zero point moves 2–3 mm. The linearity error comes from the coils and probe noise, not the background.</figcaption></figure>
-
-    <h3 class="sub-h">Results for each coil</h3>
-    <details class="more">
-      <summary>How to read these graphs</summary>
-      <figure class="plot"><img src="images/results/how-to-read.png" alt="Annotated guide using the X coil: one plane of 64 points, the measured gradient graph, one step zoomed in, the linearity step chart and the efficiency comparison bars" loading="lazy" width="1600" height="1073"><figcaption>Left graph: each dot is one plane’s average and the dashed line is the design. Right graph: each bar is one 7 mm step compared with the average step; bars inside the green ±5 % band mean a straight line.</figcaption></figure>
-    </details>
-    <div class="tabs" data-tabs>
-      <div class="tab-list" role="tablist" aria-label="Choose a coil">
-        <button role="tab" aria-selected="true" aria-controls="res-x" id="tab-res-x">X coil</button>
-        <button role="tab" aria-selected="false" aria-controls="res-y" id="tab-res-y" tabindex="-1">Y coil</button>
-        <button role="tab" aria-selected="false" aria-controls="res-z" id="tab-res-z" tabindex="-1">Z coil</button>
-      </div>
-      <div class="tab-panel" role="tabpanel" id="res-x" aria-labelledby="tab-res-x">
-        <h4>X coil: efficiency matches the design within 0.5 %</h4>
-        <dl class="facts"><div><dt>Measured efficiency</dt><dd>1.048 mT/m/A (design 1.053)</dd></div><div><dt>Gradient at 5.0 A</dt><dd>5.24 mT/m (design 5.27)</dd></div><div><dt>Linearity error, RMS</dt><dd>2.9 % (1.4 % with noise removed)</dd></div></dl>
-        <figure class="plot"><img src="images/results/x-result.png" alt="X coil: plane averages along X lying on the dashed design line, and a step-by-step bar chart with most bars inside the plus or minus 5 percent band" loading="lazy" width="1600" height="560"><figcaption>The end steps differ most (+8 % / −6 %); the middle five are within ±4 %. The coil sat 8.5° off the motor axis (rotated by hand), which widens the band but does not change the efficiency or linearity.</figcaption></figure>
-      </div>
-      <div class="tab-panel" role="tabpanel" id="res-y" aria-labelledby="tab-res-y" hidden>
-        <h4>Y coil: efficiency matches the design within 3.5 %</h4>
-        <dl class="facts"><div><dt>Measured efficiency</dt><dd>0.980 mT/m/A (design 1.015); 1.032 by a second method</dd></div><div><dt>Gradient at 5.0 A</dt><dd>4.90 mT/m (design 5.08)</dd></div><div><dt>Linearity error, RMS</dt><dd>3.1 % (1.4 % with noise removed)</dd></div></dl>
-        <figure class="plot"><img src="images/results/y-result.png" alt="Y coil: plane averages along Y on the design line, and a step chart where one step is clearly lower than the rest" loading="lazy" width="1600" height="560"><figcaption>One step is 13 % below average, yet every plane average stays within ±3 µT of the line: a motor step error of about 1 mm would explain it.</figcaption></figure>
-        <figure class="plot"><img src="images/results/y-rescan.png" alt="Y coil before and after the rescan: the first scan shows a bent profile, the rescan a straight line with even steps" loading="lazy" width="1600" height="1097"><figcaption>The rescan removed a bend. Steps are now even (30–38 µT), and the zero point moved from +4.9 to +6.8 mm, yet the bend is gone: the 13 Oct setup caused it. Efficiency went from 0.958 to 0.980 mT/m/A and the linearity error from 5.9 % to 3.1 %.</figcaption></figure>
-      </div>
-      <div class="tab-panel" role="tabpanel" id="res-z" aria-labelledby="tab-res-z" hidden>
-        <h4>Z coil: efficiency matches the design within 0.6 %</h4>
-        <dl class="facts"><div><dt>Measured efficiency</dt><dd>1.290 mT/m/A (design 1.282)</dd></div><div><dt>Gradient at 5.0 A</dt><dd>6.45 mT/m (design 6.41)</dd></div><div><dt>Linearity error, RMS</dt><dd>2.7 % (1.6 % with noise removed)</dd></div></dl>
-        <figure class="plot"><img src="images/results/z-result.png" alt="Z coil: plane averages along Z on the design line, and a step chart with a weaker first step" loading="lazy" width="1600" height="560"><figcaption>The weaker first step (−7.7 %, at the −Z end) matches the design, which also predicts a weaker field at that end. The field crosses zero 15 mm from the scan centre.</figcaption></figure>
-      </div>
-    </div>
-
-    <h3 class="sub-h">All three coils side by side</h3>
-    <figure class="plot"><img src="images/results/all-steps.png" alt="Bar charts of the rise per 7 mm step for each coil, all nearly equal, and the distance of each plane average from the straight line, all within a few microtesla" loading="lazy" width="1600" height="875"><figcaption>Equal bars mean a straight line. Every plane average stays within ±3.5 µT of the line, inside the ±5 % band (green).</figcaption></figure>
-    <figure class="plot"><img src="images/results/measured-vs-coilgen.png" alt="Left: bar chart of design and measured efficiency for each coil against the 1.0 target. Right: linearity error for each coil, raw and with noise removed, against the 5 percent target" loading="lazy" width="1600" height="594"><figcaption>Efficiency: all three within 3.5 % of the design and at the 1.0 mT/m/A target. Linearity: all three below 5 %; about half of the measured error is probe noise (green = noise removed).</figcaption></figure>
-
-    <h3 class="sub-h">Field slices through the scan</h3>
-    <p class="section-lede">Centre slices of B<sub>z</sub> at 5.0 A with the background removed. On the two planes that contain a coil’s axis, the lines of equal field are straight and evenly spaced. The plane that crosses the axis is nearly flat.</p>
-    <div class="tabs" data-tabs>
-      <div class="tab-list" role="tablist" aria-label="Choose a coil">
-        <button role="tab" aria-selected="true" aria-controls="sl-x" id="tab-sl-x">X coil</button>
-        <button role="tab" aria-selected="false" aria-controls="sl-y" id="tab-sl-y" tabindex="-1">Y coil</button>
-        <button role="tab" aria-selected="false" aria-controls="sl-z" id="tab-sl-z" tabindex="-1">Z coil</button>
-      </div>
-      <div class="tab-panel" role="tabpanel" id="sl-x" aria-labelledby="tab-sl-x">
-        <div class="slices">
-          <figure><img src="images/results/x-slice-xy.png" alt="X coil, XY plane: Bz ramps from blue to red across X" loading="lazy" width="840" height="720"><figcaption>XY plane: 5.13 mT/m</figcaption></figure>
-          <figure><img src="images/results/x-slice-yz.png" alt="X coil, YZ plane: nearly one flat colour" loading="lazy" width="840" height="720"><figcaption>YZ plane: nearly flat (±11 µT)</figcaption></figure>
-          <figure><img src="images/results/x-slice-xz.png" alt="X coil, XZ plane: Bz ramps from blue to red across X" loading="lazy" width="840" height="720"><figcaption>XZ plane: 5.11 mT/m</figcaption></figure>
-        </div>
-        <p class="small">Bz changes along X (across the bore): 5.24 mT/m overall.</p>
-      </div>
-      <div class="tab-panel" role="tabpanel" id="sl-y" aria-labelledby="tab-sl-y" hidden>
-        <div class="slices">
-          <figure><img src="images/results/y-slice-xy.png" alt="Y coil, XY plane: Bz ramps from blue to red vertically" loading="lazy" width="840" height="720"><figcaption>XY plane: 4.86 mT/m</figcaption></figure>
-          <figure><img src="images/results/y-slice-yz.png" alt="Y coil, YZ plane: Bz ramps from blue to red along Y" loading="lazy" width="840" height="720"><figcaption>YZ plane: 4.94 mT/m</figcaption></figure>
-          <figure><img src="images/results/y-slice-xz.png" alt="Y coil, XZ plane: nearly one flat colour" loading="lazy" width="840" height="720"><figcaption>XZ plane: nearly flat (±6 µT)</figcaption></figure>
-        </div>
-        <p class="small">Bz changes along Y (vertical): 4.90 mT/m overall.</p>
-      </div>
-      <div class="tab-panel" role="tabpanel" id="sl-z" aria-labelledby="tab-sl-z" hidden>
-        <div class="slices">
-          <figure><img src="images/results/z-slice-xy.png" alt="Z coil, XY plane: nearly one flat colour" loading="lazy" width="840" height="720"><figcaption>XY plane: nearly flat (±4 µT)</figcaption></figure>
-          <figure><img src="images/results/z-slice-yz.png" alt="Z coil, YZ plane: Bz ramps from blue to red along Z" loading="lazy" width="840" height="720"><figcaption>YZ plane: 6.41 mT/m</figcaption></figure>
-          <figure><img src="images/results/z-slice-xz.png" alt="Z coil, XZ plane: Bz ramps from blue to red along Z" loading="lazy" width="840" height="720"><figcaption>XZ plane: 6.41 mT/m</figcaption></figure>
-        </div>
-        <p class="small">Bz changes along Z (along the bore): 6.45 mT/m overall.</p>
-      </div>
-    </div>
-    <figure class="plot"><img src="images/results/layer-gradient.png" alt="Three line graphs, one per coil, showing the gradient measured in each layer of the scan staying close to the average" loading="lazy" width="1600" height="480"><figcaption>The gradient is the same in every layer: X ±3.2 %, Y ±2.5 %, Z ±2.4 %. In the X and Z scans the layers fall slowly in the order they were scanned (about 0.6 % per layer), likely the current dropping as the coil warmed; the Y rescan, with steady current, does not.</figcaption></figure>
-
-    <h3 class="sub-h" id="meaning">What the numbers mean at 32 mT</h3>
-    <div class="two-col stack">
-      <div class="prose">
-        <p>The gradient turns position into frequency. With the 32 mT magnet and the measured gradients at 5.0 A:</p>
-        <p class="formula">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
-        <p class="formula">Δf = γ · G ≈ 209–275 Hz per mm</p>
-        <p>Across the 50 mm FOV that is a frequency range of about <strong>10–14 kHz</strong>, a comfortable bandwidth at low field, and enough for about 1 mm pixels.</p>
-        <div class="problem">
-          <h4>The one condition: magnet uniformity</h4>
-          <p>With about 5 µT per mm of gradient, a B<sub>0</sub> error of 5 µT (about 150 ppm of 32 mT) shifts the image by about 1 mm. The gradients are strong enough as long as the magnet’s B<sub>0</sub> varies by less than about 150 ppm over the FOV, or the gradient current is raised to match. Try it with the <em>Magnet error</em> slider in <a href="#lab">the lab above</a>.</p>
-        </div>
-      </div>
-      <div>
-        <div class="table-wrap">
-        <table class="results">
-          <caption>Predicted electrical values at 5.0 A</caption>
-          <thead><tr><th scope="col">Coil</th><th scope="col">Wire</th><th scope="col">Resistance (litz)</th><th scope="col">Inductance</th><th scope="col">Voltage</th><th scope="col">Power</th><th scope="col">Current rise L/R</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">X</th><td>13.6 m</td><td>0.36–0.47 Ω</td><td>37.7 µH</td><td>1.8–2.4 V</td><td>9.0–11.8 W</td><td>0.08–0.10 ms</td></tr>
-            <tr><th scope="row">Y</th><td>14.1 m</td><td>0.37–0.48 Ω</td><td>38.9 µH</td><td>1.9–2.4 V</td><td>9.3–12.1 W</td><td>0.08–0.10 ms</td></tr>
-            <tr><th scope="row">Z</th><td>17.1 m</td><td>0.45–0.59 Ω</td><td>68.0 µH</td><td>2.3–2.9 V</td><td>11.3–14.7 W</td><td>0.12–0.15 ms</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p class="formula small-formula">V = I · R &nbsp;&nbsp; P = I² · R &nbsp;&nbsp; τ = L / R</p>
-        <p class="small">R from the litz datasheet (0.0264–0.0345 Ω/m) and the wire length; L from pyCoilGen (FastHenry2). Litz is 2.6–3.5× more resistive than the solid 1.3 mm wire pyCoilGen assumes, because only about 35 % of its footprint is copper. A current rise of about 0.1 ms is fast enough for low-field sequences.</p>
-      </div>
-    </div>
-
-    <h3 class="sub-h">Limits and next steps</h3>
-    <div class="two-col">
-      <div>
-        <h4>Limits of this measurement</h4>
-        <ul>
-          <li>Probe noise of ±3.8 µT per reading sets a floor of about 3 % on the linearity error.</li>
-          <li>The probe’s sign is not certain, so only gradient sizes are reported, not directions.</li>
-          <li>The X and Z scans lost about 0.6 % of gradient per layer, likely the current dropping as the coil warmed (the Y rescan was steady).</li>
-          <li>The Z 5.0 A scan is from 13 Oct and its 0 A scan from 15 Oct; this is fine because the background is uniform.</li>
-          <li>B<sub>0</sub> is assumed to point along the bore (Z), as in the design.</li>
-        </ul>
-      </div>
-      <div>
-        <h4>Next steps</h4>
-        <ul>
-          <li>Measure each coil’s resistance cold and warm, against the 0.36–0.59 Ω prediction.</li>
-          <li>Run the supply in constant-current mode and log the current.</li>
-          <li>Align the X coil in the scanner (it sat 8.5° off the motor axis on the bench).</li>
-          <li>Check the Z coil’s orientation against the design (lead end).</li>
-          <li>Measure the magnet’s B<sub>0</sub> uniformity over the 50 mm FOV.</li>
-          <li>If Y must clearly exceed 1.0 mT/m/A, run it at about 5.1 A.</li>
-        </ul>
-      </div>
-    </div>
-    <p class="note">None of these limits changes the verdict: X and Z clear both targets by more than the measurement uncertainty, and Y’s efficiency range (0.98–1.03 mT/m/A) straddles the 1.0 target.</p>
-
-    <details class="more">
-      <summary>Appendix: how probe noise was separated</summary>
-      <figure class="plot"><img src="images/results/noise-cubic.png" alt="For each coil: the measured field with a straight-line and cubic fit, the distance from the straight line, and a histogram of what is left after the cubic fit" loading="lazy" width="1600" height="1350"><figcaption>Fit a smooth 20-term cubic to the 512 points: it follows the coil’s gentle bending but not random noise. Cubic minus straight line is the coil’s own bending, the “noise removed” value (about 1.5 %). Measured minus cubic is the noise: 3.6–3.7 µT, matching the 3.8 µT from two 0 A scans.</figcaption></figure>
-      <p class="formula">B<sub>z</sub> = c<sub>0</sub> + c<sub>1</sub>x + c<sub>2</sub>y + c<sub>3</sub>z + … + c<sub>19</sub>z³</p>
-    </details>
-  </div>
+<div class="wrap">
+<h2 data-i18n="t218">Test the coils</h2>
+<p class="section-lede" data-i18n="t219">We map each coil’s field on a 3D grid and compare it with the pyCoilGen design. A coil passes when its gradient is close to the design and its field is close to a straight line. Measurements from 13–15 Oct 2026, at 5.0 A.</p>
+<div class="verdict-box">
+<h3 data-i18n="t220">The result</h3>
+<p data-i18n="t221">All three coils produce real, straight gradients that match the pyCoilGen design and reach the 1.0 mT/m/A target: efficiency within 3.5 % of the design, and a linearity error of about 3 % against a 5 % target. The design can be used in the 32 mT portable MRI, as long as the magnet’s field is uniform enough (see <a href="#meaning">What the numbers mean at 32 mT</a>).</p>
+</div>
+<div class="table-wrap">
+<table class="results">
+<caption data-i18n="t222">Results at a glance. Measured = the built coil in the lab; Design = the pyCoilGen simulation of the same coil.</caption>
+<thead><tr><th scope="col"></th><th data-i18n="t223" scope="col">X coil</th><th data-i18n="t224" scope="col">Y coil</th><th data-i18n="t225" scope="col">Z coil</th><th data-i18n="t226" scope="col">Target</th></tr></thead>
+<tbody>
+<tr><th data-i18n="t227" scope="row">Design efficiency (mT/m/A)</th><td>1.053</td><td>1.015</td><td>1.282</td><td>1.0</td></tr>
+<tr class="hl"><th data-i18n="t228" scope="row">Measured efficiency (mT/m/A)</th><td>1.048</td><td>0.980*</td><td>1.290</td><td>≈ 1.0</td></tr>
+<tr><th data-i18n="t229" scope="row">Measured vs design</th><td>−0.5 %</td><td>−3.5 %</td><td>+0.6 %</td><td></td></tr>
+<tr><th data-i18n="t230" scope="row">Design gradient at 5.0 A (mT/m)</th><td>5.27</td><td>5.08</td><td>6.41</td><td></td></tr>
+<tr><th data-i18n="t231" scope="row">Measured gradient at 5.0 A (mT/m)</th><td>5.24</td><td>4.90</td><td>6.45</td><td></td></tr>
+<tr class="hl"><th data-i18n="t232" scope="row">Linearity error, RMS (50 mm FOV)</th><td>2.9 %</td><td>3.1 %</td><td>2.7 %</td><td>&lt; 5 %</td></tr>
+<tr><th data-i18n="t233" scope="row">Linearity error, 95th percentile</th><td>5.6 %</td><td>6.5 %</td><td>5.2 %</td><td></td></tr>
+<tr><th data-i18n="t234" scope="row">Linearity error, worst point</th><td>8.9 %</td><td>9.8 %</td><td>7.1 %</td><td></td></tr>
+<tr><th data-i18n="t235" scope="row">Linearity error, probe noise removed</th><td>1.4 %</td><td>1.4 %</td><td>1.6 %</td><td>&lt; 5 %</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" data-i18n="t236">* Y meets the target within measurement uncertainty: a second method (the field component along the bore, B<sub>y</sub>) gives 1.032 mT/m/A, so the true value lies between 0.98 and 1.03. The 0 A background is removed in all numbers.</p>
+<h3 class="sub-h" data-i18n="t237">How we measure</h3>
+<div class="two-col">
+<div class="prose">
+<ol class="plain-steps">
+<li data-i18n="t238">Mount a 3-axis gaussmeter probe on a motorised stage and move it through an <strong>8 × 8 × 8 grid, 7 mm apart</strong>: 512 points filling a 49 mm cube at the centre of the coil.</li>
+<li data-i18n="t239">Run <strong>5.0 A DC</strong> through one coil at a time and record the field at every point.</li>
+<li data-i18n="t240">Repeat the same scan at <strong>0 A</strong> with the coil in place, to measure the background.</li>
+<li data-i18n="t241">For the field-of-view numbers, keep the <strong>208 points inside the 50 mm FOV</strong> sphere. The other 304 points sit in the cube’s corners and edges.</li>
+</ol>
+<p class="note" data-i18n="t242">The motor axes are not the design axes. X = motor x, Y = motor z, and Z = 200 mm − motor y, because the motor’s y runs into the bore while the design’s Z runs out of it. The field readings get the same correction. The probe’s sign is not certain, so we report gradient sizes, not directions.</p>
+</div>
+<div class="photos">
+<figure><img alt="The motorised three-axis stage holding a long probe arm next to the gradient coil" data-i18n-alt="t402" height="1000" loading="lazy" src="images/results/setup-positioner.jpg" width="750"/><figcaption data-i18n="t243">The motorised probe positioner.</figcaption></figure>
+<figure><img alt="The gaussmeter probe reaching into the bore of the coil" data-i18n-alt="t403" height="1000" loading="lazy" src="images/results/setup-probe.jpg" width="750"/><figcaption data-i18n="t244">The probe entering the coil.</figcaption></figure>
+</div>
+</div>
+<figure class="plot"><img alt="Left: the centre slice of the scan grid with the 50 mm field of view drawn as a circle around the grid points. Right: all 512 points in 3D, with the 208 inside the field of view highlighted" data-i18n-alt="t404" height="736" loading="lazy" src="images/results/scan-fov.png" width="1600"/><figcaption data-i18n="t245">The scan (±24.5 mm) covers the 50 mm FOV (±25 mm) to within 0.5 mm. Points inside the FOV are coloured; points outside are grey and not counted.</figcaption></figure>
+<h3 class="sub-h" data-i18n="t246">How each coil is judged</h3>
+<div class="judge">
+<div>
+<h4 data-i18n="t247">1 · Remove the background</h4>
+<p data-i18n="t248">Fit a flat plane to the 0 A scan and subtract it, so only the coil’s own field is judged.</p>
+<p class="formula" data-i18n="t249">B<sub>z,coil</sub> = B<sub>z</sub>(5 A) − (b<sub>0</sub> + b<sub>1</sub>x + b<sub>2</sub>y + b<sub>3</sub>z)</p>
+</div>
+<div>
+<h4 data-i18n="t250">2 · Efficiency</h4>
+<p data-i18n="t251">Fit the best straight line (a plane in 3D) through all 512 points. Its slope is the gradient; divide by the current.</p>
+<p class="formula" data-i18n="t252">B<sub>z</sub> = a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>z<br/>|G| = √(a<sub>1</sub>² + a<sub>2</sub>² + a<sub>3</sub>²)    efficiency = |G| ÷ 5.0 A</p>
+</div>
+<div>
+<h4 data-i18n="t253">3 · Linearity, step by step</h4>
+<p data-i18n="t254">Average the 64 readings in each plane (planes 7 mm apart along the coil’s axis), then compare every step between planes with the average of the 7 steps. Equal steps mean a straight line.</p>
+<p class="formula" data-i18n="t255">G<sub>step</sub> = (B̄<sub>i+1</sub> − B̄<sub>i</sub>) ÷ 7 mm</p>
+</div>
+<div>
+<h4 data-i18n="t256">4 · Linearity error (RMS)</h4>
+<p data-i18n="t257">How far the 208 FOV points sit from the straight line of card 2, as a percentage of the field change across the FOV radius. Target: below 5 %.</p>
+<p class="formula" data-i18n="t258">RMS = √mean[(B<sub>z</sub> − line)²] ÷ (|G| × 25 mm) × 100 %</p>
+</div>
+</div>
+<p class="small" data-i18n="t259">Measured vs design (%) = (measured efficiency − design efficiency) ÷ design efficiency × 100.</p>
+<details class="more">
+<summary data-i18n="t260">Worked example: one plane = 64 readings</summary>
+<figure class="plot"><img alt="The 8 by 8 by 8 grid with one orange plane of 64 points highlighted, shown from the end of the bore and laid flat with the 64 readings written in" data-i18n-alt="t405" height="587" loading="lazy" src="images/results/one-plane.png" width="1600"/><figcaption data-i18n="t261">Each dot on the coil-result graphs below is the average of one such plane. The 8 planes are 7 mm apart along the coil’s axis.</figcaption></figure>
+</details>
+<h3 class="sub-h" data-i18n="t262">First look at the field</h3>
+<figure class="plot"><img alt="Nine colour maps of the raw field Bz at 5 A, one row per coil and one column per centre plane. Along each coil's own axis the colour ramps from blue to red; on the plane that crosses that axis the colour is nearly flat" data-i18n-alt="t406" height="1325" loading="lazy" src="images/results/first-look-bz.png" width="1600"/><figcaption data-i18n="t263">Raw B<sub>z</sub> at 5.0 A, straight from the probe (only the coordinates corrected). One row per coil, one column per centre plane. Along each coil’s own axis the colour ramps blue → red: a linear gradient. The plane that crosses the axis is one flat colour (X coil: YZ, Y coil: XZ, Z coil: XY). Everything below puts numbers on what this picture already shows.</figcaption></figure>
+<h3 class="sub-h" data-i18n="t264">The background is small and almost uniform</h3>
+<dl class="facts">
+<div><dt data-i18n="t265">|B| with the coil at 0 A</dt><dd data-i18n="t266">0.17–0.26 mT, mostly vertical (B<sub>y</sub>)</dd></div>
+<div><dt data-i18n="t267">B<sub>z</sub> background along the bore</dt><dd data-i18n="t268">−0.014 mT, slope below 0.2 mT/m</dd></div>
+<div><dt data-i18n="t269">Probe noise per reading</dt><dd data-i18n="t270">±3.8 µT, from two 0 A scans 45 min apart: spread of the difference ÷ √2</dd></div>
+</dl>
+<figure class="plot"><img alt="Three colour maps of the field magnitude with the coil switched off, showing only small variations" data-i18n-alt="t407" height="499" loading="lazy" src="images/results/background-0A.png" width="1600"/><figcaption data-i18n="t271">Field magnitude with the X coil at 0 A, on three centre planes.</figcaption></figure>
+<figure class="plot"><img alt="Line graphs for each coil comparing the plane averages with and without the background removed, with bar charts of efficiency, linearity and zero point" data-i18n-alt="t408" height="950" loading="lazy" src="images/results/background-effect.png" width="1600"/><figcaption data-i18n="t272">Removing the background moves the lines up by 2–3 µT/A but keeps the same slope: efficiency changes by 1–2 %, the linearity error does not change, and the zero point moves 2–3 mm. The linearity error comes from the coils and probe noise, not the background.</figcaption></figure>
+<h3 class="sub-h" data-i18n="t273">Results for each coil</h3>
+<details class="more">
+<summary data-i18n="t274">How to read these graphs</summary>
+<figure class="plot"><img alt="Annotated guide using the X coil: one plane of 64 points, the measured gradient graph, one step zoomed in, the linearity step chart and the efficiency comparison bars" data-i18n-alt="t409" height="1073" loading="lazy" src="images/results/how-to-read.png" width="1600"/><figcaption data-i18n="t275">Left graph: each dot is one plane’s average and the dashed line is the design. Right graph: each bar is one 7 mm step compared with the average step; bars inside the green ±5 % band mean a straight line.</figcaption></figure>
+</details>
+<div class="tabs" data-tabs="">
+<div aria-label="Choose a coil" class="tab-list" data-i18n-aria="t433" role="tablist">
+<button aria-controls="res-x" aria-selected="true" data-i18n="t276" id="tab-res-x" role="tab">X coil</button>
+<button aria-controls="res-y" aria-selected="false" data-i18n="t277" id="tab-res-y" role="tab" tabindex="-1">Y coil</button>
+<button aria-controls="res-z" aria-selected="false" data-i18n="t278" id="tab-res-z" role="tab" tabindex="-1">Z coil</button>
+</div>
+<div aria-labelledby="tab-res-x" class="tab-panel" id="res-x" role="tabpanel">
+<h4 data-i18n="t279">X coil: efficiency matches the design within 0.5 %</h4>
+<dl class="facts"><div><dt data-i18n="t280">Measured efficiency</dt><dd data-i18n="t281">1.048 mT/m/A (design 1.053)</dd></div><div><dt data-i18n="t282">Gradient at 5.0 A</dt><dd data-i18n="t283">5.24 mT/m (design 5.27)</dd></div><div><dt data-i18n="t284">Linearity error, RMS</dt><dd data-i18n="t285">2.9 % (1.4 % with noise removed)</dd></div></dl>
+<figure class="plot"><img alt="X coil: plane averages along X lying on the dashed design line, and a step-by-step bar chart with most bars inside the plus or minus 5 percent band" data-i18n-alt="t410" height="560" loading="lazy" src="images/results/x-result.png" width="1600"/><figcaption data-i18n="t286">The end steps differ most (+8 % / −6 %); the middle five are within ±4 %. The coil sat 8.5° off the motor axis (rotated by hand), which widens the band but does not change the efficiency or linearity.</figcaption></figure>
+</div>
+<div aria-labelledby="tab-res-y" class="tab-panel" hidden="" id="res-y" role="tabpanel">
+<h4 data-i18n="t287">Y coil: efficiency matches the design within 3.5 %</h4>
+<dl class="facts"><div><dt data-i18n="t288">Measured efficiency</dt><dd data-i18n="t289">0.980 mT/m/A (design 1.015); 1.032 by a second method</dd></div><div><dt data-i18n="t290">Gradient at 5.0 A</dt><dd data-i18n="t291">4.90 mT/m (design 5.08)</dd></div><div><dt data-i18n="t292">Linearity error, RMS</dt><dd data-i18n="t293">3.1 % (1.4 % with noise removed)</dd></div></dl>
+<figure class="plot"><img alt="Y coil: plane averages along Y on the design line, and a step chart where one step is clearly lower than the rest" data-i18n-alt="t411" height="560" loading="lazy" src="images/results/y-result.png" width="1600"/><figcaption data-i18n="t294">One step is 13 % below average, yet every plane average stays within ±3 µT of the line: a motor step error of about 1 mm would explain it.</figcaption></figure>
+<figure class="plot"><img alt="Y coil before and after the rescan: the first scan shows a bent profile, the rescan a straight line with even steps" data-i18n-alt="t412" height="1097" loading="lazy" src="images/results/y-rescan.png" width="1600"/><figcaption data-i18n="t295">The rescan removed a bend. Steps are now even (30–38 µT), and the zero point moved from +4.9 to +6.8 mm, yet the bend is gone: the 13 Oct setup caused it. Efficiency went from 0.958 to 0.980 mT/m/A and the linearity error from 5.9 % to 3.1 %.</figcaption></figure>
+</div>
+<div aria-labelledby="tab-res-z" class="tab-panel" hidden="" id="res-z" role="tabpanel">
+<h4 data-i18n="t296">Z coil: efficiency matches the design within 0.6 %</h4>
+<dl class="facts"><div><dt data-i18n="t297">Measured efficiency</dt><dd data-i18n="t298">1.290 mT/m/A (design 1.282)</dd></div><div><dt data-i18n="t299">Gradient at 5.0 A</dt><dd data-i18n="t300">6.45 mT/m (design 6.41)</dd></div><div><dt data-i18n="t301">Linearity error, RMS</dt><dd data-i18n="t302">2.7 % (1.6 % with noise removed)</dd></div></dl>
+<figure class="plot"><img alt="Z coil: plane averages along Z on the design line, and a step chart with a weaker first step" data-i18n-alt="t413" height="560" loading="lazy" src="images/results/z-result.png" width="1600"/><figcaption data-i18n="t303">The weaker first step (−7.7 %, at the −Z end) matches the design, which also predicts a weaker field at that end. The field crosses zero 15 mm from the scan centre.</figcaption></figure>
+</div>
+</div>
+<h3 class="sub-h" data-i18n="t304">All three coils side by side</h3>
+<figure class="plot"><img alt="Bar charts of the rise per 7 mm step for each coil, all nearly equal, and the distance of each plane average from the straight line, all within a few microtesla" data-i18n-alt="t414" height="875" loading="lazy" src="images/results/all-steps.png" width="1600"/><figcaption data-i18n="t305">Equal bars mean a straight line. Every plane average stays within ±3.5 µT of the line, inside the ±5 % band (green).</figcaption></figure>
+<figure class="plot"><img alt="Left: bar chart of design and measured efficiency for each coil against the 1.0 target. Right: linearity error for each coil, raw and with noise removed, against the 5 percent target" data-i18n-alt="t415" height="594" loading="lazy" src="images/results/measured-vs-coilgen.png" width="1600"/><figcaption data-i18n="t306">Efficiency: all three within 3.5 % of the design and at the 1.0 mT/m/A target. Linearity: all three below 5 %; about half of the measured error is probe noise (green = noise removed).</figcaption></figure>
+<h3 class="sub-h" data-i18n="t307">Field slices through the scan</h3>
+<p class="section-lede" data-i18n="t308">Centre slices of B<sub>z</sub> at 5.0 A with the background removed. On the two planes that contain a coil’s axis, the lines of equal field are straight and evenly spaced. The plane that crosses the axis is nearly flat.</p>
+<div class="tabs" data-tabs="">
+<div aria-label="Choose a coil" class="tab-list" data-i18n-aria="t434" role="tablist">
+<button aria-controls="sl-x" aria-selected="true" data-i18n="t309" id="tab-sl-x" role="tab">X coil</button>
+<button aria-controls="sl-y" aria-selected="false" data-i18n="t310" id="tab-sl-y" role="tab" tabindex="-1">Y coil</button>
+<button aria-controls="sl-z" aria-selected="false" data-i18n="t311" id="tab-sl-z" role="tab" tabindex="-1">Z coil</button>
+</div>
+<div aria-labelledby="tab-sl-x" class="tab-panel" id="sl-x" role="tabpanel">
+<div class="slices">
+<figure><img alt="X coil, XY plane: Bz ramps from blue to red across X" data-i18n-alt="t416" height="720" loading="lazy" src="images/results/x-slice-xy.png" width="840"/><figcaption data-i18n="t312">XY plane: 5.13 mT/m</figcaption></figure>
+<figure><img alt="X coil, YZ plane: nearly one flat colour" data-i18n-alt="t417" height="720" loading="lazy" src="images/results/x-slice-yz.png" width="840"/><figcaption data-i18n="t313">YZ plane: nearly flat (±11 µT)</figcaption></figure>
+<figure><img alt="X coil, XZ plane: Bz ramps from blue to red across X" data-i18n-alt="t418" height="720" loading="lazy" src="images/results/x-slice-xz.png" width="840"/><figcaption data-i18n="t314">XZ plane: 5.11 mT/m</figcaption></figure>
+</div>
+<p class="small" data-i18n="t315">Bz changes along X (across the bore): 5.24 mT/m overall.</p>
+</div>
+<div aria-labelledby="tab-sl-y" class="tab-panel" hidden="" id="sl-y" role="tabpanel">
+<div class="slices">
+<figure><img alt="Y coil, XY plane: Bz ramps from blue to red vertically" data-i18n-alt="t419" height="720" loading="lazy" src="images/results/y-slice-xy.png" width="840"/><figcaption data-i18n="t316">XY plane: 4.86 mT/m</figcaption></figure>
+<figure><img alt="Y coil, YZ plane: Bz ramps from blue to red along Y" data-i18n-alt="t420" height="720" loading="lazy" src="images/results/y-slice-yz.png" width="840"/><figcaption data-i18n="t317">YZ plane: 4.94 mT/m</figcaption></figure>
+<figure><img alt="Y coil, XZ plane: nearly one flat colour" data-i18n-alt="t421" height="720" loading="lazy" src="images/results/y-slice-xz.png" width="840"/><figcaption data-i18n="t318">XZ plane: nearly flat (±6 µT)</figcaption></figure>
+</div>
+<p class="small" data-i18n="t319">Bz changes along Y (vertical): 4.90 mT/m overall.</p>
+</div>
+<div aria-labelledby="tab-sl-z" class="tab-panel" hidden="" id="sl-z" role="tabpanel">
+<div class="slices">
+<figure><img alt="Z coil, XY plane: nearly one flat colour" data-i18n-alt="t422" height="720" loading="lazy" src="images/results/z-slice-xy.png" width="840"/><figcaption data-i18n="t320">XY plane: nearly flat (±4 µT)</figcaption></figure>
+<figure><img alt="Z coil, YZ plane: Bz ramps from blue to red along Z" data-i18n-alt="t423" height="720" loading="lazy" src="images/results/z-slice-yz.png" width="840"/><figcaption data-i18n="t321">YZ plane: 6.41 mT/m</figcaption></figure>
+<figure><img alt="Z coil, XZ plane: Bz ramps from blue to red along Z" data-i18n-alt="t424" height="720" loading="lazy" src="images/results/z-slice-xz.png" width="840"/><figcaption data-i18n="t322">XZ plane: 6.41 mT/m</figcaption></figure>
+</div>
+<p class="small" data-i18n="t323">Bz changes along Z (along the bore): 6.45 mT/m overall.</p>
+</div>
+</div>
+<figure class="plot"><img alt="Three line graphs, one per coil, showing the gradient measured in each layer of the scan staying close to the average" data-i18n-alt="t425" height="480" loading="lazy" src="images/results/layer-gradient.png" width="1600"/><figcaption data-i18n="t324">The gradient is the same in every layer: X ±3.2 %, Y ±2.5 %, Z ±2.4 %. In the X and Z scans the layers fall slowly in the order they were scanned (about 0.6 % per layer), likely the current dropping as the coil warmed; the Y rescan, with steady current, does not.</figcaption></figure>
+<h3 class="sub-h" data-i18n="t325" id="meaning">What the numbers mean at 32 mT</h3>
+<div class="two-col stack">
+<div class="prose">
+<p data-i18n="t326">The gradient turns position into frequency. With the 32 mT magnet and the measured gradients at 5.0 A:</p>
+<p class="formula" data-i18n="t327">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
+<p class="formula" data-i18n="t328">Δf = γ · G ≈ 209–275 Hz per mm</p>
+<p data-i18n="t329">Across the 50 mm FOV that is a frequency range of about <strong>10–14 kHz</strong>, a comfortable bandwidth at low field, and enough for about 1 mm pixels.</p>
+<div class="problem">
+<h4 data-i18n="t330">The one condition: magnet uniformity</h4>
+<p data-i18n="t331">With about 5 µT per mm of gradient, a B<sub>0</sub> error of 5 µT (about 150 ppm of 32 mT) shifts the image by about 1 mm. The gradients are strong enough as long as the magnet’s B<sub>0</sub> varies by less than about 150 ppm over the FOV, or the gradient current is raised to match. Try it with the <em>Magnet error</em> slider in <a href="#lab">the lab above</a>.</p>
+</div>
+</div>
+<div>
+<div class="table-wrap">
+<table class="results">
+<caption data-i18n="t332">Predicted electrical values at 5.0 A</caption>
+<thead><tr><th data-i18n="t333" scope="col">Coil</th><th data-i18n="t334" scope="col">Wire</th><th data-i18n="t335" scope="col">Resistance (litz)</th><th data-i18n="t336" scope="col">Inductance</th><th data-i18n="t337" scope="col">Voltage</th><th data-i18n="t338" scope="col">Power</th><th data-i18n="t339" scope="col">Current rise L/R</th></tr></thead>
+<tbody>
+<tr><th scope="row">X</th><td>13.6 m</td><td>0.36–0.47 Ω</td><td>37.7 µH</td><td>1.8–2.4 V</td><td>9.0–11.8 W</td><td>0.08–0.10 ms</td></tr>
+<tr><th scope="row">Y</th><td>14.1 m</td><td>0.37–0.48 Ω</td><td>38.9 µH</td><td>1.9–2.4 V</td><td>9.3–12.1 W</td><td>0.08–0.10 ms</td></tr>
+<tr><th scope="row">Z</th><td>17.1 m</td><td>0.45–0.59 Ω</td><td>68.0 µH</td><td>2.3–2.9 V</td><td>11.3–14.7 W</td><td>0.12–0.15 ms</td></tr>
+</tbody>
+</table>
+</div>
+<p class="formula small-formula">V = I · R    P = I² · R    τ = L / R</p>
+<p class="small" data-i18n="t340">R from the litz datasheet (0.0264–0.0345 Ω/m) and the wire length; L from pyCoilGen (FastHenry2). Litz is 2.6–3.5× more resistive than the solid 1.3 mm wire pyCoilGen assumes, because only about 35 % of its footprint is copper. A current rise of about 0.1 ms is fast enough for low-field sequences.</p>
+</div>
+</div>
+<h3 class="sub-h" data-i18n="t341">Limits and next steps</h3>
+<div class="two-col">
+<div>
+<h4 data-i18n="t342">Limits of this measurement</h4>
+<ul>
+<li data-i18n="t343">Probe noise of ±3.8 µT per reading sets a floor of about 3 % on the linearity error.</li>
+<li data-i18n="t344">The probe’s sign is not certain, so only gradient sizes are reported, not directions.</li>
+<li data-i18n="t345">The X and Z scans lost about 0.6 % of gradient per layer, likely the current dropping as the coil warmed (the Y rescan was steady).</li>
+<li data-i18n="t346">The Z 5.0 A scan is from 13 Oct and its 0 A scan from 15 Oct; this is fine because the background is uniform.</li>
+<li data-i18n="t347">B<sub>0</sub> is assumed to point along the bore (Z), as in the design.</li>
+</ul>
+</div>
+<div>
+<h4 data-i18n="t348">Next steps</h4>
+<ul>
+<li data-i18n="t349">Measure each coil’s resistance cold and warm, against the 0.36–0.59 Ω prediction.</li>
+<li data-i18n="t350">Run the supply in constant-current mode and log the current.</li>
+<li data-i18n="t351">Align the X coil in the scanner (it sat 8.5° off the motor axis on the bench).</li>
+<li data-i18n="t352">Check the Z coil’s orientation against the design (lead end).</li>
+<li data-i18n="t353">Measure the magnet’s B<sub>0</sub> uniformity over the 50 mm FOV.</li>
+<li data-i18n="t354">If Y must clearly exceed 1.0 mT/m/A, run it at about 5.1 A.</li>
+</ul>
+</div>
+</div>
+<p class="note" data-i18n="t355">None of these limits changes the verdict: X and Z clear both targets by more than the measurement uncertainty, and Y’s efficiency range (0.98–1.03 mT/m/A) straddles the 1.0 target.</p>
+<details class="more">
+<summary data-i18n="t356">Appendix: how probe noise was separated</summary>
+<figure class="plot"><img alt="For each coil: the measured field with a straight-line and cubic fit, the distance from the straight line, and a histogram of what is left after the cubic fit" data-i18n-alt="t426" height="1350" loading="lazy" src="images/results/noise-cubic.png" width="1600"/><figcaption data-i18n="t357">Fit a smooth 20-term cubic to the 512 points: it follows the coil’s gentle bending but not random noise. Cubic minus straight line is the coil’s own bending, the “noise removed” value (about 1.5 %). Measured minus cubic is the noise: 3.6–3.7 µT, matching the 3.8 µT from two 0 A scans.</figcaption></figure>
+<p class="formula">B<sub>z</sub> = c<sub>0</sub> + c<sub>1</sub>x + c<sub>2</sub>y + c<sub>3</sub>z + … + c<sub>19</sub>z³</p>
+</details>
+</div>
 </section>
-
 <!-- 5. FILES -->
 <section class="band" id="files">
-  <div class="wrap">
-    <h2>Files</h2>
-    <p class="section-lede">Click a file to download it. Everything is also in the <a href="https://github.com/dtica4/gradient-coil-builder-beginner">GitHub repository</a>.</p>
-    <div class="files">
-      <div>
-        <h3>Python scripts</h3>
-        <ul class="file-list">
-          <li><a href="scripts/xgrad_coil_1198mm.py" download>xgrad_coil_1198mm.py</a><span>Design X</span></li>
-          <li><a href="scripts/ygrad_coil_1262mm.py" download>ygrad_coil_1262mm.py</a><span>Design Y</span></li>
-          <li><a href="scripts/zgrad_coil_1326mm.py" download>zgrad_coil_1326mm.py</a><span>Design Z</span></li>
-          <li><a href="scripts/summ_data_smth_x1198.py" download>summ_data_smth_x1198.py</a><span>Summarise and export X</span></li>
-          <li><a href="scripts/summ_data_smth_y1262.py" download>summ_data_smth_y1262.py</a><span>Summarise and export Y</span></li>
-          <li><a href="scripts/summ_data_smth_z1326.py" download>summ_data_smth_z1326.py</a><span>Summarise, fold and export Z</span></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Plates to print (STEP)</h3>
-        <ul class="file-list">
-          <li><span class="file-group">X coil</span>
-            <a href="CAD/plates/x_coil_1198mm/x_plate_1.step" download>1</a>
-            <a href="CAD/plates/x_coil_1198mm/x_plate_2.step" download>2</a>
-            <a href="CAD/plates/x_coil_1198mm/x_plate_3.step" download>3</a>
-            <a href="CAD/plates/x_coil_1198mm/x_plate_4.step" download>4</a></li>
-          <li><span class="file-group">Y coil</span>
-            <a href="CAD/plates/y_coil_1262mm/y_plate_1.step" download>1</a>
-            <a href="CAD/plates/y_coil_1262mm/y_plate_2.step" download>2</a>
-            <a href="CAD/plates/y_coil_1262mm/y_plate_3.step" download>3</a>
-            <a href="CAD/plates/y_coil_1262mm/y_plate_4.step" download>4</a></li>
-          <li><span class="file-group">Z coil</span>
-            <a href="CAD/plates/z_coil_1326mm/z_plate_TL.step" download>TL</a>
-            <a href="CAD/plates/z_coil_1326mm/z_plate_TR.step" download>TR</a>
-            <a href="CAD/plates/z_coil_1326mm/z_plate_BL.step" download>BL</a>
-            <a href="CAD/plates/z_coil_1326mm/z_plate_BR.step" download>BR</a></li>
-        </ul>
-        <h3>Gradient cover (STEP)</h3>
-        <ul class="file-list">
-          <li><a href="CAD/cover/gradient_cover_concentric.step" download>gradient_cover_concentric.step</a><span>Print in PLA</span></li>
-        </ul>
-        <h3>Wire paths (STL)</h3>
-        <ul class="file-list">
-          <li><a href="CAD/wires/xgrad_coil_1198mm_wire_0_x.stl" download>xgrad_coil_1198mm_wire_0_x.stl</a><span>4.1 MB</span></li>
-          <li><a href="CAD/wires/ygrad_coil_1262mm_wire_0_y.stl" download>ygrad_coil_1262mm_wire_0_y.stl</a><span>4.1 MB</span></li>
-          <li><a href="CAD/wires/zgrad_coil_1326mm_wire_0_z.stl" download>zgrad_coil_1326mm_wire_0_z.stl</a><span>4.2 MB</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+<div class="wrap">
+<h2 data-i18n="t358">Files</h2>
+<p class="section-lede" data-i18n="t359">Click a file to download it. Everything is also in the <a href="https://github.com/dtica4/gradient-coil-builder-beginner">GitHub repository</a>.</p>
+<div class="files">
+<div>
+<h3 data-i18n="t360">Python scripts</h3>
+<ul class="file-list">
+<li><a download="" href="scripts/xgrad_coil_1198mm.py">xgrad_coil_1198mm.py</a><span data-i18n="t367">Design X</span></li>
+<li><a download="" href="scripts/ygrad_coil_1262mm.py">ygrad_coil_1262mm.py</a><span data-i18n="t368">Design Y</span></li>
+<li><a download="" href="scripts/zgrad_coil_1326mm.py">zgrad_coil_1326mm.py</a><span data-i18n="t369">Design Z</span></li>
+<li><a download="" href="scripts/summ_data_smth_x1198.py">summ_data_smth_x1198.py</a><span data-i18n="t370">Summarise and export X</span></li>
+<li><a download="" href="scripts/summ_data_smth_y1262.py">summ_data_smth_y1262.py</a><span data-i18n="t371">Summarise and export Y</span></li>
+<li><a download="" href="scripts/summ_data_smth_z1326.py">summ_data_smth_z1326.py</a><span data-i18n="t372">Summarise, fold and export Z</span></li>
+</ul>
+</div>
+<div>
+<h3 data-i18n="t361">Plates to print (STEP)</h3>
+<ul class="file-list">
+<li><span class="file-group" data-i18n="t373">X coil</span>
+<a download="" href="CAD/plates/x_coil_1198mm/x_plate_1.step">1</a>
+<a download="" href="CAD/plates/x_coil_1198mm/x_plate_2.step">2</a>
+<a download="" href="CAD/plates/x_coil_1198mm/x_plate_3.step">3</a>
+<a download="" href="CAD/plates/x_coil_1198mm/x_plate_4.step">4</a></li>
+<li><span class="file-group" data-i18n="t374">Y coil</span>
+<a download="" href="CAD/plates/y_coil_1262mm/y_plate_1.step">1</a>
+<a download="" href="CAD/plates/y_coil_1262mm/y_plate_2.step">2</a>
+<a download="" href="CAD/plates/y_coil_1262mm/y_plate_3.step">3</a>
+<a download="" href="CAD/plates/y_coil_1262mm/y_plate_4.step">4</a></li>
+<li><span class="file-group" data-i18n="t375">Z coil</span>
+<a download="" href="CAD/plates/z_coil_1326mm/z_plate_TL.step">TL</a>
+<a download="" href="CAD/plates/z_coil_1326mm/z_plate_TR.step">TR</a>
+<a download="" href="CAD/plates/z_coil_1326mm/z_plate_BL.step">BL</a>
+<a download="" href="CAD/plates/z_coil_1326mm/z_plate_BR.step">BR</a></li>
+</ul>
+<h3 data-i18n="t362">Gradient cover (STEP)</h3>
+<ul class="file-list">
+<li><a download="" href="CAD/cover/gradient_cover_concentric.step">gradient_cover_concentric.step</a><span data-i18n="t376">Print in PLA</span></li>
+</ul>
+<h3 data-i18n="t363">Wire paths (STL)</h3>
+<ul class="file-list">
+<li><a download="" href="CAD/wires/xgrad_coil_1198mm_wire_0_x.stl">xgrad_coil_1198mm_wire_0_x.stl</a><span>4.1 MB</span></li>
+<li><a download="" href="CAD/wires/ygrad_coil_1262mm_wire_0_y.stl">ygrad_coil_1262mm_wire_0_y.stl</a><span>4.1 MB</span></li>
+<li><a download="" href="CAD/wires/zgrad_coil_1326mm_wire_0_z.stl">zgrad_coil_1326mm_wire_0_z.stl</a><span>4.2 MB</span></li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-
 </main>
-
 <footer class="foot">
-  <p>Gradient subsystem, BioMed-EM Lab, SUTD. Built for the portable MRI hackathon.</p>
+<p data-i18n="t364">Gradient subsystem, BioMed-EM Lab, SUTD. Built for the portable MRI hackathon.</p>
 </footer>
-
-<script type="module" src="js/main.js"></script>
+<script src="js/main.js" type="module"></script>
 </body>
 </html>

@@ -51,10 +51,10 @@ function bend(mesh, k) {
   mesh.geometry.computeBoundingSphere();
 }
 
-export function createViewer({ stage, status, base = 'models/' }) {
+export function createViewer({ stage, status, base = 'models/', t = (k) => k }) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x26303b, 1);
+  renderer.setClearColor(0xffffff, 1);
   stage.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
@@ -64,12 +64,12 @@ export function createViewer({ stage, status, base = 'models/' }) {
   controls.enableDamping = true;
   controls.minDistance = 150; controls.maxDistance = 2000;
 
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x3a4450, 1.6));
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9aa3ad, 1.7));
   const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(400, 600, 500); scene.add(key);
   const rim = new THREE.DirectionalLight(0xffd9b8, 0.9); rim.position.set(-500, -200, -400); scene.add(rim);
 
-  const plateMat = new THREE.MeshStandardMaterial({ color: 0xdfe4e8, roughness: 0.85, metalness: 0, side: THREE.DoubleSide });
-  const ghostMat = new THREE.MeshStandardMaterial({ color: 0xdfe4e8, roughness: 0.85, transparent: true, opacity: 0.18, depthWrite: false, side: THREE.DoubleSide });
+  const plateMat = new THREE.MeshStandardMaterial({ color: 0x4a4f57, roughness: 0.85, metalness: 0, side: THREE.DoubleSide });
+  const ghostMat = new THREE.MeshStandardMaterial({ color: 0x8a9099, roughness: 0.85, transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide });
   const wireMat = new THREE.MeshStandardMaterial({ color: 0xc8743a, roughness: 0.35, metalness: 0.75, side: THREE.DoubleSide });
 
   const root = new THREE.Group(); scene.add(root);
@@ -109,13 +109,13 @@ export function createViewer({ stage, status, base = 'models/' }) {
     state.coil = c;
     const list = c === 'all' ? ['x', 'y', 'z'] : [c];
     const missing = list.filter((k) => !state.groups[k]);
-    if (missing.length) status.hidden = false, status.textContent = 'Loading the coil…';
+    if (missing.length) status.hidden = false, status.textContent = t('viewer.loading');
     try {
       for (const k of list) state.groups[k] = await getCoil(k);
       status.hidden = true;
     } catch (e) {
       status.hidden = false;
-      status.textContent = 'The 3D model did not load. Check that the models folder was uploaded, then reload the page.';
+      status.textContent = t('viewer.error');
       console.error(e);
       return;
     }

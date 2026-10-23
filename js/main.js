@@ -1,5 +1,5 @@
-import { COILS } from './config.js';
 import { createLab } from './lab.js';
+import { t, initLang } from './i18n.js';
 
 // --- Lab (no 3D needed, so start it first) ---
 createLab(document.getElementById('lab'));
@@ -12,8 +12,7 @@ try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { saved = {
 function refresh() {
   let n = 0;
   steps.forEach((li) => { const on = li.querySelector('input').checked; li.classList.toggle('is-done', on); n += on; });
-  document.getElementById('done-count').textContent = n;
-  document.getElementById('step-count').textContent = steps.length;
+  document.getElementById('progress-text').textContent = t('progress', { n, total: steps.length });
 }
 steps.forEach((li) => {
   const box = li.querySelector('input');
@@ -30,6 +29,18 @@ document.getElementById('reset').addEventListener('click', () => {
   refresh();
 });
 refresh();
+
+// --- Highlight the current section in the tab bar ---
+const navLinks = [...document.querySelectorAll('.tabbar a')];
+const sections = navLinks.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const markCurrent = () => {
+  const y = window.scrollY + 140;
+  let cur = sections[0];
+  sections.forEach((s) => { if (s.getBoundingClientRect().top + window.scrollY <= y) cur = s; });
+  navLinks.forEach((a) => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + cur.id)));
+};
+window.addEventListener('scroll', markCurrent, { passive: true });
+markCurrent();
 
 // --- Tabs (results and field slices) ---
 document.querySelectorAll('[data-tabs]').forEach((box) => {
@@ -55,16 +66,19 @@ const tabs = [...document.querySelectorAll('.viewer-tabs button')];
 const caption = document.getElementById('viewer-caption');
 const wrap = document.getElementById('wrap');
 const play = document.getElementById('play');
-const HELP = ' Drag to turn, scroll to zoom.';
+let currentCoil = 'x';
+const setCaption = () => { caption.textContent = t('caption.' + currentCoil) + t('viewer.help'); };
+document.addEventListener('langchange', () => { setCaption(); refresh(); });
+initLang(document.getElementById('lang'));
 
 import('./viewer.js').then(({ createViewer }) => {
-  const viewer = createViewer({ stage: document.getElementById('stage'), status: document.getElementById('viewer-status') });
+  const viewer = createViewer({ stage: document.getElementById('stage'), status: document.getElementById('viewer-status'), t });
   viewer.show('x');
 
   tabs.forEach((b) => b.addEventListener('click', () => {
     tabs.forEach((t) => t.setAttribute('aria-selected', String(t === b)));
     const c = b.dataset.coil;
-    caption.textContent = (c === 'all' ? 'All three coils nested: X inside Y inside Z.' : COILS[c].caption) + HELP;
+    currentCoil = c; setCaption();
     viewer.show(c);
   }));
   wrap.addEventListener('input', () => viewer.setWrap(wrap.value / 100));
@@ -85,6 +99,6 @@ import('./viewer.js').then(({ createViewer }) => {
     anim = requestAnimationFrame(stepFn);
   });
 }).catch((e) => {
-  document.getElementById('viewer-status').textContent = 'The 3D viewer could not start in this browser.';
+  document.getElementById('viewer-status').textContent = t('viewer.nogl');
   console.error(e);
 });

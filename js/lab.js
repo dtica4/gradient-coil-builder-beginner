@@ -1,6 +1,7 @@
 // "From current to position" lab: draws the extra field from one gradient coil
 // across the 50 mm field of view and reports what it means for imaging.
 import { COILS } from './config.js';
+import { t } from './i18n.js';
 
 const GAMMA = 42.58; // Hz per µT  (42.58 MHz/T)
 const FOV = 50;      // mm
@@ -65,10 +66,11 @@ export function createLab(root) {
     out('#r-g').textContent = `${(G + 1e-9).toFixed(2)} mT/m`;
     out('#r-df').textContent = `${Math.round(GAMMA * G)} Hz`;
     out('#r-bw').textContent = `${(GAMMA * G * FOV / 1000).toFixed(1)} kHz`;
-    out('#r-shift').textContent = G > 0 ? `${shift.toFixed(1)} mm` : 'no gradient';
+    out('#r-shift').textContent = G > 0 ? `${shift.toFixed(1)} mm` : t('lab.none');
   }
 
   root.addEventListener('input', draw);
+  document.addEventListener('langchange', draw);
   window.addEventListener('resize', draw);
   draw();
 }
