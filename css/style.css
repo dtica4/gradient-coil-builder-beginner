@@ -229,7 +229,7 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 600; border-
 .results tr.hl td, .results tr.hl th { background: var(--accent-soft); font-weight: 650; }
 .sub-h { font-size: 1.35rem; margin: 52px 0 14px; padding-top: 22px; border-top: 1px solid var(--line); }
 .judge { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.judge > div { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.judge > div { min-width: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
 .judge h4 { margin: 0 0 6px; font-size: 1rem; font-variation-settings: "wdth" 115; }
 .judge p { margin: 0 0 8px; font-size: 0.95rem; }
 .judge .formula, .formula.small-formula { font-size: 1rem; padding: 6px 0 0; }
@@ -256,7 +256,35 @@ thead th { font-size: 0.85rem; color: var(--ink-soft); font-weight: 600; border-
 #test .two-col.stack { grid-template-columns: minmax(0, 1fr); gap: 8px; }
 #test .two-col.stack .prose p, #test .two-col.stack .problem { max-width: 46em; }
 .results td { white-space: nowrap; }
-@media (max-width: 760px) { .judge, .facts, .slices { grid-template-columns: 1fr; } .slices { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 760px) { .judge, .facts, .slices { grid-template-columns: minmax(0, 1fr); } .slices { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+/* Formulas (KaTeX) */
+.formula.is-math { font-weight: 400; padding: 6px 0; overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+.formula.is-math .katex-display { margin: 0.35em 0; }
+.formula.is-math .katex-display > .katex { text-align: left; }
+.formula.is-math[data-tex="vsdesign"] .katex { font-size: 0.98em; }
+.judge .formula.is-math .katex-display > .katex { text-align: center; }
+.formula.is-math .katex { font-size: 1.12em; }
+.judge .formula.is-math .katex, .formula.small-formula.is-math .katex { font-size: 1.02em; }
+
+/* Physics: how MRI uses gradients */
+.physics { margin-top: 56px; }
+.physics-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin: 52px 0 6px; padding-top: 22px; border-top: 1px solid var(--line); }
+.physics-head .sub-h { margin: 0; padding: 0; border: 0; }
+.phys-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; align-items: center; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.phys-row h4, .phys-block h4 { font-size: 1.08rem; font-weight: 650; margin: 0 0 8px; }
+.phys-row .prose p { margin: 0 0 0.8em; }
+.phys-row .plot { margin: 0 0 14px; }
+.phys-block { padding: 26px 0; border-bottom: 1px solid var(--line); }
+.encode { padding-left: 1.3em; margin: 0 0 14px; max-width: 52em; }
+.encode li { margin-bottom: 6px; }
+.anim { margin: 0; }
+.anim video { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); background: #fff; }
+.anim figcaption { font-size: 0.85rem; color: var(--ink-soft); margin-top: 6px; }
+.anim-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin: 6px 0 14px; }
+.phys-row .anim video { max-height: 420px; object-fit: contain; }
+.plot.narrow { max-width: 34em; }
+@media (max-width: 900px) { .phys-row, .anim-pair { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
 
 /* Files */
 .files { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }

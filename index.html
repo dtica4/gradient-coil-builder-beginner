@@ -7,7 +7,9 @@
 <title data-i18n="t001">portableMRI NerdFest - 2 | Gradient coils</title>
 <meta content="Learn how to design, build and test the X, Y and Z gradient coils of a 32 mT portable MRI." name="description"/>
 <link href="images/brand/favicon.png" rel="icon"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <link href="css/style.css" rel="stylesheet"/>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -92,7 +94,7 @@
 <div class="two-col">
 <div class="prose">
 <p data-i18n="t016">The permanent magnet ring makes a strong, even field, B<sub>0</sub> = 32 mT, pointing along the bore. Protons in that field spin at one frequency, the <em>Larmor frequency</em>:</p>
-<p class="formula" data-i18n="t017">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
+<div class="formula" data-tex="larmor">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</div>
 <p data-i18n="t018">If every proton spins at the same frequency, the scanner hears one note and cannot tell where it came from. A gradient coil adds a small extra field that grows in a straight line across the scanner. Now each position has its own frequency, and the frequency tells you the position.</p>
 <p data-i18n="t019">We need three coils, one per direction. Each is designed to give <strong>1.0 mT/m for every ampere</strong> of current (written 1.0 mT/m/A). We test them at <strong>5 A</strong>.</p>
 <p class="note" data-i18n="t020">The field only works as a ruler if it is a <em>straight</em> line. We call how far it bends away from a straight line the <em>linearity error</em>. Our target is below 5 % over a 50 mm field of view (FOV).</p>
@@ -117,6 +119,17 @@
 </dl>
 <p class="small" data-i18n="t026">Uses each coil’s pyCoilGen design value (X 1.053, Y 1.015, Z 1.282 mT/m/A). Blue is less field, red is more. The lines join points of equal field: straight, evenly spaced lines mean a linear gradient. A magnet error moves the whole pattern, so the image lands in the wrong place.</p>
 </div>
+</div>
+<div class="physics" id="physics">
+<div class="physics-head"><h3 class="sub-h phys-title" data-i18n="p01">How MRI uses gradients</h3><button type="button" class="btn" id="anim-toggle" aria-pressed="false">Pause animations</button></div>
+<p class="section-lede" data-i18n="p02">The physics behind the coils, step by step. The animations are slowed down and exaggerated so you can see what happens.</p>
+<div class="phys-row"><div class="prose"><h4 data-i18n="p03">1 · A proton spins around B<sub>0</sub></h4><p data-i18n="p04">Each hydrogen proton behaves like a tiny magnet. In the main field B<sub>0</sub> it does not simply point along the field: it wobbles around it like a spinning top (<em>precession</em>) and slowly settles along B<sub>0</sub>. How fast it wobbles depends only on the field strength:</p><div class="formula" data-tex="larmor">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</div><p class="small" data-i18n="p05">γ = 42.58 MHz/T is the same for every hydrogen proton. Double the field and the spin is twice as fast.</p></div><figure class="anim"><video poster="media/proton-precession.jpg" width="640" height="640" muted loop playsinline preload="metadata" aria-label="Animation of one proton spinning around the vertical B0 arrow in a shrinking spiral until it lines up with B0" data-i18n-aria="p48"><source src="media/proton-precession.webm" type="video/webm"><source src="media/proton-precession.mp4" type="video/mp4"></video><figcaption data-i18n="p06">A proton precesses around B<sub>0</sub> and settles along it.</figcaption></figure></div>
+<div class="phys-row"><div class="prose"><h4 data-i18n="p07">2 · A gradient turns frequency into position</h4><p data-i18n="p08">In a perfectly uniform field every proton sends the same frequency, so the signal cannot be placed. The gradient coil adds a small field that grows in a straight line across the scanner. Now the field, and so the frequency, depends on position:</p><div class="formula" data-tex="gradfield">B<sub>z</sub>(x) = B<sub>0</sub> + G·x  ⇒  f(x) = γ (B<sub>0</sub> + G·x)</div><p data-i18n="p09">Read the frequency and you know where the signal came from.</p></div><figure class="anim"><video poster="media/uniform-vs-gradient.jpg" width="1080" height="558" muted loop playsinline preload="metadata" aria-label="Animation comparing four protons in a uniform field, all spinning at the same rate, with four protons in a gradient, spinning faster on the stronger-field side" data-i18n-aria="p49"><source src="media/uniform-vs-gradient.webm" type="video/webm"><source src="media/uniform-vs-gradient.mp4" type="video/mp4"></video><figcaption data-i18n="p10">Left: uniform field, same frequency everywhere. Right: with a gradient along x, the frequency changes from one side to the other.</figcaption></figure></div>
+<div class="phys-row"><div class="prose"><h4 data-i18n="p11">3 · Only B<sub>z</sub> matters</h4><p data-i18n="p12">The coil field has three parts. B<sub>z</sub> points along B<sub>0</sub>, so it adds straight onto it and changes the frequency. B<sub>x</sub> and B<sub>y</sub> point sideways: next to the much larger B<sub>0</sub> they barely change the total (a small side effect called <em>concomitant fields</em>). That is why every result on this site is judged on B<sub>z</sub>.</p><div class="formula" data-tex="onlybz">|B<sub>0</sub> + B<sub>coil</sub>| ≈ B<sub>0</sub> + B<sub>z</sub></div></div><figure class="plot"><img src="images/physics/only-bz.png" alt="Vector diagram: the main field B0 points up, the coil field points diagonally, and its part along B0 is labelled Bz while the sideways part is labelled Bx, By" data-i18n-alt="p52" loading="lazy" width="611" height="521"><figcaption data-i18n="p13">The coil field (orange) splits into B<sub>z</sub>, along B<sub>0</sub>, and a sideways part.</figcaption></figure></div>
+<div class="phys-row"><div class="prose"><h4 data-i18n="p14">4 · Three coils, three directions</h4><p data-i18n="p15">X makes B<sub>z</sub> change across the bore, Y vertically, and Z along the bore. Running all three together tilts the gradient in any direction, so a slice can be taken at any angle.</p></div><figure class="plot"><img src="images/physics/three-axes.png" alt="A wire-frame bore with three arrows: X across, Y vertical and Z along the bore in the B0 direction" data-i18n-alt="p53" loading="lazy" width="724" height="378"><figcaption data-i18n="p16">The three gradient directions relative to the bore.</figcaption></figure></div>
+<div class="phys-block"><h4 data-i18n="p17">5 · Building an image in three steps</h4><ol class="encode"><li data-i18n="p18"><strong>Slice selection.</strong> The gradient is on during the RF pulse, so only the slice whose frequency matches the pulse tips over.</li><li data-i18n="p19"><strong>Phase encoding.</strong> A short gradient pulse: each row ends up with its own angle (phase).</li><li data-i18n="p20"><strong>Frequency encoding.</strong> The gradient is on during readout: each column spins at its own frequency.</li></ol><div class="anim-pair"><figure class="anim"><video poster="media/slice-selection.jpg" width="1020" height="535" muted loop playsinline preload="metadata" aria-label="Animation of layers of protons: during the RF pulse with the slice gradient on, only the matching middle layer tips over" data-i18n-aria="p50"><source src="media/slice-selection.webm" type="video/webm"><source src="media/slice-selection.mp4" type="video/mp4"></video><figcaption data-i18n="p22">Slice selection: only the layer that matches the RF pulse tips over.</figcaption></figure><figure class="anim"><video poster="media/phase-frequency-encoding.jpg" width="1020" height="535" muted loop playsinline preload="metadata" aria-label="Animation of a 3 by 3 grid of spins seen down B0: a phase pulse gives each row its own angle, then during readout each column spins at its own speed" data-i18n-aria="p51"><source src="media/phase-frequency-encoding.webm" type="video/webm"><source src="media/phase-frequency-encoding.mp4" type="video/mp4"></video><figcaption data-i18n="p23">Phase and frequency encoding: each row gets an angle, each column a frequency.</figcaption></figure></div><p class="note" data-i18n="p21">Together: slice → row → column. Every point in the slice gets its own angle-and-frequency label, and the computer turns those labels back into an image.</p></div>
+<div class="phys-row"><div class="prose"><h4 data-i18n="p24">6 · Gradient strength sets the resolution</h4><p data-i18n="p25">The frequency difference between two points Δx apart is:</p><div class="formula" data-tex="deltaf">Δf = γ · G · Δx</div><p data-i18n="p26">A stronger gradient gives more hertz per millimetre, so neighbouring pixels are easier to tell apart. For our X coil at 5.0 A (5.24 mT/m = 5.24 µT/mm):</p><div class="formula" data-tex="deltafex">Δf = 42.58 Hz/µT × 5.24 µT/mm ≈ 223 Hz/mm</div><p data-i18n="p27">Across the 50 mm FOV that is about 10–14 kHz for our three coils: enough for about 1 mm pixels.</p></div><figure class="plot"><img src="images/physics/frequency-shift.png" alt="Line graph of frequency shift against position from the centre for the Z, X and Y coils, three straight lines through zero" data-i18n-alt="p54" loading="lazy" width="1050" height="660"><figcaption data-i18n="p28">Frequency shift against position for our three coils at 5.0 A.</figcaption></figure></div>
+<div class="phys-row"><div class="prose"><h4 data-i18n="p29">7 · Efficiency, linearity and their trade-offs</h4><p data-i18n="p30">A coil’s main figure of merit is its <strong>efficiency</strong>: how much gradient each ampere buys. Higher efficiency means less current and less heat for the same image.</p><div class="formula" data-tex="effdef">efficiency = G ÷ I</div><p data-i18n="p31">It also has to be <strong>linear</strong>: B<sub>z</sub> should follow a straight line across the FOV. Where it bends, the image is stretched or squeezed. Improving one property usually costs another:</p><div class="table-wrap"><table class="mini"><thead><tr><th data-i18n="p32" scope="col">Wanted</th><th data-i18n="p33" scope="col">Costs</th></tr></thead><tbody><tr><td data-i18n="p34">Higher efficiency</td><td data-i18n="p35">more turns → more inductance and resistance</td></tr><tr><td data-i18n="p36">Better linearity</td><td data-i18n="p37">wider wire spread → less efficiency</td></tr><tr><td data-i18n="p38">Faster switching</td><td data-i18n="p39">fewer turns → less efficiency</td></tr><tr><td data-i18n="p40">Less heat</td><td data-i18n="p41">thicker wire → bulkier coil</td></tr><tr><td data-i18n="p42">Larger bore</td><td data-i18n="p43">lower efficiency</td></tr></tbody></table></div></div><div><figure class="plot"><img src="images/physics/linearity-concept.png" alt="Graph of Bz against position: a dashed ideal straight line and a real orange curve that bends away near the edges of the field of view" data-i18n-alt="p55" loading="lazy" width="960" height="660"><figcaption data-i18n="p44">Ideal straight line against a real coil that bends near the edges: the gap is the linearity error.</figcaption></figure><figure class="plot"><img src="images/physics/stream-function-x.png" alt="3D plot of a cylinder coloured by the stream function, with contour lines that form the X coil’s saddle-shaped wire pattern" data-i18n-alt="p56" loading="lazy" width="873" height="977"><figcaption data-i18n="p45">The X coil’s design in pyCoilGen: the wire follows the contour lines of a “stream function” on the cylinder.</figcaption></figure></div></div>
 </div>
 </div>
 </section>
@@ -427,25 +440,25 @@ step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
 <div>
 <h4 data-i18n="t247">1 · Remove the background</h4>
 <p data-i18n="t248">Fit a flat plane to the 0 A scan and subtract it, so only the coil’s own field is judged.</p>
-<p class="formula" data-i18n="t249">B<sub>z,coil</sub> = B<sub>z</sub>(5 A) − (b<sub>0</sub> + b<sub>1</sub>x + b<sub>2</sub>y + b<sub>3</sub>z)</p>
+<div class="formula" data-tex="background">B<sub>z,coil</sub> = B<sub>z</sub>(5 A) − (b<sub>0</sub> + b<sub>1</sub>x + b<sub>2</sub>y + b<sub>3</sub>z)</div>
 </div>
 <div>
 <h4 data-i18n="t250">2 · Efficiency</h4>
 <p data-i18n="t251">Fit the best straight line (a plane in 3D) through all 512 points. Its slope is the gradient; divide by the current.</p>
-<p class="formula" data-i18n="t252">B<sub>z</sub> = a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>z<br/>|G| = √(a<sub>1</sub>² + a<sub>2</sub>² + a<sub>3</sub>²)    efficiency = |G| ÷ 5.0 A</p>
+<div class="formula" data-tex="fitgrad">B<sub>z</sub> = a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>z<br/>|G| = √(a<sub>1</sub>² + a<sub>2</sub>² + a<sub>3</sub>²)    efficiency = |G| ÷ 5.0 A</div>
 </div>
 <div>
 <h4 data-i18n="t253">3 · Linearity, step by step</h4>
 <p data-i18n="t254">Average the 64 readings in each plane (planes 7 mm apart along the coil’s axis), then compare every step between planes with the average of the 7 steps. Equal steps mean a straight line.</p>
-<p class="formula" data-i18n="t255">G<sub>step</sub> = (B̄<sub>i+1</sub> − B̄<sub>i</sub>) ÷ 7 mm</p>
+<div class="formula" data-tex="step">G<sub>step</sub> = (B̄<sub>i+1</sub> − B̄<sub>i</sub>) ÷ 7 mm</div>
 </div>
 <div>
 <h4 data-i18n="t256">4 · Linearity error (RMS)</h4>
 <p data-i18n="t257">How far the 208 FOV points sit from the straight line of card 2, as a percentage of the field change across the FOV radius. Target: below 5 %.</p>
-<p class="formula" data-i18n="t258">RMS = √mean[(B<sub>z</sub> − line)²] ÷ (|G| × 25 mm) × 100 %</p>
+<div class="formula" data-tex="rms">RMS = √mean[(B<sub>z</sub> − line)²] ÷ (|G| × 25 mm) × 100 %</div>
 </div>
 </div>
-<p class="small" data-i18n="t259">Measured vs design (%) = (measured efficiency − design efficiency) ÷ design efficiency × 100.</p>
+<div class="formula" data-tex="vsdesign">Measured vs design (%) = (measured efficiency − design efficiency) ÷ design efficiency × 100.</div>
 <details class="more">
 <summary data-i18n="t260">Worked example: one plane = 64 readings</summary>
 <figure class="plot"><img alt="The 8 by 8 by 8 grid with one orange plane of 64 points highlighted, shown from the end of the bore and laid flat with the 64 readings written in" data-i18n-alt="t405" height="587" loading="lazy" src="images/results/one-plane.png" width="1600"/><figcaption data-i18n="t261">Each dot on the coil-result graphs below is the average of one such plane. The 8 planes are 7 mm apart along the coil’s axis.</figcaption></figure>
@@ -529,8 +542,8 @@ step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
 <div class="two-col stack">
 <div class="prose">
 <p data-i18n="t326">The gradient turns position into frequency. With the 32 mT magnet and the measured gradients at 5.0 A:</p>
-<p class="formula" data-i18n="t327">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</p>
-<p class="formula" data-i18n="t328">Δf = γ · G ≈ 209–275 Hz per mm</p>
+<div class="formula" data-tex="larmor">f = γ · B<sub>0</sub> = 42.58 MHz/T × 0.032 T ≈ 1.36 MHz</div>
+<div class="formula" data-tex="df2">Δf = γ · G ≈ 209–275 Hz per mm</div>
 <p data-i18n="t329">Across the 50 mm FOV that is a frequency range of about <strong>10–14 kHz</strong>, a comfortable bandwidth at low field, and enough for about 1 mm pixels.</p>
 <div class="problem">
 <h4 data-i18n="t330">The one condition: magnet uniformity</h4>
@@ -549,8 +562,9 @@ step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
 </tbody>
 </table>
 </div>
-<p class="formula small-formula">V = I · R    P = I² · R    τ = L / R</p>
+<div class="formula small-formula" data-tex="elec">V = I · R    P = I² · R    τ = L / R</div>
 <p class="small" data-i18n="t340">R from the litz datasheet (0.0264–0.0345 Ω/m) and the wire length; L from pyCoilGen (FastHenry2). Litz is 2.6–3.5× more resistive than the solid 1.3 mm wire pyCoilGen assumes, because only about 35 % of its footprint is copper. A current rise of about 0.1 ms is fast enough for low-field sequences.</p>
+<figure class="plot narrow"><img src="images/physics/current-rise.png" alt="Graph of coil current against time rising quickly towards 5 A, with the 63 percent point marked at about 0.1 milliseconds" data-i18n-alt="p57" loading="lazy" width="990" height="630"><figcaption data-i18n="p46">Current rise after switching on: τ = L / R is the time to reach 63 % of the final current.</figcaption></figure>
 </div>
 </div>
 <h3 class="sub-h" data-i18n="t341">Limits and next steps</h3>
@@ -581,7 +595,7 @@ step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
 <details class="more">
 <summary data-i18n="t356">Appendix: how probe noise was separated</summary>
 <figure class="plot"><img alt="For each coil: the measured field with a straight-line and cubic fit, the distance from the straight line, and a histogram of what is left after the cubic fit" data-i18n-alt="t426" height="1350" loading="lazy" src="images/results/noise-cubic.png" width="1600"/><figcaption data-i18n="t357">Fit a smooth 20-term cubic to the 512 points: it follows the coil’s gentle bending but not random noise. Cubic minus straight line is the coil’s own bending, the “noise removed” value (about 1.5 %). Measured minus cubic is the noise: 3.6–3.7 µT, matching the 3.8 µT from two 0 A scans.</figcaption></figure>
-<p class="formula">B<sub>z</sub> = c<sub>0</sub> + c<sub>1</sub>x + c<sub>2</sub>y + c<sub>3</sub>z + … + c<sub>19</sub>z³</p>
+<div class="formula" data-tex="cubic">B<sub>z</sub> = c<sub>0</sub> + c<sub>1</sub>x + c<sub>2</sub>y + c<sub>3</sub>z + … + c<sub>19</sub>z³</div>
 </details>
 </div>
 </section>

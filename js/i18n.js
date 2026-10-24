@@ -21,6 +21,8 @@ const UI = {
     'caption.z': 'Z coil: plates TL, TR, BL and BR. The wire winds around the bore many times as a double helix.',
     'caption.all': 'All three coils nested: X inside Y inside Z.',
     'lab.none': 'no gradient',
+    'anim.pause': 'Pause animations',
+    'anim.play': 'Play animations',
   },
   zh: {
     progress: '已完成 {n} / {total} 步',
@@ -33,6 +35,8 @@ const UI = {
     'caption.z': 'Z 线圈：TL、TR、BL、BR 四块板。导线以双螺旋形式绕孔径多圈。',
     'caption.all': '三个线圈嵌套：X 在 Y 内，Y 在 Z 内。',
     'lab.none': '无梯度',
+    'anim.pause': '暂停动画',
+    'anim.play': '播放动画',
   },
   es: {
     progress: '{n} de {total} pasos marcados',
@@ -45,6 +49,8 @@ const UI = {
     'caption.z': 'Bobina Z: placas TL, TR, BL y BR. El alambre da muchas vueltas alrededor del túnel como una doble hélice.',
     'caption.all': 'Las tres bobinas anidadas: X dentro de Y, Y dentro de Z.',
     'lab.none': 'sin gradiente',
+    'anim.pause': 'Pausar animaciones',
+    'anim.play': 'Reproducir animaciones',
   },
 };
 

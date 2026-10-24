@@ -1,5 +1,6 @@
 import { createLab } from './lab.js';
 import { t, initLang } from './i18n.js';
+import { initMath } from './math.js';
 
 // --- Lab (no 3D needed, so start it first) ---
 createLab(document.getElementById('lab'));
@@ -69,7 +70,25 @@ const play = document.getElementById('play');
 let currentCoil = 'x';
 const setCaption = () => { caption.textContent = t('caption.' + currentCoil) + t('viewer.help'); };
 document.addEventListener('langchange', () => { setCaption(); refresh(); });
+initMath();
 initLang(document.getElementById('lang'));
+
+// --- Physics animations: play while on screen, pause button, respect reduced motion ---
+const vids = [...document.querySelectorAll('.anim video')];
+const animBtn = document.getElementById('anim-toggle');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let animsOn = !reduceMotion;
+const onScreen = new Set();
+const syncVideos = () => vids.forEach((v) => { if (animsOn && onScreen.has(v)) v.play().catch(() => {}); else v.pause(); });
+const setAnimLabel = () => { animBtn.textContent = t(animsOn ? 'anim.pause' : 'anim.play'); animBtn.setAttribute('aria-pressed', String(!animsOn)); };
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => (e.isIntersecting ? onScreen.add(e.target) : onScreen.delete(e.target)));
+  syncVideos();
+}, { threshold: 0.25 });
+vids.forEach((v) => io.observe(v));
+animBtn.addEventListener('click', () => { animsOn = !animsOn; setAnimLabel(); syncVideos(); });
+document.addEventListener('langchange', setAnimLabel);
+setAnimLabel();
 
 import('./viewer.js').then(({ createViewer }) => {
   const viewer = createViewer({ stage: document.getElementById('stage'), status: document.getElementById('viewer-status'), t });

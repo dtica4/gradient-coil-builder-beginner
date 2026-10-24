@@ -19,16 +19,19 @@ plates, and the plates are wrapped into tubes and nested.
 | `js/lab.js` | The "from current to position" interactive lab |
 | `js/viewer.js` | The 3D viewer (Three.js) |
 | `js/i18n.js` | The language switch (English, 中文, Español) |
+| `js/math.js` | Every formula, written in TeX and drawn with KaTeX |
 | `js/i18n/zh.js`, `js/i18n/es.js` | Chinese and Spanish text, one entry per text block |
 | `models/` | Compressed coil models for the viewer (plates and wire, as flat-sheet coordinates) |
 | `scripts/` | The six pyCoilGen scripts (design + summary for X, Y, Z) |
 | `CAD/wires/` | Wire-only STL of each coil, from pyCoilGen |
 | `CAD/plates/` | The 12 grooved plates to print (STEP), 4 per coil |
 | `CAD/cover/` | The PLA gradient cover that holds the three coils (STEP) |
-| `images/` | Build photos; `images/results/` holds the test plots; `images/brand/` the team logo |
+| `media/` | The physics animations (WebM + MP4, with a still image for each) |
+| `images/` | Build photos; `images/physics/` holds the physics diagrams; `images/results/` holds the test plots; `images/brand/` the team logo |
 
 ## Common edits
 
+- **Change a formula:** edit its line in `js/math.js` (TeX, the same notation as LaTeX). The page element is the one with the matching `data-tex="…"` name.
 - **Change text on the page:** edit `index.html`. Sections are marked with comments such as `<!-- 3. BUILD -->`.
 - **Fill in a "to be added" item:** search `index.html` for `tbd`.
 - **Change a translation:** every text block in `index.html` has an id such as `data-i18n="t127"`. Find the same id in `js/i18n/zh.js` or `js/i18n/es.js` and edit its text. If you change the English text of a block, update its Chinese and Spanish entries too; a block with no entry simply shows in English.
