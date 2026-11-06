@@ -553,17 +553,31 @@ step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
 <div>
 <div class="table-wrap">
 <table class="results">
-<caption data-i18n="t332">Predicted electrical values at 5.0 A</caption>
-<thead><tr><th data-i18n="t333" scope="col">Coil</th><th data-i18n="t334" scope="col">Wire</th><th data-i18n="t335" scope="col">Resistance (litz)</th><th data-i18n="t336" scope="col">Inductance</th><th data-i18n="t337" scope="col">Voltage</th><th data-i18n="t338" scope="col">Power</th><th data-i18n="t339" scope="col">Current rise L/R</th></tr></thead>
+<caption data-i18n="t332">Electrical values at 5.0 A: predicted and measured</caption>
+<thead><tr><th data-i18n="t333" scope="col">Coil</th><th data-i18n="t435" scope="col">R predicted</th><th data-i18n="t436" scope="col">R measured</th><th data-i18n="t437" scope="col">L predicted</th><th data-i18n="t438" scope="col">L measured</th><th data-i18n="t337" scope="col">Voltage</th><th data-i18n="t338" scope="col">Power</th><th data-i18n="t339" scope="col">Current rise L/R</th></tr></thead>
 <tbody>
-<tr><th scope="row">X</th><td>13.6 m</td><td>0.36–0.47 Ω</td><td>37.7 µH</td><td>1.8–2.4 V</td><td>9.0–11.8 W</td><td>0.08–0.10 ms</td></tr>
-<tr><th scope="row">Y</th><td>14.1 m</td><td>0.37–0.48 Ω</td><td>38.9 µH</td><td>1.9–2.4 V</td><td>9.3–12.1 W</td><td>0.08–0.10 ms</td></tr>
-<tr><th scope="row">Z</th><td>17.1 m</td><td>0.45–0.59 Ω</td><td>68.0 µH</td><td>2.3–2.9 V</td><td>11.3–14.7 W</td><td>0.12–0.15 ms</td></tr>
+<tr><th scope="row">X</th><td>0.36–0.47 Ω</td><td><strong>0.36 Ω</strong></td><td>37.7 µH</td><td><strong>42.1 µH</strong></td><td>1.8 V</td><td>9.0 W</td><td>0.12 ms</td></tr>
+<tr><th scope="row">Y</th><td>0.37–0.48 Ω</td><td><strong>0.41 Ω</strong></td><td>38.9 µH</td><td><strong>43.8 µH</strong></td><td>2.1 V</td><td>10.3 W</td><td>0.11 ms</td></tr>
+<tr><th scope="row">Z</th><td>0.45–0.59 Ω</td><td><strong>0.44 Ω</strong></td><td>68.0 µH</td><td><strong>71.6 µH</strong></td><td>2.2 V</td><td>11.0 W</td><td>0.16 ms</td></tr>
 </tbody>
 </table>
 </div>
-<div class="formula small-formula" data-tex="elec">V = I · R    P = I² · R    τ = L / R</div>
-<p class="small" data-i18n="t340">R from the litz datasheet (0.0264–0.0345 Ω/m) and the wire length; L from pyCoilGen (FastHenry2). Litz is 2.6–3.5× more resistive than the solid 1.3 mm wire pyCoilGen assumes, because only about 35 % of its footprint is copper. A current rise of about 0.1 ms is fast enough for low-field sequences.</p>
+<div class="formula small-formula" data-tex="elec">V = I · R    P = I² · R    τ = L / R</div>
+<p class="small" data-i18n="t340"><strong>Predicted:</strong> R from the litz datasheet (0.0264–0.0345 Ω/m) times the wire length (13.6, 14.1 and 17.1 m); L from pyCoilGen (FastHenry2). <strong>Measured:</strong> each wound coil on its own (not nested), through its 50 cm leads and clip leads; R with a multimeter (Keysight U1242C, 2-wire, 23 °C) and L with an LCR meter (Keysight U1733C, 1 kHz). Voltage, power and L/R use the measured values.</p>
+<p data-i18n="t439"><strong>What it shows.</strong> Resistance sits at the low end of the prediction, so the litz is close to its best datasheet value and each coil makes about 9–11 W of heat at 5 A. Inductance is 5–13 % above FastHenry2, about 4 µH more on every coil: FastHenry2 models only the winding, not the 50 cm leads and clip wires. A current rise of 0.11–0.16 ms is still fast enough for low-field sequences.</p>
+<div class="note">
+<h4 data-i18n="t440">Measuring R and L yourself</h4>
+<ul>
+<li data-i18n="t441">Use the multimeter’s lowest ohm range. At about 0.4 Ω the test leads matter: touch the probes together and press Null (Δ) first, or use a 4-wire meter. Our readings were not nulled, so the true coil resistance may be a few hundredths of an ohm lower.</li>
+<li data-i18n="t442">Measure L with an LCR meter at a low frequency (1 kHz is fine) and write the frequency down.</li>
+<li data-i18n="t443">Note whether the coil was alone or nested, and measure with the leads you will use in the scanner.</li>
+<li data-i18n="t444">Quick cross-check: the LCR meter also shows Q. For the Z coil Q ≈ 0.99 at 1 kHz, so R = 2πfL ÷ Q ≈ 0.46 Ω, close to the 0.44 Ω DC reading.</li>
+</ul>
+</div>
+<div class="photos">
+<figure><img alt="A handheld LCR meter reading 71.63 microhenries, clipped to the two litz leads of the wound Z coil" data-i18n-alt="t447" height="1000" loading="lazy" src="images/results/measure-inductance.jpg" width="750"/><figcaption data-i18n="t445">Inductance: LCR meter at 1 kHz on the Z coil’s leads, 71.63 µH.</figcaption></figure>
+<figure><img alt="A handheld multimeter reading 0.44 ohm at 23.3 degrees, clipped to the two litz leads of the same coil" data-i18n-alt="t448" height="1000" loading="lazy" src="images/results/measure-resistance.jpg" width="750"/><figcaption data-i18n="t446">Resistance: multimeter on the same leads, 0.44 Ω at 23.3 °C.</figcaption></figure>
+</div>
 <figure class="plot narrow"><img src="images/physics/current-rise.png" alt="Graph of coil current against time rising quickly towards 5 A, with the 63 percent point marked at about 0.1 milliseconds" data-i18n-alt="p57" loading="lazy" width="990" height="630"><figcaption data-i18n="p46">Current rise after switching on: τ = L / R is the time to reach 63 % of the final current.</figcaption></figure>
 </div>
 </div>
@@ -577,12 +591,13 @@ step_ok = export_step_curve(flat_pattern_mm_export, step_path)</code></pre>
 <li data-i18n="t345">The X and Z scans lost about 0.6 % of gradient per layer, likely the current dropping as the coil warmed (the Y rescan was steady).</li>
 <li data-i18n="t346">The Z 5.0 A scan is from 13 Oct and its 0 A scan from 15 Oct; this is fine because the background is uniform.</li>
 <li data-i18n="t347">B<sub>0</sub> is assumed to point along the bore (Z), as in the design.</li>
+<li data-i18n="t449">R and L were measured with each coil alone, not nested in the cover, using 2-wire clip leads.</li>
 </ul>
 </div>
 <div>
 <h4 data-i18n="t348">Next steps</h4>
 <ul>
-<li data-i18n="t349">Measure each coil’s resistance cold and warm, against the 0.36–0.59 Ω prediction.</li>
+<li data-i18n="t349">Measure each coil’s resistance again after a few minutes at 5 A, to see how much it rises as the coil warms (cold: 0.36–0.44 Ω).</li>
 <li data-i18n="t350">Run the supply in constant-current mode and log the current.</li>
 <li data-i18n="t351">Align the X coil in the scanner (it sat 8.5° off the motor axis on the bench).</li>
 <li data-i18n="t352">Check the Z coil’s orientation against the design (lead end).</li>
