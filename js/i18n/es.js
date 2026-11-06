@@ -499,9 +499,11 @@ export default {
  "t442": "Mide L con un medidor LCR a baja frecuencia (1 kHz sirve) y anota la frecuencia.",
  "t443": "Indica si la bobina estaba sola o anidada, y mide con los cables que usarás en el escáner.",
  "t444": "Comprobación rápida: el medidor LCR también muestra Q. Para la bobina Z, Q ≈ 0.99 a 1 kHz, así que R = 2πfL ÷ Q ≈ 0.46 Ω, cerca de la lectura de 0.44 Ω en continua.",
- "t445": "Inductancia: medidor LCR a 1 kHz en los cables de la bobina Z, 71.63 µH.",
- "t446": "Resistencia: multímetro en los mismos cables, 0.44 Ω a 23.3 °C.",
- "t447": "Un medidor LCR portátil que marca 71.63 microhenrios, conectado con pinzas a los dos cables Litz de la bobina Z enrollada",
- "t448": "Un multímetro portátil que marca 0.44 ohmios a 23.3 grados, conectado con pinzas a los dos cables Litz de la misma bobina",
- "t449": "R y L se midieron con cada bobina sola, sin anidar en la cubierta, usando cables con pinzas de 2 hilos."
+ "t449": "R y L se midieron con cada bobina sola, sin anidar en la cubierta, usando cables con pinzas de 2 hilos.",
+ "t450": "<strong>Bobina X:</strong> R = 0.36 Ω, L = 42.06 µH (se muestra el medidor LCR).",
+ "t451": "<strong>Bobina Y:</strong> R = 0.41 Ω (se muestra el multímetro), L = 43.81 µH.",
+ "t452": "<strong>Bobina Z:</strong> R = 0.44 Ω, L = 71.63 µH (se muestra el medidor LCR).",
+ "t453": "La bobina X enrollada sobre un soporte rojo, con un medidor LCR que marca 42.06 microhenrios conectado a sus cables",
+ "t454": "La bobina Y enrollada sobre un soporte negro, con un multímetro que marca 0.41 ohmios conectado a sus cables",
+ "t455": "La bobina Z enrollada, con un medidor LCR que marca 71.63 microhenrios conectado a sus cables"
 };
