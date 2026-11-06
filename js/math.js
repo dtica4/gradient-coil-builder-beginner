@@ -27,6 +27,10 @@ const TEX = {
   vsdesign: () => String.raw`${w('vs')}\;(\%) = \frac{${w('efficiency')}_{\,\text{${WORDS.measured[currentLang()] ?? 'measured'}}} - ${w('efficiency')}_{\,\text{${WORDS.design[currentLang()] ?? 'design'}}}}{${w('efficiency')}_{\,\text{${WORDS.design[currentLang()] ?? 'design'}}}} \times 100`,
   df2: () => String.raw`\Delta f = \gamma\,G \approx 209\text{–}275\ \tfrac{\text{Hz}}{\text{mm}}`,
   elec: () => String.raw`V = I\,R \qquad P = I^2 R \qquad \tau = \frac{L}{R}`,
+  play: () => String.raw`s = G - (t + p)`,
+  platelen: () => String.raw`L = \pi\,(D_{\text{in}} + t + s) = \pi\,(D_{\text{in}} + G - p)`,
+  dgdia: () => String.raw`D_g = D_{\text{in}} + 2c`,
+  stack: () => String.raw`D_{\text{in},\,k+1} = D_{\text{in},\,k} + 2\,(G + w) \qquad D_{\text{in},1} + 2N\,(G + w) \le D_{\text{out}}`,
   cubic: () => String.raw`B_z = c_0 + c_1 x + c_2 y + c_3 z + \dots + c_{19}\, z^3`,
 };
 
