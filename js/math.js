@@ -30,7 +30,7 @@ const TEX = {
   play: () => String.raw`s = G - (t + p)`,
   platelen: () => String.raw`L = \pi\,(D_{\text{in}} + t + s) = \pi\,(D_{\text{in}} + G - p)`,
   dgdia: () => String.raw`D_g = D_{\text{in}} + 2c`,
-  stack: () => String.raw`D_{\text{in},\,k+1} = D_{\text{in},\,k} + 2\,(G + w) \qquad D_{\text{in},1} + 2N\,(G + w) \le D_{\text{out}}`,
+  stack: () => String.raw`D_{\text{in},\,k+1} = D_{\text{in},\,k} + 2\,(G + w) \qquad D_{\text{in},1} + 2\,[\,N G + (N-1)\,w\,] \le D_{\text{out}}`,
   cubic: () => String.raw`B_z = c_0 + c_1 x + c_2 y + c_3 z + \dots + c_{19}\, z^3`,
 };
 
